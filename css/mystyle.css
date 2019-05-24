@@ -26,41 +26,6 @@ body {
     background-size: cover;
 }
 
-#mobile_wrap {
-        position: fixed;
-        width: 100%;
-        display: none;
-        height: 50px;
-}
-
-#mobile_wrap #mobile_head_portrait {
-    position: fixed;
-    display: inline-block;
-    top: 8px;
-    left: 5%;
-    width: 30px;
-    height: 30px;
-    border-radius: 50px;
-}
-
-#mobile_wrap a {
-    position: relative;
-    font-size: 30px;
-    top: 5px;
-    left: 50%;
-    display: inline-block;
-    transform: translateX(-48%);
-}
-
-#mobile_wrap #expand-menu {
-    position: relative;
-    top: 12px;
-    float: right;
-    right: 5%;
-    width: 23px;
-    height: 24px;
-}
-
 #home {
     width: 20%;
     height: 100%;

@@ -1,0 +1,138 @@
+#mobile_shadow {
+	position: fixed;
+	display: none;
+    top: 0px;
+    left: 0px;
+    z-index: 1000;
+    background-color: black;
+    opacity: 0.5;
+}
+
+#mobile_box {
+	z-index: 1200;
+	position: fixed;
+	display: none;
+	width: 120px;
+	height: 300px;
+	float: right;
+	top: 0px;
+	right: 50px;
+	line-height: 30px;
+}
+
+.mobile_link {
+	position: relative;
+	right: 0px;
+	top: 50px;
+	display: block;
+	color: white;
+	text-align: right;
+}
+
+#mobile_back {
+	position: fixed;
+	display: inline-block;
+	top: 10px;
+    float: right;
+    right: 4.5%;
+    width: 23px;
+    height: 24px;
+    color: white;
+    font-family: sans-serif;
+    font-size: 30px;
+}
+
+#mobile_box a:hover {
+	color: yellow;
+}
+
+#mobile_wrap {
+    position: fixed;
+    width: 100%;
+    display: none;
+    height: 50px;
+}
+
+#mobile_wrap #mobile_head_portrait {
+    position: fixed;
+    display: inline-block;
+    top: 8px;
+    left: 5%;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+}
+
+#mobile_wrap a {
+    position: relative;
+    font-size: 30px;
+    top: 5px;
+    left: 50%;
+    display: inline-block;
+    transform: translateX(-48%);
+}
+
+#mobile_wrap #expand-menu {
+    position: relative;
+    top: 12px;
+    float: right;
+    right: 5%;
+    width: 23px;
+    height: 24px;
+}
+
+@media only screen and (max-width: 800px) {
+	#home #com a {
+		font-size: 23px;
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	#home #com a {
+		font-size: 20px;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	#mobile_wrap {
+		z-index: 100;
+		position: fixed;
+	    top: 0px;
+	    width: 100%;
+	    display: block;
+	    height: 48px;
+	    background-color: grey;
+	}
+
+	#main {
+		bottom: 0px;
+		width: 100%;
+		height: 93%;
+	}
+
+	#main #wrap {
+		display: none;
+	}
+
+	#home {
+		display: none;
+		width: 0%;
+		height: 0%;
+	}
+
+	#main #content {
+		width: 100%;
+		height: 100%;
+	}	
+}
+
+@media only screen and (min-width: 600px) {
+	#mobile_shadow {
+		display: none;
+	}
+
+	#mobile_box {
+		display: none;
+	}
+}
+
