@@ -1,0 +1,250 @@
+* {
+    font-family: Brush Script MT, STKaiti, YouYuan, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    color: black;
+}
+
+li {
+    list-style-type: none;
+}
+
+body { 
+    color: #3b3b3b; 
+    font-size: 1em; 
+    margin: 0px; 
+    padding: 0px; 
+    width: 100%; 
+    height: 100%; 
+    background: url('') no-repeat center fixed; 
+    background-size: cover;
+}
+
+#mobile_wrap {
+        position: fixed;
+        width: 100%;
+        display: none;
+        height: 50px;
+}
+
+#mobile_wrap #mobile_head_portrait {
+    position: fixed;
+    display: inline-block;
+    top: 8px;
+    left: 5%;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+}
+
+#mobile_wrap a {
+    position: relative;
+    font-size: 30px;
+    top: 5px;
+    left: 50%;
+    display: inline-block;
+    transform: translateX(-48%);
+}
+
+#mobile_wrap #expand-menu {
+    position: relative;
+    top: 12px;
+    float: right;
+    right: 5%;
+    width: 23px;
+    height: 24px;
+}
+
+#home {
+    width: 20%;
+    height: 100%;
+    background-color: grey;
+    float: left;
+    z-index: 20;
+    position: fixed;
+    left: 0px;
+    min-height: 600px;
+}
+
+#home #com {
+    position: relative;
+    top: 1%;
+    text-align: center;
+    font-size: 28px;
+}
+
+#home #com a {
+    text-decoration: none;
+    color: black;
+}
+
+#home #com a:hover {
+    color: white;
+}
+
+#home #search {
+
+}
+
+#home #head_portrait {
+    position: relative;
+    top: 10%;
+    left: 50%;
+    display: inline-block;
+    transform: translateX(-50%);
+    display: block;
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+}
+
+#home #personal_signature {
+    position: relative;
+    font-family: Brush Script MT;
+    top: 10%;
+    text-align: center;
+    font-size: 20px;
+    color: #fff; 
+    width: auto;
+    height: 20px;
+}
+
+#home #menu {
+    position: relative;
+    top: 30%;
+    left: 25%;
+    height: 100px;
+    width: auto;
+}
+
+#home #menu li  {
+    position: relative;
+    text-align: center;
+    transform: translateX(-45%);
+}
+
+#home #menu li a {
+    color: #fff;
+    font-size: 20px;
+    font-family: STKaiti, YouYuan;
+    line-height: 30px;
+}
+
+#home #menu li a:hover {
+    color: yellow; 
+}
+
+#main {
+    background-color: #fff;
+    position: fixed;
+    float: right;
+    width: 80%;
+    height: 100%;
+    right: 0px;
+}
+
+#main #wrap {
+    background-color: #b3bac3;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    height: 8%;
+    width: 100%;
+}
+
+#main #wrap #nav {
+    display: inline-block;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 80%;
+    height: 60%;
+    background-color: green;
+    font-size: 10px;
+}
+
+#main #wrap #nav li {
+    position: relative;
+    height: 100%;
+    display: inline-block;
+    text-align: center;
+}
+
+#main #wrap #nav li:hover {
+    background-color: grey;   
+    border-bottom: solid 2px #999fac;
+}
+
+#main #wrap #nav a {
+    color: #fff;
+    font-size: 18px;
+    font-family: STKaiti, YouYuan;
+    line-height: 30px;
+}
+
+#main #wrap #nav a:hover {
+    color: rgb(212, 204, 20);
+}
+
+#main #wrap #register {
+    position: relative;
+    display: inline-block;
+    top: 30%;
+    float: right;
+    right: 0px;
+    width: 10%;
+    height: 50%;
+    background-color: grey;
+    font-size: 10px;
+}
+
+#main #wrap #register a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 12px;
+    font-family: STKaiti, YouYuan;
+    line-height: 30px;
+}
+
+#main #wrap #register a:hover {
+    color: yellow;
+}
+
+#main #wrap #register #nav2 #logo {
+
+}
+
+#main #content {
+    position: relative;
+    top: 0px;
+    height: 92%;
+    width: 100%;
+    float: right;
+    right: 0px; 
+    background-color: pink;
+}
+
+#main #content #concern {
+    position: relative;
+    top: 0px;
+    width: 100%;
+    background-color: brown;
+    height: 40%;
+}
+
+#main #content #myblog {
+    position: relative;
+    width: 100%;
+    background-color: blue;
+    height: 60%;
+}
+
+#footer {
+
+}
