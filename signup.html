@@ -7,6 +7,9 @@
     <title>注册</title>
     <script src="js/loginAndRegister.js"></script>
     <style>
+        * {
+            font-family: Brush Script MT, STKaiti, YouYuan, sans-serif;
+        }
         body {
             background-color: lightgray;
             font-size: 15px;
@@ -37,6 +40,11 @@
             font-size: 18px;
             font-weight: bold;
         }
+        div#signUpWrap span#signUpBack {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -52,6 +60,7 @@
             </form>
             <p>已有帐号？<a href="login.html">前往登录</a></p>
         </div>   
+        <span id="signUpBack"><a href="index.html">返回</a></span>
     </div>
 </body>
 </html>
