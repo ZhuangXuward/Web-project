@@ -1,5 +1,5 @@
 * {
-    font-family: Brush Script MT, STKaiti, YouYuan, sans-serif;
+    font-family: STKaiti, YouYuan, sans-serif;
 }
 
 a {
@@ -29,7 +29,7 @@ body {
 #home {
     width: 20%;
     height: 100%;
-    background-color: grey;
+    background: url("../images/homepic.jpeg");
     float: left;
     z-index: 20;
     position: fixed;
@@ -47,10 +47,11 @@ body {
 #home #com a {
     text-decoration: none;
     color: black;
+    font-family: Brush Script MT;
 }
 
 #home #com a:hover {
-    color: white;
+    color: #fff;
 }
 
 #home #search {
@@ -69,23 +70,62 @@ body {
     border-radius: 50px;
 }
 
+#home #head_portrait #select_upload {
+    position: absolute;
+    width: 82px;
+    height: 82px;
+    border-radius: 50px;   
+    display: block;
+}
+
+#home #head_portrait #select_upload:hover {
+    background-color: grey;
+    opacity: 0.1;
+    cursor: pointer;
+}
+
+#home #head_portrait #upload_img {
+    position: absolute;
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    background-color: black;
+    overflow: hidden;
+}
+
+input[type='file'] {
+    position: absolute;
+    cursor: pointer;
+    font-size: 0px;
+    opacity: 0;
+}
+
+#home #head_portrait #upload_img:hover {
+    cursor: pointer; 
+}
+
 #home #personal_signature {
     position: relative;
-    font-family: Brush Script MT;
     top: 10%;
     text-align: center;
     font-size: 20px;
-    color: #fff; 
+    color: #919191; 
     width: auto;
     height: 20px;
 }
 
+#home #personal_signature p {
+    font-family: Brush Script MT;
+}
+
 #home #menu {
     position: relative;
-    top: 30%;
-    left: 25%;
+    top: 250px;
+    left: 0px;
     height: 100px;
-    width: auto;
+    width: 100%;
+    background-color: black;
 }
 
 #home #menu li  {
@@ -102,7 +142,7 @@ body {
 }
 
 #home #menu li a:hover {
-    color: yellow; 
+    color: black; 
 }
 
 #main {
@@ -115,7 +155,7 @@ body {
 }
 
 #main #wrap {
-    background-color: #b3bac3;
+    background-color: #fff;
     position: relative;
     top: 0px;
     left: 0px;
@@ -130,7 +170,7 @@ body {
     left: 0px;
     width: 80%;
     height: 60%;
-    background-color: green;
+    background-color: #fff;
     font-size: 10px;
 }
 
@@ -141,44 +181,49 @@ body {
     text-align: center;
 }
 
-#main #wrap #nav li:hover {
-    background-color: grey;   
-    border-bottom: solid 2px #999fac;
+#main #wrap #nav li:hover { 
+    border-bottom: solid 2px #919191;
+}
+
+#main #wrap #nav li:hover a {
+    color: black;
 }
 
 #main #wrap #nav a {
-    color: #fff;
+    color: #919191;
     font-size: 18px;
     font-family: STKaiti, YouYuan;
     line-height: 30px;
 }
 
 #main #wrap #nav a:hover {
-    color: rgb(212, 204, 20);
+    color: #000000;
 }
 
 #main #wrap #register {
     position: relative;
     display: inline-block;
-    top: 30%;
+    top: 25%;
     float: right;
+    overflow: hidden;
     right: 0px;
     width: 10%;
     height: 50%;
-    background-color: grey;
+    color: #999fac;
+    background-color: #fff;
     font-size: 10px;
 }
 
 #main #wrap #register a {
     text-decoration: none;
-    color: #fff;
+    color: #999fac;
     font-size: 12px;
     font-family: STKaiti, YouYuan;
     line-height: 30px;
 }
 
 #main #wrap #register a:hover {
-    color: yellow;
+    color: black;
 }
 
 #main #wrap #register #nav2 #logo {
@@ -192,7 +237,7 @@ body {
     width: 100%;
     float: right;
     right: 0px; 
-    background-color: pink;
+    background: linear-gradient(to right, #fff, #ebebeb); 
 }
 
 #main #content #concern {

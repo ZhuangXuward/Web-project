@@ -6,6 +6,8 @@
     z-index: 1000;
     background-color: black;
     opacity: 0.5;
+    width: 600px;
+    height: 100%;
 }
 
 #mobile_box {
@@ -20,6 +22,7 @@
 	line-height: 30px;
 }
 
+
 .mobile_link {
 	position: relative;
 	right: 0px;
@@ -32,14 +35,18 @@
 #mobile_back {
 	position: fixed;
 	display: inline-block;
-	top: 10px;
+	top: 12px;
     float: right;
     right: 4.5%;
-    width: 23px;
-    height: 24px;
-    color: white;
-    font-family: sans-serif;
-    font-size: 30px;
+    width: 20px;
+    height: 20px;
+    animation: backAnimate 1s;
+}
+
+@keyframes backAnimate
+{
+	from { transform: rotateZ(0deg); }
+	to { transform: rotateZ(90deg); }
 }
 
 #mobile_box a:hover {
@@ -63,10 +70,37 @@
     border-radius: 50px;
 }
 
+#mobile_wrap #mobile_head_portrait #mobile_select_upload {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50px;   
+    display: block;
+}
+
+#mobile_wrap #mobile_head_portrait #mobile_select_upload:hover {
+    background-color: grey;
+    opacity: 0.1;
+}
+
+#mobile_wrap #mobile_head_portrait #mobile_upload_img {
+    position: absolute;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    opacity: 0;
+}
+
+#mobile_wrap #mobile_head_portrait #mobile_upload_img:hover {
+    cursor: pointer; 
+}
+
 #mobile_wrap a {
     position: relative;
+    font-family: Brush Script MT;
     font-size: 30px;
-    top: 5px;
+    top: 1px;
     left: 50%;
     display: inline-block;
     transform: translateX(-48%);
@@ -79,6 +113,7 @@
     right: 5%;
     width: 23px;
     height: 24px;
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 800px) {
@@ -101,7 +136,7 @@
 	    width: 100%;
 	    display: block;
 	    height: 48px;
-	    background-color: grey;
+	    background-color: #999fac;
 	}
 
 	#main {
@@ -125,14 +160,3 @@
 		height: 100%;
 	}	
 }
-
-@media only screen and (min-width: 600px) {
-	#mobile_shadow {
-		display: none;
-	}
-
-	#mobile_box {
-		display: none;
-	}
-}
-

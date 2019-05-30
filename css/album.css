@@ -1,0 +1,7 @@
+#main #wrap #nav #album {
+    color: black;
+}
+
+#main #wrap #nav #li_album  {
+	border-bottom: solid 2px #919191;
+}

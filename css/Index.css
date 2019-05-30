@@ -1,0 +1,7 @@
+#main #wrap #nav #index {
+    color: black;
+}
+
+#main #wrap #nav #li_index  {
+	border-bottom: solid 2px #919191;
+}

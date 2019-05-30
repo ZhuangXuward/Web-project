@@ -1,0 +1,88 @@
+#main #wrap #nav #data {
+    color: black;
+}
+
+#main #wrap #nav #li_data  {
+	border-bottom: solid 2px #919191;
+}
+
+#main #content #data {
+	position: relative;
+	width: 80%;
+	height: 80%;
+	left: 5%;
+	top: 5%;
+}
+
+#main #content #name {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #sex {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #sign {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #birthday {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #phone {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #hobby {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #hometown {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+
+#main #content #mail {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #job {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #school {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #company {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+#main #content #resume {
+	position: relative;
+	width: 100%;
+	height: 30px;
+}

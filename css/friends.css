@@ -1,0 +1,97 @@
+#main #wrap #nav #friends {
+    color: black;
+}
+
+#main #wrap #nav #li_friends  {
+	border-bottom: solid 2px #919191;
+}
+
+.carousel_outer {
+	position: relative;
+	width: 90%;
+	height: 90%;
+	top: 5%;
+	margin: 0 auto;
+    overflow: hidden;
+}
+
+.carousel_outer .carousel_content {
+	position: absolute;
+	width: 100%;
+    height: 100%;
+    white-space: nowrap;
+}
+
+.tranSition {
+	transition-property: left;
+	transition-duration: 1s;
+}
+
+.carousel_outer .leftArrow {
+	position: absolute;
+	background: url("../images/arrows-30.png");
+	width: 30px;
+	height: 80px;
+	top: 60px;
+	left: 5px;
+	cursor: pointer;
+	display: none;
+}
+
+.carousel_outer .rightArrow {
+	position: absolute;
+	background: url("../images/arrows-30.png");
+	background-position: 0px -80px;
+	width: 30px;
+	height: 80px;
+	top: 65px;
+	right: 5px;
+	cursor: pointer;
+	display: none;
+}
+
+.carousel_outer #navDot1 {
+	position: absolute;
+	background: url("../images/navigator.png");
+	bottom: 2%;
+	left: 45%;
+	width: 12px;
+	height: 12px;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.carousel_outer #navDot2 {
+	position: absolute;
+	background: url("../images/navigator.png");
+	bottom: 2%;
+	left: 50%;
+	width: 12px;
+	height: 12px;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.carousel_outer #navDot3 {
+	position: absolute;
+	background: url("../images/navigator.png");
+	bottom: 2%;
+	left: 55%;
+	width: 12px;
+	height: 12px;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.navDot:hover {
+	background-color: grey;
+	opacity: 0.5;
+}
+
+.navDotRed {
+	background-position: 0 -24px;
+}
+
+div.carousel_outer:hover .Arrow {
+	display: block;
+}

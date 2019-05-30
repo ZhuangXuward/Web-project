@@ -43,3 +43,12 @@ function hideShadow() {
    showObj.style.display = "inline-block";
 }
 
+window.onresize = function() {
+   var temp = document.documentElement.clientWidth;
+   var temp2 = document.documentElement.clientHeight;
+   var shadow = document.getElementById("mobile_shadow");
+   shadow.style.width = temp + "px";
+   shadow.style.height = temp2 + "px";
+   if (document.documentElement.clientWidth > 600) 
+      hideShadow();
+}
