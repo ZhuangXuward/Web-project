@@ -1,3 +1,5 @@
+<%@ page language="java" import="java.util.*" contentType="text/html; charset=utf-8"%>
+<%request.setCharacterEncoding("utf-8");%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,9 +22,13 @@
             font-size: 15px;
         }
 
+        input {
+            font-family: 微软雅黑;
+        }
+
         div#backgroundpic {
             position: absolute;
-            z-index: -100;
+            z-Index: -100;
             left: 0px;
             top: 0px;
             width: 100%;
@@ -67,6 +73,11 @@
             right: 10px;
         }
 
+        span#loginMsg {
+            color: red;
+            font-weight: bold;
+        }
+
         @media only screen and (max-width: 600px) {
             div#logInContain form input {
                 width: 250px;
@@ -85,14 +96,23 @@
     <div id="logInWrap">
         <div id="logInContain">
             <h1>登录</h1>
-            <form>
-                <input type="text" placeholder="昵称/邮箱">
-                <input type="password" placeholder="密码">
-                <input type="submit" value="登录" onclick="doCheck_logIn()">
+            <form action="loginCheck.jsp" method="POST" name="formLogin">
+                <input type="text" placeholder="昵称/邮箱" name="name">
+                <input type="password" placeholder="密码" name="password">
+                <input type="button" value="登录" onclick="doCheck_logIn()">
             </form>
-            <p>还没有帐号？<a href="signup.html">前往注册</a></p>
+            <p>还没有帐号？<a href="signup.jsp">前往注册</a></p>
+    <%  
+    String flag = request.getParameter("errNo");  
+    try{
+         if(flag!=null)
+            out.println("<span id='loginMsg'>用户名不存在或密码错误</span>");
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+   %>
         </div>
-        <span id="logInBack"><a href="index.html">返回</a></span>
+        <span id="logInBack"><a href="Index.html">返回</a></span>
     </div>
 </body>
 </html>

@@ -1,5 +1,30 @@
+<%@page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"%>
+<% request.setCharacterEncoding("utf-8");
+String msg = "";
+String connectString = "jdbc:mysql://172.18.187.10:53306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
+String user="user"; String pwd="123";
+String username = request.getParameter("name");
+String password = request.getParameter("password");
+String email = request.getParameter("email");
+if (request.getMethod().equalsIgnoreCase("post")){
+    Class.forName("com.mysql.jdbc.Driver");
+    Connection con = DriverManager.getConnection(connectString,user, pwd);
+    Statement stmt = con.createStatement();
+    try {
+        String fmt="insert into users(name,password,email) values('%s', '%s', '%s')";
+        String sql = String.format(fmt,username,password, email);
+        int cnt = stmt.executeUpdate(sql);
+        if (cnt > 0)
+            msg = "注册成功!";
+        stmt.close(); con.close();
+    }
+    catch (Exception e) {
+        msg = e.getMessage();
+    }
+}
+%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +41,10 @@
 
         body {
             font-size: 15px;
+        }
+
+        input {
+            font-family: 微软雅黑;
         }
 
         div#backgroundpic {
@@ -67,6 +96,11 @@
             right: 10px;
         }
 
+        span#registerMsg {
+            color: red;
+            font-weight: bold;
+        }
+
         @media only screen and (max-width: 600px) {
             div#signUpContain form input {
                 width: 250px;
@@ -85,16 +119,17 @@
     <div id="signUpWrap">
         <div id="signUpContain">
             <h1>注册</h1>
-            <form>
-                <input type="text" placeholder="昵称">
-                <input type="text" placeholder="邮箱">
-                <input type="password" placeholder="密码">
-                <input type="password" placeholder="确认密码">
-                <input type="submit" value="注册" onclick="doCheck_SignUp()">
+            <form action="signup.jsp" method="post" name="formRegister">
+                <input type="text" placeholder="昵称" name="name" id="username">
+                <input type="text" placeholder="邮箱" name="email" id="email">
+                <input type="password" placeholder="密码" name="password" id="password">
+                <input type="password" placeholder="确认密码" name="password2" id="password2">
+                <input type="button" value="注册" onclick="doCheck_Register()">
             </form>
-            <p>已有帐号？<a href="login.html">前往登录</a></p>
+            <p>已有帐号？<a href="login.jsp">前往登录</a></p>
+            <span id="registerMsg"><%=msg%><span>
         </div>   
-        <span id="signUpBack"><a href="index.html">返回</a></span>
+        <span id="signUpBack"><a href="Index.html">返回</a></span>
     </div>
 </body>
 </html>

@@ -1,22 +1,30 @@
-function doCheck_SignUp() {
+
+
+function doCheck_Register() {
     var inPut = document.querySelectorAll("div#signUpContain form input");
-    var password1 = document.querySelectorAll("div#signUpContain form input")[2].value;
-    var password2 = document.querySelectorAll("div#signUpContain form input")[3].value;
     let flag = 0;
-    for (let i = 0; i < inPut.length - 1; ++ i) {
+    for (let i = 0; i < inPut.length - 1; ++i) {
         if (inPut[i].value == "") {
             alert("请输入 " + inPut[i].placeholder);
+            document.querySelectorAll("div#signUpContain form input")[i].focus();
             flag++;
             break;
         }
     }
-    if (password1 != password2) {
-        alert("两次密码输入不相同！");
-        flag++;
+    var pass1 = document.querySelector("div#signUpContain form input#password");
+    var pass2 = document.querySelector("div#signUpContain form input#password2");
+    if(flag == 0) {
+        if (pass1.value != pass2.value) {
+            alert("两次密码不相同！")
+            document.querySelector("div#signUpContain form input#password2").focus();
+            flag++;
+        }
     }
+
     if (flag == 0) {
-        alert("注册成功！");
+        formRegister.submit();
     }
+    return false;
 }
 
 function doCheck_logIn() {
@@ -25,11 +33,13 @@ function doCheck_logIn() {
     for (let i = 0; i < inPut.length - 1; ++i) {
         if (inPut[i].value == "") {
             alert("请输入 " + inPut[i].placeholder);
+            document.querySelectorAll("div#logInContain form input")[i].focus();
             flag++;
             break;
         }
     }
     if (flag == 0) {
-        alert("登录成功！");
+        formLogin.submit();
     }
+    return false;
 }
