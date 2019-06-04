@@ -1,6 +1,45 @@
+<%@ page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<% request.setCharacterEncoding("utf-8");
+	String msg = "";
+	String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
+	String user = "user";
+	String pwd = "123";
+	Class.forName("com.mysql.jdbc.Driver");
+	Connection con = DriverManager.getConnection(connectString, user, pwd);
+	Statement stmt = con.createStatement();
+	
+	if (request.getMethod().equalsIgnoreCase("post")) {
+		java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		java.util.Date currentTime = new java.util.Date();
+		String str_date1 = formatter.format(currentTime);
+		String date = currentTime.toString();
+		String content = request.getParameter("msg");
+		try {
+			String fmt = "insert into messageboard(date, content) values('%s', '%s')";
+			String sql = String.format(fmt, date, content);
+			int cnt = stmt.executeUpdate(sql);
+			if (cnt > 0) msg = "保存成功！";
+		}
+		catch (Exception e) {
+			msg = e.getMessage();
+		}
+	}
+	
+	String[] content_output = new String[100];
+	String[] date_output = new String[100];
+	int index = 0;
+	ResultSet rs = stmt.executeQuery("select * from messageboard");
+	while (rs.next()) {
+		content_output[index] = rs.getString("content");
+		date_output[index] = rs.getString("date");
+		index ++;
+	}
+	rs.close(); stmt.close(); con.close();
+%>
+
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
@@ -12,10 +51,9 @@
     <meta name="date" content="2019-05-21T12:00:00+00:00" />
     <title>Lifeblog.com</title>
     <script type="text/javascript" src="js/general.js"></script>
-    <script type="text/javascript" src="js/friends.js"></script>
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
     <link rel="stylesheet" type="text/css" href="css/mobile.css" />
-    <link rel="stylesheet" type="text/css" href="css/friends.css" />
+    <link rel="stylesheet" type="text/css" href="css/messageBoard.css" />
 </head>
 
 <body>
@@ -29,50 +67,42 @@
             <li><a href="Index.html" class="mobile_link">个人主页</a></li>
             <li><a href="friends.html" class="mobile_link">好友动态</a></li>
             <li><a href="album.html" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.html" class="mobile_link">留言板</a></li>
+            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
             <li><a href="Data.html" class="mobile_link">个人资料</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
-        <div id="mobile_head_portrait"> 
-            <div id="mobile_select_upload">
-                <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="mobile_upload_img" />
-            </div>  
+        <div id="mobile_head_portrait">
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
         <a href="Index.html" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
     </div>
-    <!-- END for mobile device -->
 
     <!-- normal -->
-    <!-- sidebar -->
     <div id="home">
+        <div id="search">
+        </div>
         <div id="com">
             <a href="">「Lifeblog.com」</a>
         </div>
-        <div id="head_portrait">  
-            <div id="select_upload">
-                <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="upload_img" />
-            </div>
+        <div id="head_portrait">
             <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
         </div>
         <div id="personal_signature">
-            <p>Show your life this moment!</p>
+            <p>Show your life this moment!<p>
         </div>
-        <div id="menu">
-            <a href="">设置</a><br><br> 
-            <a href="">关于</a>
-        </div>
-        <div id="footer">
-           <span>Copyright © 2019 LifeBlog.com</span>
-        </div>
+        <ul id="menu">
+            <li>
+                <a href="">设置</a>
+            </li>
+            <li>
+                <a href="">关于</a>
+            </li>
     </div>
-    <!-- sidebar -->
+    </div>
 
-    <!-- 主要内容 -->
-    <div id="main" style="width: 100%; z-index: 99;"> <!-- 调节main宽度 -->
-        <!-- 标题导航栏 -->
+    <div id="main">
         <div id="wrap">
             <ul id="nav">
                 <li id="li_index"><a href="Index.html" id="index" class="nav_hover">个人主页&nbsp</a></li>
@@ -88,42 +118,25 @@
                 <img id="logo" />
             </div>
         </div>
-        <!-- END 标题导航栏 -->
-
-        <!-- 轮播图和好友动态 -->
         <div id="content">
-            <div id="carousel_wrap">
-                <div id="carousel_images">
-                    <!-- 前后分别加上一张图片，方便无缝过渡显示。可以使用JS DOM增加节点操作省去该步骤 -->
-                    <img src="images/carousel/3.jpg">
-                    <img src="images/carousel/1.jpg">
-                    <img src="images/carousel/2.jpg">
-                    <img src="images/carousel/3.jpg">
-                    <img src="images/carousel/1.jpg">
-                </div>
-                <span class="arrow left-arrow">&lt;</span>
-                <span class="arrow right-arrow">&gt;</span>
-                <div id="dots">
-                    <!-- 使用小点标记实际多少张图片，要添加图片时需要修改carousel_images和此处 -->
-                    <span class="dot active"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                </div>
-            </div>
-            <div id="test">
-                <h1>blog</h1>
-                <h1>blogs</h1>
-                <h1>blog</h1>
-                <h1>blog</h1>
-            </div>
+            <form action="messageBoard.jsp" method="post" id="board">
+                <fieldset id="board_set">
+                    <legend><b>联系留言</b></legend>
+                    <textarea id="msg" name="msg"></textarea>
+                    <br>
+                    <input type="submit" id="btn" value="留言">
+                </fieldset>
+                <fieldset id="board_style">
+                	<legend><b>留言</b></legend>
+                	<%for (int i = index - 1; i >= 0; i --) { %>
+	  					<h2><%=content_output[i]%><%=date_output[i]%></h2>
+					<%}%>
+                </fieldset>
+            </form>
         </div>
-        <!-- END 轮播图和好友动态 -->
     </div>
-    <!-- END 主要内容 -->
 
     <div id="footer">
-
     </div>
-    <!-- END normal -->
 </body>
 </html>

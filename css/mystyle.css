@@ -147,12 +147,13 @@ input[type='file'] {
 }
 
 #main {
-    background-color: ;
     position: fixed;
     float: right;
     width: 80%;
     height: 100%;
     right: 0px;
+    /* 如果mystyle.css中使用overflow:auto->含有滚动条宽度; 故使用overflow:scroll */
+    overflow-y: scroll;
     background: linear-gradient(to right, #fff, #ebebeb);
 }
 

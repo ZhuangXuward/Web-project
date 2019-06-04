@@ -1,116 +1,108 @@
-//进行轮播
 window.onload = function() {
-	var pic = document.querySelectorAll(".carousel_content")[0];
-	var picOuter = document.getElementsByClassName('carousel_outer')[0];
-	var next = document.getElementsByClassName("rightArrow")[0];
-	var pre = document.getElementsByClassName("leftArrow")[0];
-	var Obtn = document.getElementsByClassName("navDot");
-	var Width = pic.offsetWidth;
-	var Width3 = Width * 3;
-	console.log(Width);
-	var current = 0; 
-	// 记录当前图片
+	var carouImg = document.getElementById("carousel_images");
+	var carouWrap = document.getElementById("carousel_wrap");
+	var img = carouImg.getElementsByTagName("img")[0];
+	var leftArrow = document.getElementsByClassName("left-arrow")[0];
+	var rightArrow = document.getElementsByClassName("right-arrow")[0];
+	var oBtn = document.getElementsByClassName("dot");
+	var index = 0;
+	var index_length = oBtn.length;
 
-	pic.style.left = 0;
+	// 给图片添加过渡效果
+	carouImg.classList.add("transition");
 
-	// 开始计时器
-	var playCarousel = setInterval(move, 2000);
-	buttonRed();
-	// 鼠标移入移出，停止和开始自动轮播。 注意onmouseover不大写
-	picOuter.onmouseover = function() {	
-		clearInterval(playCarousel);
+	// 动态获取绝对定位轮播图的高度，设置carousel_wrap的高度，宽度为整个main宽度
+	// 如果mystyle.css中使用overflow:auto->含有滚动条宽度; 故使用overflow:scroll
+	carouImg.style.left = -img.clientWidth + "px"; 
+	console.log(carouImg.style.left);
+	carouWrap.style.height = img.offsetHeight + "px";
+
+	// 监听body大小变化，修改轮播图的图片位置和高度
+	document.body.onresize = function () { 
+		carouImg.style.left = -img.clientWidth + "px";
+		carouWrap.style.height = img.offsetHeight + "px";
 	}
-	picOuter.onmouseout = function() {
-		playCarousel = setInterval(move, 2000);
-		// 注意添加定时器名字，否则会出错，开启多个定时器
+	
+	// 点击右箭头
+	rightArrow.onclick = function() {
+		next_pic();
+		showCurrentDot(index);
 	}
 
-	function buttonRed() {
-		for (let j = 0; j < Obtn.length; ++ j) {
-			Obtn[j].classList.remove("navDotRed");
-            //Obtn[j].style.backgroundColor = red;
+	// 点击左箭头
+	leftArrow.onclick = function () {
+		pre_pic();
+		showCurrentDot(index);
+	}
+	
+	// 点击小点
+	for (let i = 0; i < oBtn.length; ++ i) {
+		oBtn[i].onclick = function() {
+			var newLeft = (-img.clientWidth) * (i + 1);
+			carouImg.style.left = newLeft + 'px';
+			console.log(i);
+			showCurrentDot(i);
 		}
-		let currentIndex = (- parseInt(pic.style.left)) / Width;
-		Obtn[parseInt(currentIndex % Obtn.length)].classList.add("navDotRed");
 	}
 
-	// 自动轮播函数
-	function move() {
-		if (parseInt(pic.style.left) > Width3) {
-			pic.classList.add("tranSition");   	
-			var newLeft = parseInt(pic.style.left) - Width;
-			pic.style.left = newLeft + 'px';
-			// 这一步很重要，left本身为字符串
-			console.log(pic.style.left);
-				console.log(Width);
-		}
-		else {
-			pic.classList.remove("tranSition");
-			var newLeft = 0;
-			pic.style.left = newLeft + 'px';
-			// 这一步很重要，left本身为字符串
-			console.log(pic.style.left);
-		}
-		buttonRed();
-	}
-
-	// 点击next箭头
-	next.onclick = function () {
-		pic.classList.remove("tranSition");   	
-		if (parseInt(pic.style.left) > Width3) {
-			var newLeft = parseInt(pic.style.left) - Width;
-			pic.style.left = newLeft + 'px';
-			console.log(pic.style.left);
+	// 下一张图片
+	function next_pic() {
+		var left = parseInt(carouImg.style.left);
+		if (left <= (-img.clientWidth) * (index_length + 1)) {
+			carouImg.classList.remove("transition");
+			var newLeft = -img.clientWidth * 1;
+			carouImg.style.left = newLeft + 'px';
+			newLeft = -img.clientWidth * 2;
+			carouImg.classList.add("transition");
+			index = 1;
 		}
 		else {
-			var newLeft = Width;
-			pic.style.left = newLeft + 'px';
-			console.log(pic.style.left);
+			var newLeft = parseInt(carouImg.style.left) - img.clientWidth;
+			(index == (index_length - 1)) ? index = 0 : index += 1;
 		}
-		buttonRed();
+		carouImg.style.left = newLeft + 'px';
+		console.log(newLeft);
 	}
 
-	// 点击pre箭头
-	pre.onclick = function () {
-		pic.classList.remove("tranSition");   	
-		if (parseInt(pic.style.left) < 0) {
-			var newLeft = parseInt(pic.style.left) + Width;
-			pic.style.left = newLeft + 'px';
-			console.log(pic.style.left);
+	// 上一张图片
+	function pre_pic() {
+		var left = parseInt(carouImg.style.left);
+		if (left >= -10) {
+			carouImg.classList.remove("transition");
+			var newLeft = -img.clientWidth * index_length;
+			carouImg.style.left = newLeft + 'px';
+			newLeft = -img.clientWidth * (index_length - 1);
+			carouImg.classList.add("transition");
+			index = index_length - 2;
 		}
-		else if (parseInt(pic.style.left) == 0) {
-			var newLeft = Width * 2;
-			pic.style.left = newLeft + 'px';
-			console.log(pic.style.left);
+		else {
+			var newLeft = parseInt(carouImg.style.left) + img.clientWidth;
+			(index == 0) ? index = (index_length - 1) : index -= 1;
 		}
-		buttonRed();
+		carouImg.style.left = newLeft + 'px';
+		console.log(newLeft);
 	}
 
-
-
-	function setLeft(whichpic) {
-		var newLeft = Width * (whichpic - 1);
-		pic.style.left = newLeft + 'px';
-		console.log(pic.style.left);
-		buttonRed();
+	function showCurrentDot(index) {
+		for (let i = 0; i < oBtn.length; ++ i) {
+			(i == index) ? oBtn[i].classList.add("active") : oBtn[i].classList.remove("active");
+		}
 	}
 
-    for (let k = 0; k < Obtn.length; ++ k) {
-        Obtn[k].addEventListener("click", function() {
-            pic.classList.remove("tranSition");     
-            var newLeft = - (Width) * k;
-            pic.style.left = newLeft + 'px';
-            // if (parseInt(pic.style.left) > -2325) {
-            //     var newLeft = parseInt(pic.style.left) - 775;
-            //     pic.style.left = newLeft + 'px';
-            //     console.log(pic.style.left);
-            // }
-            // else {
-            //     var newLeft = -775;
-            //     pic.style.left = newLeft + 'px';
-            //     console.log(pic.style.left);
-            // }
-            buttonRed();
-        });
-    }
+	// 设置轮播定时器
+	var timer = setInterval(function(){
+		next_pic();
+		showCurrentDot(index);
+	}, 3000);
+
+	carouWrap.onmouseover = function() {
+		clearInterval(timer);
+	}
+
+	carouWrap.onmouseout = function() {
+		timer = setInterval(function () {
+			next_pic();
+			showCurrentDot(index);
+		}, 3000);
+	}
 }

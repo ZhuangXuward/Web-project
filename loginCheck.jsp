@@ -2,7 +2,7 @@
 <% request.setCharacterEncoding("utf-8");
     String msg=""; 
     String pwd="", name="";//数据库中保存的密码和用户名
-    String conStr = "jdbc:mysql://172.18.187.10:53306/blog_15336202"
+    String conStr = "jdbc:mysql://172.18.187.10:3306/blog_15336202"
     + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
     String userName = request.getParameter("name"); //从登录页面post过来的用户名和密码
     String userPwd = request.getParameter("password");

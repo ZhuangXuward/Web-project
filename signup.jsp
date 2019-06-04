@@ -1,7 +1,7 @@
 <%@page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"%>
 <% request.setCharacterEncoding("utf-8");
 String msg = "";
-String connectString = "jdbc:mysql://172.18.187.10:53306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
+String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
 String user="user"; String pwd="123";
 String username = request.getParameter("name");
 String password = request.getParameter("password");

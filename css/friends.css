@@ -6,108 +6,76 @@
 	border-bottom: solid 2px #919191;
 }
 
-#main #content #concern {
-    position: relative;
-    top: 20px;
-    margin: 0px auto;
-    width: 80%;
-    background-color: brown;
-    height: 60%;
-}
-
-#main #content #myblog {
-    position: relative;
-    width: 100%;
-    background-color: blue;
-    height: 60%;
-}
-
-.carousel_outer {
+/* 轮播图样式表 */
+#content #carousel_wrap {
 	position: relative;
-	width: 90%;
-	height: 90%;
-	top: 5%;
 	margin: 0 auto;
-    overflow: hidden;
+	width: 100%; /* 轮播图宽度 */
+	overflow: hidden;
 }
 
-.carousel_outer .carousel_content {
+#content #carousel_wrap #carousel_images {
 	position: absolute;
+	border: 0;
+	outline: none;
+	white-space: nowrap; /* 将图片一行排列 */
 	width: 100%;
-    height: 100%;
-    white-space: nowrap;
+	font-size: 0; /* 清除white-space间隙 */
+	margin: 0px; 
 }
 
-.tranSition {
-	transition-property: left;
-	transition-duration: 1s;
+#content #carousel_wrap #carousel_images img {
+	width: 100%;
 }
 
-.carousel_outer .leftArrow {
+#content #carousel_wrap .arrow {
 	position: absolute;
-	background: url("../images/arrows-30.png");
-	width: 30px;
-	height: 80px;
-	top: 35%;
-	left: 5px;
+	font-weight: bold;
+	font-size: 50px;
+	color: lightgray;
+	top: 50%;
+	transform: translateY(-50%);
 	cursor: pointer;
-	display: none;
+	transition-property: opacity;
+	transition-duration: 0.5s;
 }
 
-.carousel_outer .rightArrow {
-	position: absolute;
-	background: url("../images/arrows-30.png");
-	background-position: 0px -80px;
-	width: 30px;
-	height: 80px;
-	top: 35%;
-	right: 5px;
-	cursor: pointer;
-	display: none;
-}
-
-.carousel_outer #navDot1 {
-	position: absolute;
-	background: url("../images/navigator.png");
-	bottom: 2%;
-	left: 45%;
-	width: 12px;
-	height: 12px;
-	cursor: pointer;
-	border-radius: 50%;
-}
-
-.carousel_outer #navDot2 {
-	position: absolute;
-	background: url("../images/navigator.png");
-	bottom: 2%;
-	left: 50%;
-	width: 12px;
-	height: 12px;
-	cursor: pointer;
-	border-radius: 50%;
-}
-
-.carousel_outer #navDot3 {
-	position: absolute;
-	background: url("../images/navigator.png");
-	bottom: 2%;
-	left: 55%;
-	width: 12px;
-	height: 12px;
-	cursor: pointer;
-	border-radius: 50%;
-}
-
-.navDot:hover {
-	background-color: grey;
+#content #carousel_wrap .arrow:hover {
 	opacity: 0.5;
 }
 
-.navDotRed {
-	background-position: 0 -24px;
+#content #carousel_wrap .left-arrow {
+	left: 20px;
 }
 
-div.carousel_outer:hover .Arrow {
-	display: block;
+#content #carousel_wrap .right-arrow {
+	right: 20px;
 }
+
+#content #carousel_wrap #dots {
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%)
+}
+
+#content #carousel_wrap .dot {
+	background-color: white;
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	margin: 4px;
+	opacity: 0.2;
+	cursor: pointer;
+}
+
+#content #carousel_wrap .active {
+	opacity: 1;
+}
+
+.transition {
+	transition-property: left;
+	transition-duration: 1s;
+}
+/* END 轮播图样式表 */
