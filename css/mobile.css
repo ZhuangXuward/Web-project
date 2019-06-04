@@ -25,7 +25,7 @@
 
 .mobile_link {
 	position: relative;
-	right: 0px;
+	right: 1px;
 	top: 50px;
 	display: block;
 	color: white;
@@ -35,7 +35,7 @@
 #mobile_back {
 	position: fixed;
 	display: inline-block;
-	top: 12px;
+	top: 15px;
     float: right;
     right: 4.5%;
     width: 20px;
@@ -50,7 +50,7 @@
 }
 
 #mobile_box a:hover {
-	color: yellow;
+	color: black;
 }
 
 #mobile_wrap {
@@ -63,7 +63,7 @@
 #mobile_wrap #mobile_head_portrait {
     position: fixed;
     display: inline-block;
-    top: 8px;
+    top: 12px;
     left: 5%;
     width: 30px;
     height: 30px;
@@ -100,7 +100,7 @@
     position: relative;
     font-family: Brush Script MT;
     font-size: 30px;
-    top: 1px;
+    top: 4px;
     left: 50%;
     display: inline-block;
     transform: translateX(-48%);
@@ -108,7 +108,7 @@
 
 #mobile_wrap #expand-menu {
     position: relative;
-    top: 12px;
+    top: 15px;
     float: right;
     right: 5%;
     width: 23px;
@@ -135,7 +135,7 @@
 	    top: 0px;
 	    width: 100%;
 	    display: block;
-	    height: 48px;
+	    height: 54px;
 	    background-color: #999fac;
 	}
 
@@ -159,4 +159,14 @@
 		width: 100%;
 		height: 100%;
 	}	
+
+	#main #content #information {
+		display: none;
+	}
+}
+
+@media only screen and (max-height: 490px) {
+	#main #content {
+		top: 25px;
+	}
 }

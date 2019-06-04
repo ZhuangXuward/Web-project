@@ -5,3 +5,269 @@
 #main #wrap #nav #li_index  {
 	border-bottom: solid 2px #919191;
 }
+
+#main #content #information {
+	position: fixed;
+	top: 6.5%;
+	width: 20%;
+	height: 100%;
+	right: 0px;
+	float: right;
+}
+
+#main #content #information #info_show {
+	position: relative;
+	top: 20px;
+	margin: 0px auto;
+	width: 60%;
+	height: 250px;
+	text-align: center;
+	background-color: #fff;
+}
+
+#main #content #information #info_show #name {
+	position: relative;
+	height: 25px;
+	width: 100%;
+	background-color: blue;
+	top: 70px;
+	font-size: 25px;
+}
+
+#main #content #information #info_show #fan {
+	position: relative;
+	height: 20px;
+	width: 100%;
+	background-color: grey;
+	top: 80px;
+}
+
+#main #content #information #info_show #guanzhu {
+	position: relative;
+	height: 20px;
+	width: 100%;
+	background-color: yellow;
+	top: 90px;
+}
+
+#main #content #information #info_show #blog_num {
+	position: relative;
+	height: 20px;
+	width: 100%;
+	background-color: pink;
+	top: 100px;
+}
+
+#main #content #information #info_show #like {
+	position: relative;
+	height: 20px;
+	width: 100%;
+	background-color: green;
+	top: 110px;
+}
+
+#main #content #board {
+	position: relative;
+	top: 20px;
+	left: 6%;
+	width: 70%;
+	max-width: 70%;
+	height: 200px;
+}
+
+#main #content #board #board_set {
+	position: relative;
+	width: 100%;
+	max-width: 100%;
+	height: 110%;
+	border-top-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
+
+#main #content #board #board_set #msg {
+	position: relative;
+	border: 1px solid black;
+	outline: none;
+	padding-top: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
+	left: 10%;
+	width: 80%;
+	max-width: 700px;
+	height: 80%;
+	border-radius: 10px;
+	border-top-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	font-size: 20px;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+@media only screen and (max-width: 600px) {
+	#main #content #board {
+		width: 400px;
+		left: 12%;	
+	}
+
+	#main #content #board #board_set #msg {
+		max-width: 300px;
+	}
+}
+
+#main #content #board #board_set #bianji {
+	position: relative;
+	width: 81%;
+	max-width: 81%;
+	height: 30px;
+	left: 10%;
+	top: -9px;
+}
+
+#main #content #board #board_set #bianji #btn {
+	position: relative;	
+	border-radius: 50%;
+	font-size: 15px;
+	display: inline-block;
+	top: 0px;
+	float: right;
+}
+
+#main #content #board #board_set #bianji #jinghao {
+	position: relative;
+	width: 17px;
+	height: 17px;
+	cursor: pointer;
+	top: -1.1px;
+}
+
+#main #content #board #board_set #bianji #xiaolian, #gaojibianji, #quanping, #huanyuan, #picture {
+	position: relative;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+}
+
+#main #content #board #board_set #huanyuan {
+	display: none;
+}
+
+#main #content #board #edit {
+	position: relative;
+	border: 1px solid #8a8a8a;
+	border-radius: 5px;
+	display: inline-block;
+	width: 145px;
+	display: none;
+}
+
+#main #content #board #edit #etitle, #exieti, #ebold, #elink {
+	position: relative;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+}
+
+#etitle {
+	left: 3px;
+}
+
+#exieti {
+	left: -5px;
+}
+
+#elink {
+	left: 0px;
+}
+
+#main #content #board #edit #ecolor {
+	position: relative;
+	display: inline-block;
+	background-color: black;
+	width: 18px;
+	height: 18px;
+	top: -1px;
+	cursor: pointer;
+	left: -4px;
+}
+
+#main #content #board #submit {
+	position: relative;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	float: right;
+	display: inline-block;
+}
+
+#main #content #board #colorBar {
+	position: relative;
+	display: block;
+	width: 200px;
+	height: 22px;
+	border: 1px solid #8a8a8a;
+	left: 10.5%;
+	border-radius: 5px;
+	background-color: #fff;
+	display: none;
+}
+
+.colors {
+	position: relative;
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	background-color: black;
+	top: 2px;
+	left: 14px;
+	cursor: pointer;
+}
+
+#red_block {
+	background-color: red;
+}
+
+#orange_block {
+	background-color: orange;
+}
+
+#yellow_block {
+	background-color: yellow;
+}
+
+#green_block {
+	background-color: green;
+}
+
+#blue_block {
+	background-color: blue;
+}
+
+#purple_block {
+	background-color: purple;
+}
+
+#black_block {
+	background-color: black;
+}
+
+#brown_block {
+	background-color: brown;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

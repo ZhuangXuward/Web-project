@@ -8,11 +8,11 @@
 
 #main #content #board {
 	position: relative;
-	top: 5%;
+	top: 20px;
 	left: 6%;
 	width: 80%;
 	max-width: 80%;
-	height: 30%;
+	height: 200px;
 }
 
 #main #content #board #board_set {

@@ -6,6 +6,22 @@
 	border-bottom: solid 2px #919191;
 }
 
+#main #content #concern {
+    position: relative;
+    top: 20px;
+    margin: 0px auto;
+    width: 80%;
+    background-color: brown;
+    height: 60%;
+}
+
+#main #content #myblog {
+    position: relative;
+    width: 100%;
+    background-color: blue;
+    height: 60%;
+}
+
 .carousel_outer {
 	position: relative;
 	width: 90%;
@@ -32,7 +48,7 @@
 	background: url("../images/arrows-30.png");
 	width: 30px;
 	height: 80px;
-	top: 60px;
+	top: 35%;
 	left: 5px;
 	cursor: pointer;
 	display: none;
@@ -44,7 +60,7 @@
 	background-position: 0px -80px;
 	width: 30px;
 	height: 80px;
-	top: 65px;
+	top: 35%;
 	right: 5px;
 	cursor: pointer;
 	display: none;

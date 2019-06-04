@@ -10,9 +10,9 @@
         Class.forName("com.mysql.jdbc.Driver"); // 查找数据库驱动类
         Connection con=DriverManager.getConnection(conStr, "user", "123");
         Statement stmt=con.createStatement(); //创建MySQL语句的对象
-        ResultSet rs=stmt.executeQuery("select * from users where name = '" + userName + "' and password = '" + userPwd + "'");//执行查询，返回结果集
+        ResultSet rs=stmt.executeQuery("select * from users where (name = '" + userName + "' or email = '" + userName + "') and password = '" + userPwd + "'");//执行查询，返回结果集
         if(rs.next()) { //把游标(cursor)移至第一个或下一个记录
-            response.sendRedirect("loGinsuccess.jsp?username=" + userName); 
+            response.sendRedirect("loGinsuccess.jsp?username=" + userName); //密码正确跳转loGinsuccess.jsp
         }else{
             response.sendRedirect("login.jsp?errNo");//密码不对返回到登陆  
         }

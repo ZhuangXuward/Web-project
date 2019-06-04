@@ -45,8 +45,6 @@
 
     <!-- normal -->
     <div id="home">
-        <div id="search">
-        </div>
         <div id="com">
             <a href="">「Lifeblog.com」</a>
         </div>
@@ -57,16 +55,15 @@
             <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
         </div>
         <div id="personal_signature">
-            <p>Show your life this moment!<p>
+            <p>Show your life this moment!</p>
         </div>
-        <ul id="menu">
-            <li>
-                <a href="">设置</a>
-            </li>
-            <li>
-                <a href="">关于</a>
-            </li>
-    </div>
+        <div id="menu">
+            <a href="">设置</a><br><br> 
+            <a href="">关于</a>
+        </div>
+        <div id="footer">
+           <span>Copyright © 2019 LifeBlog.com</span>
+        </div>
     </div>
 
     <div id="main">
@@ -86,10 +83,56 @@
             </div>
         </div>
         <div id="content">
+            <form id="board" >
+                <fieldset id="board_set">
+                    <legend><b>发表博客</b></legend>
+                    <div id="msg" contenteditable="true" onclick="editMode()"></div>
+                    <br>
+                    <div id="bianji">
+                        <!-- <div id="mjs:tip" class="tip" style="position:fixed; left:0;top:0; display:none;"></div> -->
+                        <img src="images/icon/jinghao.png" id="jinghao" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" tips="话题"/>
+                        <img src="images/icon/xiaolian.png" id="xiaolian" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onmouseover="tip.start(this)" tips="表情" />
+                        <img src="images/icon/picture.png" id="picture" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" onmouseover="tip.start(this)" tips="图片" />
+                        <img src="images/icon/gaojibianji.png" id="gaojibianji" onmousemove="appendixto2(this)" onmouseout="editOut(this)" onmouseover="tip.start(this)" tips="高级编辑" onclick="topEdit()" />
+                        <div id="edit">           
+                            <img src="images/icon/title.png" id="etitle" onmousemove="appendixto2(this)" onmouseout="editHide(0, this)" onclick="Title(this)" />
+                            <img src="images/icon/bold.png" id="ebold" onmousemove="appendixto2(this)" onmouseout="editHide(1, this)" onclick="bold(this)" />
+                            <img src="images/icon/xieti.png" id="exieti" onmousemove="appendixto2(this)" onmouseout="editHide(2, this)" onclick="italic()" />
+                            <div id="ecolor" onclick="showColors()" onmouseover="colorHover(this)" onmouseout="colorOut(this)"></div>
+                            <img src="images/icon/link.png" id="elink" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" onclick="linka()" />
+                        </div>
+                        <img src="images/icon/quanping.png" id="quanping" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" onclick="quanPing()" onmouseover="tip.start(this)" tips="全屏" />
+                        <img src="images/icon/huanyuan.png" id="huanyuan" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" onclick="huanYuan()" onmouseover="tip.start(this)" tips="还原" />
+                        <img src="images/icon/submit.png" id="submit" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" />
+                    <div id="colorBar">
+                        <div id="red_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('red')"></div>
+                        <div id="orange_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('orange')"></div>
+                        <div id="yellow_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('yellow')"></div>
+                        <div id="green_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('green')">
+                        </div>
+                        <div id="blue_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('blue')">
+                        </div>
+                        <div id="purple_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('purple')"></div>
+                        <div id="black_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('black')"></div>
+                        <div id="brown_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('brown')">
+                        </div>
+                    </div>
+                    </div>
+                </fieldset>
+            </form>
+            <div id="information">
+                <div id="info_show">
+                    <div id="name">昵称</div>
+                    <div id="fan"><img src="images/fan.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 粉丝：0</div>
+                    <div id="guanzhu"><img src="images/guanzhu.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 关注：0</div>
+                    <div id="blog_num"><img src="images/boke.png" style="width: 15px; height: 15px;" /> 博客：0</div>
+                    <div id="like"><img src="images/dianzan.png" style="width: 15px; height: 15px;" /> 点赞：0</div>
+                </div>
+                <div id="info_hide">
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="footer">
-    </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 
-
+//注册检查函数：验证是否输入完全，两次输入的密码是否相同。
 function doCheck_Register() {
     var inPut = document.querySelectorAll("div#signUpContain form input");
     let flag = 0;
@@ -27,6 +27,7 @@ function doCheck_Register() {
     return false;
 }
 
+//登录检查函数：验证是否输入，否则提示输入。
 function doCheck_logIn() {
     var inPut = document.querySelectorAll("div#logInContain form input");
     let flag = 0;
