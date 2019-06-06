@@ -40,7 +40,7 @@
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
         <a href="Index.html" id="mobile_com">「Lifeblog.com」</a>
-        <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
+        <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow()" />
     </div>
 
     <!-- normal -->
@@ -85,38 +85,61 @@
         <div id="content">
             <form id="board" >
                 <fieldset id="board_set">
+                    <!-- 发表博客 -->
                     <legend><b>发表博客</b></legend>
-                    <div id="msg" contenteditable="true" onclick="editMode()"></div>
+                    <div id="msg" contenteditable="true" onclick="editMode()" onselect=""></div>
                     <br>
+                    <!-- 编辑 -->
                     <div id="bianji">
                         <!-- <div id="mjs:tip" class="tip" style="position:fixed; left:0;top:0; display:none;"></div> -->
-                        <img src="images/icon/jinghao.png" id="jinghao" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" tips="话题"/>
-                        <img src="images/icon/xiaolian.png" id="xiaolian" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onmouseover="tip.start(this)" tips="表情" />
-                        <img src="images/icon/picture.png" id="picture" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" onmouseover="tip.start(this)" tips="图片" />
-                        <img src="images/icon/gaojibianji.png" id="gaojibianji" onmousemove="appendixto2(this)" onmouseout="editOut(this)" onmouseover="tip.start(this)" tips="高级编辑" onclick="topEdit()" />
+                        <img src="images/icon/jinghao.png" id="jinghao" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" tips="话题" onclick="hotTopic()" />
+                        <img src="images/icon/xiaolian.png" id="xiaolian" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onmouseover="tip.start(this)" tips="表情" onclick="showEmojis()" />
+                        <img src="images/icon/picture.png" id="picture" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" tips="图片" onclick="picClick()" />
+                        <!-- 高级编辑 -->
+                        <img src="images/icon/gaojibianji.png" id="gaojibianji" onmouseover="appendixto2(this)" onmouseout="editOut(this)" tips="高级编辑" onclick="topEdit()" />
                         <div id="edit">           
-                            <img src="images/icon/title.png" id="etitle" onmousemove="appendixto2(this)" onmouseout="editHide(0, this)" onclick="Title(this)" />
-                            <img src="images/icon/bold.png" id="ebold" onmousemove="appendixto2(this)" onmouseout="editHide(1, this)" onclick="bold(this)" />
-                            <img src="images/icon/xieti.png" id="exieti" onmousemove="appendixto2(this)" onmouseout="editHide(2, this)" onclick="italic()" />
-                            <div id="ecolor" onclick="showColors()" onmouseover="colorHover(this)" onmouseout="colorOut(this)"></div>
-                            <img src="images/icon/link.png" id="elink" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" onclick="linka()" />
+                            <img src="images/icon/title.png" id="etitle" onmouseover="appendixto2(this)" onmouseout="editHide(0, this)" onclick="Title(this)" />
+                            <img src="images/icon/bold.png" id="ebold" onmouseover="appendixto2(this)" onmouseout="editHide(1, this)" onclick="bold(this)" />
+                            <img src="images/icon/xieti.png" id="exieti" onmouseover="appendixto2(this)" onmouseout="editHide(2, this)" onclick="italic()" />
+                            <img src="images/icon/underline.png" id="eunderline" onmouseover="appendixto2(this)" onmouseout="editHide(3, this)" onclick="underline(this)" />
+                            <input type="button" id="ecolor" onclick="showColors()" onmouseover="colorHover(this)" onmouseout="colorOut(this)" />
+                            <img src="images/icon/link.png" id="elink" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="linka()" />
                         </div>
-                        <img src="images/icon/quanping.png" id="quanping" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" onclick="quanPing()" onmouseover="tip.start(this)" tips="全屏" />
-                        <img src="images/icon/huanyuan.png" id="huanyuan" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" onclick="huanYuan()" onmouseover="tip.start(this)" tips="还原" />
-                        <img src="images/icon/submit.png" id="submit" onmousemove="appendixto2(this)" onmouseout="removethe2(this)" />
-                    <div id="colorBar">
-                        <div id="red_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('red')"></div>
-                        <div id="orange_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('orange')"></div>
-                        <div id="yellow_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('yellow')"></div>
-                        <div id="green_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('green')">
+                        <img src="images/icon/quanping.png" id="quanping" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="quanPing()" onmouseover="tip.start(this)" tips="全屏" />
+                        <img src="images/icon/huanyuan.png" id="huanyuan" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="huanYuan()" onmouseover="tip.start(this)" tips="还原" />
+                        <img src="images/icon/submit.png" id="submit" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" />
+                        <!-- 颜色条 -->
+                        <div id="colorBar">
+                            <input type="button" id="red_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('red')" />
+                            <input type="button" id="orange_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('orange')" />
+                            <input type="button" id="yellow_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('yellow')" />
+                            <input type="button" id="green_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('green')" />
+                            <input type="button" id="blue_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('blue')" />
+                            <input type="button" id="purple_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('purple')" />
+                            <input type="button" id="black_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('black')" />
+                            <input type="button" id="brown_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('brown')" />
                         </div>
-                        <div id="blue_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('blue')">
+                        <div id="emojis">
+                            <img src="images/emoji/大笑.png" class="emoji" id="大笑" onclick="insertEmoji(this)">
+                            <img src="images/emoji/调皮.png" class="emoji" id="调皮" onclick="insertEmoji(this)">
+                            <img src="images/emoji/尴尬.png" class="emoji" id="尴尬" onclick="insertEmoji(this)">
+                            <img src="images/emoji/鬼脸.png" class="emoji" id="鬼脸" onclick="insertEmoji(this)">
+                            <img src="images/emoji/惊讶.png" class="emoji" id="惊讶" onclick="insertEmoji(this)">
+                            <img src="images/emoji/骷髅.png" class="emoji" id="骷髅" onclick="insertEmoji(this)">
+                            <img src="images/emoji/流泪.png" class="emoji" id="流泪" onclick="insertEmoji(this)">
+                            <img src="images/emoji/难过.png" class="emoji" id="难过" onclick="insertEmoji(this)">
+                            <img src="images/emoji/生气.png" class="emoji" id="生气" onclick="insertEmoji(this)">
+                             <img src="images/emoji/屎.png" class="emoji" id="屎" onclick="insertEmoji(this)">
+                            <img src="images/emoji/受伤.png" class="emoji" id="受伤" onclick="insertEmoji(this)">
+                            <img src="images/emoji/耍酷.png" class="emoji" id="耍酷" onclick="insertEmoji(this)">
+                            <img src="images/emoji/睡觉.png" class="emoji" id="睡觉" onclick="insertEmoji(this)">
+                            <img src="images/emoji/思考.png" class="emoji" id="思考" onclick="insertEmoji(this)">
+                            <img src="images/emoji/吐.png" class="emoji" id="吐" onclick="insertEmoji(this)">
+                            <img src="images/emoji/笑哭.png" class="emoji" id="笑哭" onclick="insertEmoji(this)">
+                            <img src="images/emoji/喜欢.png" class="emoji" id="喜欢" onclick="insertEmoji(this)">
+                            <img src="images/emoji/震惊.png" class="emoji" id="震惊" onclick="insertEmoji(this)">
                         </div>
-                        <div id="purple_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('purple')"></div>
-                        <div id="black_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('black')"></div>
-                        <div id="brown_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('brown')">
-                        </div>
-                    </div>
+                        <input type="file" name="file" id="uploadFiles" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" onchange="uploadFile(event)" />
                     </div>
                 </fieldset>
             </form>

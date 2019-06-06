@@ -140,7 +140,8 @@
 	}
 
 	#main {
-		bottom: 0px;
+		margin: 0px;
+		bottom: 2px;
 		width: 100%;
 		height: 93%;
 	}
@@ -160,7 +161,7 @@
 		height: 100%;
 	}	
 
-	#main #content #information {
+	#quanping {
 		display: none;
 	}
 }

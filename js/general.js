@@ -1,16 +1,7 @@
-//隐藏指向的内容
-function hideById(obj) {
-   var hideObj = document.getElementById("obj");
-   hideObj.style.display = "none";
-}
-
-//显示指向的内容
-function showById(obj, num) {
-   var showObj = document.getElementById("obj");
-   if (num == 1)
-      showObj.style.display = "inline-block";
-   else
-      showObj.style.display = "block";
+//获取被选中的文本值
+function getSelectText() {
+   return window.getSelection ? window.getSelection().toString() :     
+   document.selection.createRange().text;
 }
 
 //显示mobile模式中的shadow，并能显示相关的链接
@@ -54,6 +45,60 @@ window.onresize = function() {
 }
 
 /********************关于编辑文本的JS************************/
+
+//解决加入图片后粗体等不再编辑的bug
+function solveHBI() {
+   var _ebold = document.getElementById("ebold");
+   if (_ebold.src.search('2') != -1) {
+      document.execCommand("bold", false, null);
+      ebold = true;
+   }
+   var _etitle = document.getElementById("etitle");
+   if (_etitle.src.search('2') != -1) {
+      document.execCommand("fontsize", false, 6);
+      etitle = true;
+   }
+   var _eitalic = document.getElementById("exieti");
+   if (_eitalic.src.search('2') != -1) {
+      document.execCommand("italic", false, null);
+      eitalic = true;
+   }
+   var _eunderline = document.getElementById("eunderline");
+   if (_eunderline.src.search('2') != -1) {
+      document.execCommand("underline", false, null);
+      eunderline = true;
+   }
+}
+
+//编辑div的光标问题解决
+
+//使光标保持
+function efocus() {
+   var msg = document.getElementById("msg");
+   msg.focus();
+}
+
+//是光标位于文本末
+function elast() {
+   var msg = document.getElementById("msg");
+   if (window.getSelection) {//ie11 10 9 ff safari
+      msg.focus(); //解决ff不获取焦点无法定位问题
+      var range = window.getSelection();//创建range
+      range.selectAllChildren(msg);//range 选择obj下所有子内容
+      range.collapseToEnd();//光标移至最后
+      }
+   else if (document.selection) {//ie10 9 8 7 6 5
+      var range = document.selection.createRange();//创建选择对象
+       //var range = document.body.createTextRange();
+      range.moveToElementText(msg);//range定位到obj
+      range.collapse(false);//光标移至最后
+      range.select();
+   }
+   solveHBI();
+   solveHBI(); //必须重复
+   efocus();
+}
+
 function appendixto2(obj) {
    if (obj.src.search('2') == -1)
    {
@@ -72,6 +117,69 @@ function removethe2(obj) {
    }
 }
 
+//输出#话题#
+function hotTopic() {
+   var msg = document.getElementById("msg");
+   if (msg.innerHTML.search("#输入话题#") == -1)
+   { 
+      var temp = msg.innerHTML;
+      msg.innerHTML = "#输入话题#" + temp;
+      //选中文本
+      var range = document.createRange();
+      var startNode = document.getElementById("msg").firstChild;
+      var startOffset = 1;
+      range.setStart(startNode, startOffset);
+      var endOffset = 5;
+      range.setEnd(startNode, endOffset);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range) 
+   }
+}
+
+//表情包部分
+//显示表情包
+function showEmojis() {
+   var emojis = document.getElementById("emojis");
+   emojis.style.display = "block";
+   efocus();
+}
+
+//隐藏表情包
+function hideEmojis() {
+   var emojis = document.getElementById("emojis");
+   emojis.style.display = "none";
+}
+
+//向文本中插入表情
+function insertEmoji(obj) {
+   var temp = obj.getAttribute("id");
+   var imgPath = "images/emoji/" + temp + ".png";
+   document.execCommand('insertHTML', false, '<img src="' + imgPath + '" width="20px" height="20px">');
+   solveHBI();
+   efocus();
+}
+
+//上传图片
+function uploadFile(event){
+   var files = event.target.files, file;
+   if (files && files.length > 0) {
+      //获取目前上传的文件
+      file = files[0];// 文件大小校验的动作
+   }
+   var URL = window.URL || window.webkitURL;
+   //获取文件的路径
+   var imgURL = URL.createObjectURL(file);
+   var msg = document.getElementById("msg");
+   msg.focus();
+   document.execCommand('insertHTML', false, '<img src="' + imgURL + '" width="30%" height="auto">');
+}
+
+function picClick() {
+   var uploadFiless = document.getElementById("uploadFiles");
+   uploadFiless.click();  
+}
+
 //高级编辑
 function topEdit() {
    var edit = document.getElementById("edit");
@@ -84,9 +192,10 @@ function topEdit() {
    }
    var colorBar = document.getElementById("colorBar");
    colorBar.style.display = "none";
+   efocus();
 }
 
-var emsg = document.getElementById("msg");
+//****高级编辑半部分****//
 
 function editOut(obj) {
    var edit = document.getElementById("edit");
@@ -96,8 +205,146 @@ function editOut(obj) {
    }
 }
 
+var etitle = false;
+var ebold = false;
+var eitalic = false;
+var eunderline = false;
+//判断是否在使用该模式
+function editHide(num, obj) {
+   if (num == 0)
+      condition = etitle;
+   if (num == 1)
+      condition = ebold;
+   if (num == 2)
+      condition = eitalic;
+   if (num == 3)
+      condition = eunderline;
+   if (condition == false) 
+      removethe2(obj);
+   if (condition == true) 
+      appendixto2(obj);
+}
+
+//标题字体
+function Title(obj) {
+   if (etitle == false)
+   {
+      etitle = true;
+      document.execCommand("fontsize", false, 6);
+   }
+   else
+   {
+      etitle = false;
+      document.execCommand("fontsize", false, 4);
+   }
+   efocus();
+}
+
+//字体加粗
+function bold(obj) {
+   if (ebold == false)
+      ebold = true;
+   else
+      ebold = false;
+   document.execCommand("bold", false, null);
+   efocus();
+}
+
+//斜体字体
+function italic(obj) {
+   if (eitalic == false)
+      eitalic = true;
+   else
+      eitalic = false;
+   document.execCommand("italic", false, null);
+   efocus();
+}
+
+//加下划线
+function underline(obj) {
+   if (eunderline == false)
+      eunderline = true;
+   else
+      eunderline = false;
+   document.execCommand("underline", false, null);
+   efocus();
+}
+
+
+function editMode() {
+   // var msg = document.getElementById("msg");
+   // var temp = msg.innerHTML;
+   // //编辑框有内容才可以进行
+   // if (temp[0] != undefined) {
+   // var selection = getSelection();
+   // // 设置最后光标对象
+   // var cursorPos = selection.anchorOffset;
+   // console.log(msg.style.innerHTML);
+   var _etitle = document.getElementById("etitle");
+   if (_etitle.src.search('2') != -1) {
+      document.execCommand("fontsize", false, 6);
+      etitle = true;
+   }
+
+   var _ebold = document.getElementById("ebold");
+   if (_ebold.src.search('2') != -1)  {
+      document.execCommand("bold", false, null);
+      ebold = true;
+   }
+
+   var _eitalic = document.getElementById("exieti");
+   if (_eitalic.src.search('2') != -1) {
+      document.execCommand("italic", false, null);
+      eitalic = true;
+   }
+
+   var _ecolor = document.getElementById("ecolor");
+   var color = ecolor.style.backgroundColor;
+   document.execCommand("forecolor", false, color);
+// }
+}
+
+function showColors() {
+   var colorBar = document.getElementById("colorBar");
+   colorBar.style.display = "block";
+}
+
+function colorHover(obj) {
+   obj.style.opacity = "0.8";
+}
+
+function colorOut(obj) {
+   obj.style.opacity = "1";
+}
+
+function colorBarHide() {
+   var colorBar = document.getElementById("colorBar");
+   colorBar.style.display = "none";
+}
+
+//点击div外会隐藏emojis和colorBar
+window.onclick = function(event) {
+   var target = event ? event.target : window.event.srcElement;
+   if(target.id != "colorBar" && target.id != "ecolor" && target.id != "msg")
+        colorBarHide();
+   if(target.id != "emojis" && target.id != "xiaolian")
+        hideEmojis();
+}
+
+function changeColor(str) {
+   var ecolor = document.getElementById("ecolor");
+   ecolor.style.backgroundColor = str;
+   document.execCommand("forecolor", false, str);
+}
+
+//生成链接
+function linka() {
+   document.execCommand("createlink", false, "输入链接");
+}
+
 //全屏模式
 function quanPing() {
+   //将其他div隐藏
    var home = document.getElementById("home");
    home.style.display = "none";
    var wrap = document.getElementById("wrap");
@@ -107,13 +354,22 @@ function quanPing() {
 
    var board = document.getElementById("board");
    board.style.position = "fixed";
-   board.style.width = "100%";
-   board.style.height = "100%"; 
+   board.style.Width = "100%";
+   board.style.height = "95%";
+   board.style.left = "15%"; 
 
    var huanyuan = document.getElementById("huanyuan");
    huanyuan.style.display = "inline-block";
    var quanping = document.getElementById("quanping");
    quanping.style.display = "none";
+
+   var main = document.getElementById("main");
+   main.style.overflowY = "visible";
+
+   //调整表情包div的长宽
+   var emojis = document.getElementById("emojis");
+   emojis.style.height = "60px";
+   emojis.style.width = "360px"
 }
 
 //全屏还原
@@ -129,109 +385,20 @@ function huanYuan() {
    board.style.position = "relative";
    board.style.width = "70%";
    board.style.height = "200px";
+   board.style.left = "6%"
 
    var quanping = document.getElementById("quanping");
    quanping.style.display = "inline-block";
    var huanyuan = document.getElementById("huanyuan");
    huanyuan.style.display = "none";
+
+   var main = document.getElementById("main");
+   main.style.overflowY = "scroll";
+
+   var emojis = document.getElementById("emojis");
+   emojis.style.height = "85px";
+   emojis.style.width = "180px"
 }
-
-var etitle = false;
-var ebold = false;
-var eitalic = false;
-//判断是否在使用该模式
-function editHide(num, obj) {
-   if (num == 0)
-      condition = etitle;
-   if (num == 1)
-      condition = ebold;
-   if (num == 2)
-      condition = eitalic;
-   if (condition == false) 
-      removethe2(obj);
-   if (condition == true) 
-      appendixto2(obj);
-}
-
-//字体加粗
-
-function Title(obj) {
-   if (etitle == false)
-   {
-      etitle = true;
-      document.execCommand("fontsize", false, 6);
-   }
-   else
-   {
-      etitle = false;
-      document.execCommand("fontsize", false, 4);
-   }
-}
-
-function bold(obj) {
-   if (ebold == false)
-      ebold = true;
-   else
-      ebold = false;
-   document.execCommand("bold", false, null);
-}
-
-function italic(obj) {
-   if (eitalic == false)
-      eitalic = true;
-   else
-      eitalic = false;
-   document.execCommand("italic", false, null);
-   document.execCommand("forecolor", false, "green");
-
-}
-
-function linka() {
-   document.execCommand("createlink", false, "#");
-}
-
-function showColors() {
-   var colorBar = document.getElementById("colorBar");
-   colorBar.style.display = "block";
-}
-
-function colorHover(obj) {
-   obj.style.opacity = "0.8";
-}
-
-function colorBarHide() {
-   var colorBar = document.getElementById("colorBar");
-   colorBar.style.display = "none";
-}
-
-function colorOut(obj) {
-   obj.style.opacity = "1";
-}
-
-function changeColor(str) {
-   var ecolor = document.getElementById("ecolor");
-   ecolor.style.backgroundColor = str;
-   colorBarHide();
-}
-
-function editMode() {
-   var ecolor = document.getElementById("ecolor").style.backgroundColor;
-   //document.execCommand("forecolor", false, "green");
-   //console.log(document.execCommand("forecolor", false, "green"));
-
-   var etitle = document.getElementById("etitle");
-   if (etitle.src.search('2') != -1) 
-      document.execCommand("fontsize", false, 6);
-
-   var ebold = document.getElementById("ebold");
-   if (ebold.src.search('2') != -1) 
-      document.execCommand("bold", false, null);
-
-   var eitalic = document.getElementById("exieti");
-   if (eitalic.src.search('2') != -1) 
-      document.execCommand("italic", false, null);
-}
-
 
 /******************跟随鼠标移动的提示框************************/
 /*var tip={

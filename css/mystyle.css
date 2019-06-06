@@ -1,6 +1,6 @@
 * {
     font-family: STKaiti, YouYuan, sans-serif;
-    color: black;
+    /*不要设置全部字体颜色，否则其他会出错*/
     /*cursor: url(https://images2015.cnblogs.com/blog/961272/201607/961272-20160719145928310-806072030.gif), default!important;*/
 }
 
@@ -41,6 +41,7 @@ body {
 
 #home {
     position: fixed;
+    display: block;
     width: 20%;
     height: 100%;
     background: url("../images/homepic.jpeg");
@@ -165,6 +166,7 @@ input[type='file'] {
     height: 52px;
     width: 100%;
     z-index: 1000;
+    display: block;
 }
 
 #main #wrap #nav {
@@ -238,6 +240,7 @@ input[type='file'] {
 
 #main #content {
     position: relative;
+    color: black;
     top: 0px;
     height: 92%;
     width: 100%;
