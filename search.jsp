@@ -1,7 +1,61 @@
+<%@ page language="java" import="java.util.*,java.sql.*" 
+         contentType="text/html; charset=utf-8"
+%><%
+	request.setCharacterEncoding("utf-8");
+	String msg ="";
+    String sql ="";
+	String query = "";
+	String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202"
+					+ "?autoReconnect=true&useUnicode=true"
+					+ "&characterEncoding=UTF-8"; 
+        StringBuilder table=new StringBuilder("");
+	try{
+	  Class.forName("com.mysql.jdbc.Driver");
+	  Connection con=DriverManager.getConnection(connectString, 
+	                 "user", "123");
+	  Statement stmt=con.createStatement();
+      if(request.getMethod().equalsIgnoreCase("post")) {
+        query = request.getParameter("query");
+        sql="select*from users where name like '%"+query+"%' or email like '%"+query+"%' or phone like '%"+query+"%'";
+      }
+      else {
+           sql="select*from users";
+      }
+	  ResultSet rs=stmt.executeQuery(sql);
+      if(!rs.next()) {
+          msg = "没有该用户！";
+      }
+	  else {
+          rs=stmt.executeQuery(sql);
+          table.append("<div class='user_searched'>");
+          while(rs.next()) {
+            table.append(String.format(
+                "<div class='user_item'>" +
+                "<div class='user_avatar'><img src='./images/default_avatar.jpeg' style='width: 60px; height: 60px; border-radius: 50px;'></img>" +
+                "</div>" + 
+                "<div class='user_content'><span class='user_name'>%s</span> <span class='user_hobby'>%s</span> <span class='user_follow'>%s</span></div></div>",
+                rs.getString("name"), rs.getString("hobby"),
+                "<button><a href='#?pid="+rs.getString("id")+"'>关注</a></button>"
+                //TODO 关注，添加到数据库
+                )
+            );
+		}
+      table.append("</div>");
+      }
+	  rs.close();
+	  stmt.close();
+	  con.close();
+	}
+	catch (Exception e){
+	  msg = e.getMessage();
+	}
+%>
+
+
 <!DOCTYPE html>
 <html>
-
 <head>
+    
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport"
@@ -12,9 +66,10 @@
     <meta name="date" content="2019-05-21T12:00:00+00:00" />
     <title>Lifeblog.com</title>
     <script type="text/javascript" src="js/general.js"></script>
+    <script type="text/javascript" src="js/data.js"></script>
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
     <link rel="stylesheet" type="text/css" href="css/mobile.css" />
-    <link rel="stylesheet" type="text/css" href="css/album.css" />
+    <link rel="stylesheet" type="text/css" href="css/search.css" />
 </head>
 
 <body>
@@ -84,8 +139,17 @@
             </div>
         </div>
         <div id="content">
+            <div id="container">
+              <h1>查找ID</h1>  
+              <form action="search.jsp" method="post">
+                  输入查询：<input type="text" name="query" placeholder="输入昵称/邮箱/手机号码" value="<%=query%>">
+                  <input type="submit" value="查询">
+                  <a href="Index.html"><input type="button" value="返回"></a>
+              </form>
+              <%=table%><br><br>  
+              <%=msg%>
+            </div>
         </div>
     </div>
-
 </body>
 </html>

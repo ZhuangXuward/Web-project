@@ -47,10 +47,21 @@ function updateData() {
 	window.location.href = "Data.jsp";
 }
 
+//清除所有cookie函数
+function clearAllCookie() {
+	var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+	if (keys) {
+		for (var i = keys.length; i--;)
+			document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+	}
+}
+
 //退出登录
 function exitLogin() {
-	if(window.confirm("是否退出登录"))
+	if(window.confirm("是否退出登录")) {
+		clearAllCookie();
 		window.location.href = "login.jsp";
+	}
 }
 
 window.onload = function() {

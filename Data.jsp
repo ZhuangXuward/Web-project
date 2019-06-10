@@ -32,13 +32,38 @@
         String companyPost = request.getParameter("companyPost");
         String signPost = request.getParameter("signPost");
         String resumePost = request.getParameter("resumeText");
-        try {
-            int cnt = stmt.executeUpdate("update users set name='"+namePost+"', sex='"+sexPost+"', birthday='"+birthdayPost+"', phone='"+phonePost+"', hobby='"+hobbyPost+"', hometown='"+hometownPost+"', email='"+emailPost+"', job='"+jobPost+"', school='"+schoolPost+"', company='"+companyPost+"', sign='"+signPost+"', resume='"+resumePost+"' where name='"+webUser+"'");
-            if (cnt>0) 
-            msg = "资料修改成功!";
-        } catch(Exception e) {
-            msg = e.getMessage();
+
+        String name = namePost;
+        String email = emailPost;
+        String sql="select*from users where name='" + name +"'"; //查询数据库中是否有相同用户名
+        String sql2="select*from users where email='" + email + "'"; //查询数据库中是否有相同邮箱
+        ResultSet rs=stmt.executeQuery(sql); 
+        if (!rs.next()) { //没有相同用户名，继续判断邮箱是否相同
+            try {
+                ResultSet rss = stmt.executeQuery(sql2);
+                if (!rss.next()) { //没有相同邮箱，注册成功
+                        int cnt = stmt.executeUpdate("update users set name='"+namePost+"', sex='"+sexPost+"', birthday='"+birthdayPost+"', phone='"+phonePost+"', hobby='"+hobbyPost+"', hometown='"+hometownPost+"', email='"+emailPost+"', job='"+jobPost+"', school='"+schoolPost+"', company='"+companyPost+"', sign='"+signPost+"', resume='"+resumePost+"' where name='"+webUser+"'");
+                        if (cnt>0) {
+                            msg = "资料修改成功!";
+                            response.sendRedirect("signUpSuccess.jsp");
+                        }
+                }
+                else { //用户名相同，但是邮箱已注册
+                    msg = "该邮箱已注册！";
+                    response.sendRedirect("Data.jsp");
+                }
+                stmt.close(); con.close();
+            }
+            catch (Exception e) {
+                msg = e.getMessage();
+            }
         }
+        else { //用户名已注册
+            msg = "该用户名已存在！";
+            response.sendRedirect("Data.jsp");
+        }
+
+        
     }
 
     //显示数据库内容
@@ -56,7 +81,7 @@
     String resume_value = "";
 
     ResultSet rs = stmt.executeQuery("select * from users where name='"+webUser+"'");
-    while (rs.next()) {    
+    if (rs.next()) {    
         name_value = rs.getString("name");
         sex_value = rs.getString("sex");
         birthday_value = rs.getString("birthday");
@@ -136,7 +161,8 @@
         </div>
         <div id="menu">
             <a href="setting.html">设置</a><br><br> 
-            <a href="about.html">关于</a>
+            <a href="about.html">关于</a><br><br>
+            <a href="search.jsp">搜索</a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
@@ -157,6 +183,7 @@
                 <script type="text/javascript">
                     var userTemp = document.cookie.split("=");
                     document.getElementById("userName").innerHTML = userTemp[1];
+                    console.log(userTemp[1]);
                 </script>
             </div>
         </div>

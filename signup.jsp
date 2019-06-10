@@ -1,6 +1,9 @@
 <%@page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"%>
 <% request.setCharacterEncoding("utf-8");
 String msg = "";
+String query = "";
+String sql = "";
+String sql2 = "";
 String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
 String user="user"; String pwd="123";
 String username = request.getParameter("name");
@@ -20,19 +23,34 @@ if (request.getMethod().equalsIgnoreCase("post")){
     Class.forName("com.mysql.jdbc.Driver");
     Connection con = DriverManager.getConnection(connectString, user, pwd);
     Statement stmt = con.createStatement();
-    try {
-        String fmt="insert into users(name,password,sex,birthday,phone,hobby,hometown,email,job,school,company,sign,resume) values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
-        String sql = String.format(fmt, username, password, sex, birthday, phone, hobby,hometown, email, job, school, company, sign, resume);
-        int cnt = stmt.executeUpdate(sql);
-        if (cnt > 0) {
-            msg = "注册成功!";
-            response.sendRedirect("signUpSuccess.jsp");
+    query = request.getParameter("query");
+    sql="select*from users where name='" + username +"'"; //查询数据库中是否有相同用户名
+    sql2="select*from users where email='" + email + "'"; //查询数据库中是否有相同邮箱
+    ResultSet rs=stmt.executeQuery(sql); 
+      if (!rs.next()) { //没有相同用户名，继续判断邮箱是否相同
+        try {
+            ResultSet rss = stmt.executeQuery(sql2);
+            if (!rss.next()) { //没有相同邮箱，注册成功
+                String fmt="insert into users(name, password, sex, birthday, phone, hobby, hometown, email, job, school, company, sign, resume) values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+                sql = String.format(fmt, username, password, sex, birthday, phone, hobby,hometown, email, job, school, company, sign, resume);
+                int cnt = stmt.executeUpdate(sql);
+                if (cnt > 0) {
+                    msg = "注册成功!";
+                    response.sendRedirect("signUpSuccess.jsp");
+                }
+            }
+            else { //用户名相同，但是邮箱已注册
+                msg = "该邮箱已注册！";
+            }
+            stmt.close(); con.close();
         }
-        stmt.close(); con.close();
-    }
-    catch (Exception e) {
-        msg = e.getMessage();
-    }
+        catch (Exception e) {
+            msg = e.getMessage();
+        }
+      }
+      else { //用户名已注册
+        msg = "该用户名已存在！";
+      }
 }
 %>
 <!DOCTYPE html>

@@ -1,0 +1,66 @@
+#container {
+    margin-left: 30px;
+}
+
+
+.user_searched {
+    margin-top: 20px;
+}
+
+.user_avatar {
+    /* float: left; */
+    margin-right: 20px;
+    line-height: 100px;
+    position: relative;
+    top: 20px;
+    display: inline-block;
+}
+
+.user_content {
+    /* margin-left: 30px; */
+    line-height: 100px;
+    width: 80%;
+    display: inline-block;
+}
+
+.user_content .user_name {
+    font-size: 18px;
+    font-weight: bold;
+    font-family: 微软雅黑;
+}
+
+.user_content .user_hobby {
+    margin-left: 10px;
+}
+
+.user_content .user_follow {
+    position: absolute; 
+    right: 30px;
+}
+
+.user_content .user_follow button {
+   /* TODO 关注按钮样式*/
+}
+
+.user_item:first-child {
+    border-top: 1px solid lightgray;
+}
+
+.user_item {
+    /* float: left; */
+    display: block;
+    border-bottom: 1px solid lightgray;
+    /* border-color: black; */
+}
+
+.user_item:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+@media only screen and (max-width: 700px) {
+    .user_content .user_hobby {
+        display: none;
+    }
+}
