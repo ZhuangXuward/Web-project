@@ -32,38 +32,21 @@
         String companyPost = request.getParameter("companyPost");
         String signPost = request.getParameter("signPost");
         String resumePost = request.getParameter("resumeText");
+        try {
+            int cnt = stmt.executeUpdate("update users set name='"+namePost+"', sex='"+sexPost+"', birthday='"+birthdayPost+"', phone='"+phonePost+"', hobby='"+hobbyPost+"', hometown='"+hometownPost+"', email='"+emailPost+"', job='"+jobPost+"', school='"+schoolPost+"', company='"+companyPost+"', sign='"+signPost+"', resume='"+resumePost+"' where name='"+webUser+"'");
+            Cookie suser = new Cookie("user", namePost);
 
-        String name = namePost;
-        String email = emailPost;
-        String sql="select*from users where name='" + name +"'"; //查询数据库中是否有相同用户名
-        String sql2="select*from users where email='" + email + "'"; //查询数据库中是否有相同邮箱
-        ResultSet rs=stmt.executeQuery(sql); 
-        if (!rs.next()) { //没有相同用户名，继续判断邮箱是否相同
-            try {
-                ResultSet rss = stmt.executeQuery(sql2);
-                if (!rss.next()) { //没有相同邮箱，注册成功
-                        int cnt = stmt.executeUpdate("update users set name='"+namePost+"', sex='"+sexPost+"', birthday='"+birthdayPost+"', phone='"+phonePost+"', hobby='"+hobbyPost+"', hometown='"+hometownPost+"', email='"+emailPost+"', job='"+jobPost+"', school='"+schoolPost+"', company='"+companyPost+"', sign='"+signPost+"', resume='"+resumePost+"' where name='"+webUser+"'");
-                        if (cnt>0) {
-                            msg = "资料修改成功!";
-                            response.sendRedirect("signUpSuccess.jsp");
-                        }
-                }
-                else { //用户名相同，但是邮箱已注册
-                    msg = "该邮箱已注册！";
-                    response.sendRedirect("Data.jsp");
-                }
-                stmt.close(); con.close();
-            }
-            catch (Exception e) {
-                msg = e.getMessage();
-            }
-        }
-        else { //用户名已注册
-            msg = "该用户名已存在！";
+            // 设置cookie过期时间为一周。
+            suser.setMaxAge(7*60*60*24); 
+
+            // 在响应头部添加cookie
+            response.addCookie(suser);
+            if (cnt>0) 
+            msg = "资料修改成功!";
             response.sendRedirect("Data.jsp");
+        } catch(Exception e) {
+            msg = e.getMessage();
         }
-
-        
     }
 
     //显示数据库内容
@@ -81,7 +64,7 @@
     String resume_value = "";
 
     ResultSet rs = stmt.executeQuery("select * from users where name='"+webUser+"'");
-    if (rs.next()) {    
+    while (rs.next()) {    
         name_value = rs.getString("name");
         sex_value = rs.getString("sex");
         birthday_value = rs.getString("birthday");
@@ -97,7 +80,21 @@
         //用户名更改
         
     }
-    rs.close(); stmt.close(); con.close();
+
+    rs.close(); 
+
+    //防止邮箱和名字重复
+    ResultSet rss = stmt.executeQuery("select * from users");
+    int index = 0;
+    String[] name_array = new String[1000];
+    String[] email_array = new String[1000];
+    while (rss.next()) {
+        name_array[index] = rss.getString("name");
+        email_array[index] = rss.getString("email");
+        index ++;
+    } 
+    
+    rss.close(); stmt.close(); con.close();
 %>
 
 <!DOCTYPE html>
@@ -161,8 +158,7 @@
         </div>
         <div id="menu">
             <a href="setting.html">设置</a><br><br> 
-            <a href="about.html">关于</a><br><br>
-            <a href="search.jsp">搜索</a>
+            <a href="about.html">关于</a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
@@ -183,7 +179,6 @@
                 <script type="text/javascript">
                     var userTemp = document.cookie.split("=");
                     document.getElementById("userName").innerHTML = userTemp[1];
-                    console.log(userTemp[1]);
                 </script>
             </div>
         </div>
@@ -285,9 +280,9 @@
                         </div>                      
                     </div>
                     <img src="images/icon/dataEdit.png" id="dataEdit" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="dataToEdit(this)" />
-                        <input type="button" name="exit" id="exit" value="退出" onclick="if(window.confirm('是否放弃此次编辑？')) window.location.reload();" />
-                        <input type="button" name="save" value="保存" id="saveData" onclick=" if(window.confirm('是否进行资料修改？')) { document.getElementById('dataForm').submit(); datatoShow();} " />
-                       <img src="images/bamboo.png" id="dataBamboo" />
+                    <input type="button" name="exit" id="exit" value="退出" onclick="if(window.confirm('是否放弃此次编辑？')) window.location.reload();" />
+                    <input type="button" name="save" value="保存" id="saveData" onclick="uploadData()" />
+                    <img src="images/bamboo.png" id="dataBamboo" />
                 </fieldset>          
             </form>
         </div>
@@ -333,8 +328,43 @@
         //设置修改资料
         //通过上一个跳转过来的网页是否是setting.html确定
         window.onload = function() {
-            if(document.referrer.search("setting.html") != -1) 
+            if (document.referrer.search("setting.html") != -1) 
                 document.getElementById("dataEdit").click();
+        }
+
+        function uploadData() {
+            if (window.confirm('是否进行资料修改？')) 
+            { 
+                var nameFlag = true;
+                var emailFlag = true;
+                //检查用户名是否被注册
+                <%for (int i = 0; i < index; i ++) { %>
+                    //注意要加双引号！
+                    if ("<%=name_array[i]%>" == namePost.value && namePost.value != "<%=webUser%>")
+                    {
+                        alert('"'+namePost.value+'"'+"这个用户名已被注册");
+                        flag = false;
+                        namePost.value = "<%=webUser%>";
+                    }
+                <%}%>
+
+                //检查邮箱是否被注册
+                if (nameFlag == true) {
+                    <%for (int i = 0; i < index; i ++) { %>
+                        if ("<%=email_array[i]%>" == emailPost.value && emailPost.value != "<%=email_value%>")
+                        {
+                            alert('"'+emailPost.value+'"'+"这个邮箱已被注册");
+                            flag = false;
+                            emailPost.value = "<%=email_value%>";
+                        }
+                    <%}%>
+                }
+
+                if (nameFlag == true && emailFlag == true) {
+                    document.getElementById('dataForm').submit();  
+                    datatoShow();           
+                }
+            }
         }
 
     </script>

@@ -105,22 +105,13 @@ function elast() {
    efocus();
 }
 
+//图片的触碰效果
 function appendixto2(obj) {
-   if (obj.src.search('2') == -1)
-   {
-      var temp = obj.src.split('.png');
-      temp[0] += "2.png";
-      obj.src = temp[0];
-   }
+   obj.style.opacity = "1";
 }
 
 function removethe2(obj) {
-   if (obj.src.search('2') != -1)
-   {
-      var temp = obj.src.split('2.png');
-      temp[0] += ".png";
-      obj.src = temp[0];
-   }
+   obj.style.opacity = "0.5";
 }
 
 //输出#话题#
@@ -398,8 +389,6 @@ function huanYuan() {
    emojis.style.height = "85px";
    emojis.style.width = "180px"
 }
-
-
 
 
 /******************跟随鼠标移动的提示框************************/

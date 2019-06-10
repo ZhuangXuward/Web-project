@@ -146,6 +146,10 @@ input[type='file'] {
     color: black; 
 }
 
+#home #menu img:hover {
+    opacity: 1!important;
+}
+
 #main {
     position: fixed;
     float: right;
@@ -227,6 +231,7 @@ input[type='file'] {
     background: linear-gradient(to right, #fff, #ebebeb); 
 }
 
+
 #footer {
     position: absolute;
     text-align: center;
@@ -305,6 +310,10 @@ input[type='file'] {
     height: 30px;
     left: 10%;
     bottom: 5px;
+}
+
+#main #content #board #board_set #bianji img {
+    opacity: 0.5;
 }
 
 #main #content #board #board_set #bianji #btn {

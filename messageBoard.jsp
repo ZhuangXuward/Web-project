@@ -100,7 +100,7 @@
         <div id="menu">
             <a href="setting.html">设置</a><br /><br /> 
             <a href="about.html">关于</a><br><br>
-            <a href="search.jsp">搜索</a>
+            <a href="search.jsp"><img src="./images/icon/search.png" style="width: 20px; opacity: 0.5;"></a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
