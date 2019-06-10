@@ -1,3 +1,9 @@
+//查看是否已经登录账号
+window.onload = function() {
+   if (document.cookie.length == 0) 
+      window.location.href = "login.jsp";
+}
+
 //获取被选中的文本值
 function getSelectText() {
    return window.getSelection ? window.getSelection().toString() :     
@@ -102,7 +108,7 @@ function elast() {
 function appendixto2(obj) {
    if (obj.src.search('2') == -1)
    {
-      var temp = obj.src.split('.');
+      var temp = obj.src.split('.png');
       temp[0] += "2.png";
       obj.src = temp[0];
    }
@@ -111,7 +117,7 @@ function appendixto2(obj) {
 function removethe2(obj) {
    if (obj.src.search('2') != -1)
    {
-      var temp = obj.src.split('2');
+      var temp = obj.src.split('2.png');
       temp[0] += ".png";
       obj.src = temp[0];
    }
@@ -322,15 +328,6 @@ function colorBarHide() {
    colorBar.style.display = "none";
 }
 
-//点击div外会隐藏emojis和colorBar
-window.onclick = function(event) {
-   var target = event ? event.target : window.event.srcElement;
-   if(target.id != "colorBar" && target.id != "ecolor" && target.id != "msg")
-        colorBarHide();
-   if(target.id != "emojis" && target.id != "xiaolian")
-        hideEmojis();
-}
-
 function changeColor(str) {
    var ecolor = document.getElementById("ecolor");
    ecolor.style.backgroundColor = str;
@@ -347,6 +344,8 @@ function quanPing() {
    //将其他div隐藏
    var home = document.getElementById("home");
    home.style.display = "none";
+   var head = document.getElementById("head_portrait");
+   head.style.display = "none";
    var wrap = document.getElementById("wrap");
    wrap.style.display = "none";
    var information = document.getElementById("information");
@@ -399,6 +398,7 @@ function huanYuan() {
    emojis.style.height = "85px";
    emojis.style.width = "180px"
 }
+
 
 /******************跟随鼠标移动的提示框************************/
 /*var tip={

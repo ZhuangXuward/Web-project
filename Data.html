@@ -1,7 +1,40 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+    <!-- <% request.setCharacterEncoding("utf-8");
+String msg = "";
+String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
+String user="user"; String pwd="123";
+String username = request.getParameter("name");
+String password = request.getParameter("password");
+String sex = request.getParameter("sex");
+String birthday = request.getParameter("birthday");
+String phone = request.getParameter("phone");
+String hobby = request.getParameter("hobby");
+String hometown = request.getParameter("hometown");
+String email = request.getParameter("email");
+String job = request.getParameter("job");
+String school = request.getParameter("school");
+String company = request.getParameter("company");
+String sign = request.getParameter("sign");
+String resume = request.getParameter("resume");
+if (request.getMethod().equalsIgnoreCase("post")){
+    Class.forName("com.mysql.jdbc.Driver");
+    Connection con = DriverManager.getConnection(connectString,user, pwd);
+    Statement stmt = con.createStatement();
+    try {
+        String fmt="insert into users(name, sex, birthday, phone, hobby, hometown, email, job, school, company, sign, resume) values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+        String sql = String.format(fmt, username,sex, birthday, phone, hobby, hometown, email, job, school, company, sign, resume);
+        int cnt = stmt.executeUpdate(sql);
+        if (cnt > 0)
+            msg = "资料修改成功!";
+        stmt.close(); con.close();
+    }
+    catch (Exception e) {
+        msg = e.getMessage();
+    }
+}
+%> -->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport"
@@ -12,6 +45,7 @@
     <meta name="date" content="2019-05-21T12:00:00+00:00" />
     <title>Lifeblog.com</title>
     <script type="text/javascript" src="js/general.js"></script>
+    <script type="text/javascript" src="js/data.js"></script>
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
     <link rel="stylesheet" type="text/css" href="css/mobile.css" />
     <link rel="stylesheet" type="text/css" href="css/data.css" />
@@ -28,8 +62,9 @@
             <li><a href="Index.html" class="mobile_link">个人主页</a></li>
             <li><a href="friends.html" class="mobile_link">好友动态</a></li>
             <li><a href="album.html" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.html" class="mobile_link">留言板</a></li>
+            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
             <li><a href="Data.html" class="mobile_link">个人资料</a></li>
+            <li><a href="about.html" class="mobile_link">关于</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
@@ -55,8 +90,8 @@
             <p>Show your life this moment!</p>
         </div>
         <div id="menu">
-            <a href="">设置</a><br><br> 
-            <a href="">关于</a>
+            <a href="setting.html">设置</a><br><br> 
+            <a href="about.html">关于</a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
@@ -70,7 +105,7 @@
                 <li id="li_friends"><a href="friends.html" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
                 <li id="li_album"><a href="album.html" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
                 <li id="li_messageBoard"><a href="messageBoard.html" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
-                <li id="li_data"><a href="Data.html" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
+                <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
             </ul>
             <div id="register">
                 <a href="login.jsp">登录</a>
@@ -80,24 +115,105 @@
             </div>
         </div>
         <div id="content">
-            <div id="data">
-                <div id="name">昵称：</div>
-                <div id="sex">性别：</div>
-                <div id="sign">签名：</div>
-                <div id="birthday">生日：</div>
-                <div id="phone">电话：</div>
-                <div id="hobby">兴趣：</div>
-                <div id="hometown">家乡：</div>
-                <div id="mail">邮箱：</div>
-                <div id="job">职业：</div>
-                <div id="school">学校：</div>
-                <div id="company">公司：</div>
-                <div id="resume">个人简介：</div>
-            </div>
+            <form action="Data.jsp" method="post">
+                <fieldset id="data_board">
+                    <!-- 发表博客 -->
+                    <legend>
+                        <img src="images/icon/ziliao.png" style="position: relative; width: 22px; height: 22px; top: 2px;" />
+                        <b style="position: relative; left: -3px; top: -4px; text-shadow: 2.5px 2.5px 2px #8a8a8a;">资料显示</b>
+                    </legend>
+                    <div id="data">
+                        <div id="name">昵称：<input type="text" name="name" value="Mickey" class="dataInput" /></div>
+                        <div id="sex">性别：
+                            <div class="dataInput">
+                                <input type="radio" name="sex" value="男"/>男
+                                <input type="radio" name="sex" value="女"/>女
+                                <input type="radio" name="sex" value="保密"/>保密
+                            </div>
+                        </div>
+                        <div id="birthday">生日：
+                            <div class="dataInput">
+                                <select name="sel1" id="sel1" onchange="showMonth()">
+                                    <option value="year" disabled="true">年</option>
+                                </select>
+                                <select name="sel2" id="sel2" disabled>
+                                    <option value="month" disabled="true">月</option>
+                                </select>
+                                <select name="sel3" id="sel3" disabled="true">
+                                    <option value="day" disabled="true">日</option>
+                                </select> 
+                                <div id="birthday_result"></div>  
+                            </div>
+                            <input type="button" value="更改" onclick="changeBirthDay()" style="display: none;" id="forChange" />
+                        </div>
+                        <div id="phone">电话：<input type="text" name="phone" value="Mickey" class="dataInput" /></div>
+                        <div id="hobby">兴趣：<input type="text" name="hobby" value="Mickey" class="dataInput" /></div>
+                        <div id="hometown">家乡：<input type="text" name="hometown" value="Mickey" class="dataInput" /></div>
+                        <div id="email">邮箱：<input type="text" name="email" value="Mickey" class="dataInput" /></div>
+                        <div id="job">职业：<input type="text" name="job" value="Mickey" class="dataInput" /></div>
+                        <div id="school">学校：<input type="text" name="school" value="Mickey" class="dataInput" /></div>
+                        <div id="company">公司：<input type="text" name="company" value="Mickey" class="dataInput" /></div>
+                        <div id="sign">个性签名：<input type="text" name="sign" value="Mickey" class="dataInput" /></div>
+                        <div id="resume">个人简介：
+                            <div class="dataInput">
+                                <textarea style="vertical-align: top;" id="resumeText" name="resume"  maxlength="120"></textarea>
+                                <!-- 注意textarea之间不能留有空格 -->
+                            </div>
+                        </div>                      
+                    </div>
+                    <img src="images/icon/dataEdit.png" id="dataEdit" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="dataToEdit(this)" />
+                        <input type="button" name="exit" id="exit" value="退出" onclick="datatoShow()" />
+                        <input type="button" name="save" value="保存" id="saveData" onclick="datatoShow()" />
+                </fieldset>
+            </form>
         </div>
     </div>
 
     <div id="footer">
     </div>
+    <script>
+        //生成1950年到2019年
+        for(var i = 2019; i >= 1950; i--) {
+            var option = document.createElement('option');
+            option.setAttribute('value', i);
+            option.setAttribute('onclick', "showMonth()");
+            option.innerHTML = i;
+            sel1.appendChild(option);
+        }
+        //生成1月-12月
+        for(var i = 1; i <= 12; i ++) {
+            var option = document.createElement('option');
+            option.setAttribute('value', i);
+            option.innerHTML = i;
+            sel2.appendChild(option);    
+        }
+        //生成1日—31日
+        sel2.onchange = function() {
+            var dayNum = getDayNum(sel2.value, sel1.value);
+            for(var i = 1; i <= dayNum; i ++) {
+                var option = document.createElement('option');
+                option.setAttribute('value', i);
+                option.innerHTML = i;
+                sel3.appendChild(option);    
+            }
+            showDay();
+        }
+
+        sel3.onchange = function() {
+            document.getElementById('sel3').removeAttribute("disabled");
+            document.getElementById("birthday_result").innerHTML = sel1.value + "年" + sel2.value + "月" + sel3.value + "日";
+            sel1.style.display = "none";
+            sel2.style.display = "none";
+            sel3.style.display = "none";
+            document.getElementById("forChange").style.display = "inline-block";
+        }
+
+        //设置修改资料
+        //通过上一个跳转过来的网页是否是setting.html确定
+        window.onload = function() {
+           // if(document.referrer.search("setting.html") == -1) {} 
+                document.getElementById("dataEdit").click();
+        }
+    </script>
 </body>
 </html>

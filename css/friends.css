@@ -79,6 +79,7 @@
 	transition-duration: 1s;
 }
 
+
 @media only screen and (max-width: 600px) {
 	#content #carousel_wrap .arrow {
 		opacity: 0;

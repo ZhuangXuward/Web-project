@@ -5,17 +5,29 @@ String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoR
 String user="user"; String pwd="123";
 String username = request.getParameter("name");
 String password = request.getParameter("password");
+String sex = "保密";
+String birthday = "";
+String phone = "";
+String hobby = "";
+String hometown = "";
 String email = request.getParameter("email");
+String job = "";
+String school = "";
+String company = "";
+String sign = "";
+String resume = "";
 if (request.getMethod().equalsIgnoreCase("post")){
     Class.forName("com.mysql.jdbc.Driver");
-    Connection con = DriverManager.getConnection(connectString,user, pwd);
+    Connection con = DriverManager.getConnection(connectString, user, pwd);
     Statement stmt = con.createStatement();
     try {
-        String fmt="insert into users(name,password,email) values('%s', '%s', '%s')";
-        String sql = String.format(fmt,username,password, email);
+        String fmt="insert into users(name,password,sex,birthday,phone,hobby,hometown,email,job,school,company,sign,resume) values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+        String sql = String.format(fmt, username, password, sex, birthday, phone, hobby,hometown, email, job, school, company, sign, resume);
         int cnt = stmt.executeUpdate(sql);
-        if (cnt > 0)
+        if (cnt > 0) {
             msg = "注册成功!";
+            response.sendRedirect("signUpSuccess.jsp");
+        }
         stmt.close(); con.close();
     }
     catch (Exception e) {
@@ -89,14 +101,9 @@ if (request.getMethod().equalsIgnoreCase("post")){
             font-size: 18px;
             font-weight: bold;
         }
-        
-        div#signUpWrap span#signUpBack {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
 
         span#registerMsg {
+            font-family: 宋体;
             color: red;
             font-weight: bold;
         }
@@ -129,7 +136,6 @@ if (request.getMethod().equalsIgnoreCase("post")){
             <p>已有帐号？<a href="login.jsp">前往登录</a></p>
             <span id="registerMsg"><%=msg%><span>
         </div>   
-        <span id="signUpBack"><a href="Index.html">返回</a></span>
     </div>
 </body>
 </html>

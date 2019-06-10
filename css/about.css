@@ -1,0 +1,137 @@
+#aboutWrap {
+	position: relative;
+	top: 0px;
+	width: 80%;
+	height: 60px;
+	float: right;
+	right: 0px;
+	color: black;
+	font-size: 25px;
+	text-align: center;
+	background: url("../images/aboutWrap.jpg");
+	background-position: 0% 20%;
+}
+
+#aboutMain {
+	position: relative;
+	float: right;
+	right: 0px;
+	top: 0px;
+	width: 80%;
+	height: 1170px;
+	background: linear-gradient(to right, #fff, #ebebeb);
+	color: black;
+}
+
+#aboutMain #introduction {
+	position: relative;
+	top: 20px;
+	width: 760px;
+	height: 260px;
+	margin: 0px auto;
+	background: linear-gradient(to right, #ebebeb, #8a8a8a);
+	text-indent: 2em;
+	padding: 40px;
+	border-top-left-radius: 40px;
+	border-bottom-right-radius: 40px;
+}
+
+#aboutMain #introduction p {
+	font-size: 15px;
+}
+
+
+
+#aboutMain #contact {
+ 	position: relative;
+ 	background: linear-gradient(to right, #ebebeb, #8a8a8a);
+	top: 60px;
+	width: 800px;
+	height: 150px;
+	margin: 0px auto;
+	padding: 20px;
+	font-size: 15px;
+	text-align: center;
+	border-top-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
+
+#aboutMain legend {
+	font-size: 20px;
+}
+
+#aboutMain #introduction #l0 {
+	text-indent: 0;
+	text-shadow: 2.5px 2.5px 1.5px #8a8a8a;
+}
+
+#aboutMain #team #l1 {
+	text-align: center;
+	text-shadow: 2.5px 2.5px 1.5px #8a8a8a;	
+}
+
+#aboutMain #team .bamboo {
+	position: absolute;
+	left: 340px;
+}
+
+#aboutMain #contact #l2 {
+	text-align: right;
+	text-shadow: 2.5px 2.5px 1.5px #8a8a8a;
+}
+
+#aboutMain #team .member {
+	position: relative;
+	width: 270px;
+	height: 110px;
+	border-bottom: 1px solid black;
+}
+
+#aboutMain #team .member .photoZone {
+	position: relative;
+	top: 0px;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	overflow: hidden;
+	display: inline-block;
+}
+
+#aboutMain #team .member .teamPhoto {
+	position: relative;
+	width: 80px;
+	cursor: pointer;
+}
+
+#aboutMain #team #member2 .teamPhoto {
+	position: relative;
+	width: 120px;
+	left: -25px;
+}
+
+#aboutMain #team #member2 {
+	top: -30px;
+}
+
+#aboutMain #team #member3 {
+	top: 20px;
+}
+
+#aboutMain #team #member4 {
+	top: -20px;
+}
+
+#aboutMain #team #member2, #member4 {
+	float: right;
+}
+
+.bamboo {
+	opacity: 0.8;
+}
+
+.expand {
+	display: none;
+}
+
+/*for mobile devices */
+

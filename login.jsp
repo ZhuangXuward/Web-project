@@ -67,11 +67,6 @@
             font-size: 18px;
             font-weight: bold;
         }
-        div#logInWrap span#logInBack {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
 
         span#loginMsg {
             color: red;
@@ -112,7 +107,6 @@
     }
    %>
         </div>
-        <span id="logInBack"><a href="Index.html">返回</a></span>
     </div>
 </body>
 </html>

@@ -15,6 +15,109 @@
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
     <link rel="stylesheet" type="text/css" href="css/mobile.css" />
     <link rel="stylesheet" type="text/css" href="css/Index.css" />
+    <style type="text/css">
+        #main #content #information {
+            position: absolute;
+            width: 14%;
+            height: 215px;
+            right: 20px;
+            top: 25px;
+            display: block;
+            border-top-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            background: linear-gradient(to right, #ebebeb, #8a8a8a);
+        }
+
+        #main #content #information legend {
+            text-shadow: 2px 2px 3px black;
+        }
+
+        #main #content #information #fan {
+            position: relative;
+            height: 20px;
+            width: 80px;
+            top: 20px;
+            margin: 0px auto;
+        }
+
+        #main #content #information #guanzhu {
+            position: relative;
+            height: 20px;
+            width: 80px;
+            top: 40px;
+            margin: 0px auto;
+        }
+
+        #main #content #information #blog_num {
+            position: relative;
+            height: 20px;
+            width: 80px;
+            top: 60px;
+            margin: 0px auto;
+        }
+
+        #main #content #information #like {
+            position: relative;
+            height: 20px;
+            width: 80px;
+            top: 80px;
+            margin: 0px auto;
+        }
+
+        @media only screen and (max-width: 740px) {
+            #main #wrap #welcomeBack {
+                display: none;
+            }
+
+            #main #content #board {
+                top: 170px;
+                height: 120px;
+            }
+
+            #main #content #board #board_set #msg {
+                top: 5px;
+                height: 70%;
+            }
+
+            #main #content #information {
+                width: 70%;
+                height: 100px;
+                top: 30px;
+                left: 0px;
+                margin: 0px auto;
+            }
+
+            #main #content #information #fan {
+                top: 15px;
+                margin: 0px;
+                left: 60px;
+            }
+
+            #main #content #information #guanzhu {
+                top: -5px;
+                margin: 0px;
+                left: 200px;
+            }
+
+            #main #content #information #blog_num {
+                top: 15px;
+                margin: 0px;
+                left: 60px;
+            }
+
+            #main #content #information #like {
+                top: -5px;
+                margin: 0px;
+                left: 200px;
+            }
+        }
+
+        @media only screen and (max-width: 1100px) {
+            #main #content #information {
+                right: 0px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -28,8 +131,10 @@
             <li><a href="Index.html" class="mobile_link">个人主页</a></li>
             <li><a href="friends.html" class="mobile_link">好友动态</a></li>
             <li><a href="album.html" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.html" class="mobile_link">留言板</a></li>
-            <li><a href="Data.html" class="mobile_link">个人资料</a></li>
+            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
+            <li><a href="Data.jsp" class="mobile_link">个人资料</a></li>
+            <li><a href="about.html" class="mobile_link">关于</a></li>
+            <li><a href="setting.html" class="mobile_link">设置</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
@@ -58,8 +163,8 @@
             <p>Show your life this moment!</p>
         </div>
         <div id="menu">
-            <a href="">设置</a><br><br> 
-            <a href="">关于</a>
+            <a href="setting.html">设置</a><br><br> 
+            <a href="about.html">关于</a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
@@ -72,21 +177,25 @@
                 <li id="li_index"><a href="Index.html" id="index" class="nav_hover">个人主页&nbsp</a></li>
                 <li id="li_friends"><a href="friends.html" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
                 <li id="li_album"><a href="album.html" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
-                <li id="li_messageBoard"><a href="messageBoard.html" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
-                <li id="li_data"><a href="Data.html" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
+                <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
+                <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
             </ul>
-            <div id="register">
-                <a href="login.jsp">登录</a>
-                |
-                <a href="signup.jsp">注册</a>
-                <img id="logo" />
+            <div id="welcomeBack">
+                欢迎回来!&nbsp;<font id="userName"></font>
+                <script type="text/javascript">
+                    var userTemp = document.cookie.split("=");
+                    document.getElementById("userName").innerHTML = userTemp[1];
+                </script>
             </div>
         </div>
         <div id="content">
             <form id="board" >
                 <fieldset id="board_set">
                     <!-- 发表博客 -->
-                    <legend><b>发表博客</b></legend>
+                    <legend>
+                        <img src="images/icon/maobi.png" style="position: relative; width: 20px; height: 20px; top: 2px;" />
+                        <b style="position: relative; left: -5px; top: -2px; text-shadow: 2.5px 2.5px 2px #8a8a8a;">发表博客</b>
+                    </legend>
                     <div id="msg" contenteditable="true" onclick="editMode()" onselect=""></div>
                     <br>
                     <!-- 编辑 -->
@@ -120,42 +229,55 @@
                             <input type="button" id="brown_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('brown')" />
                         </div>
                         <div id="emojis">
-                            <img src="images/emoji/大笑.png" class="emoji" id="大笑" onclick="insertEmoji(this)">
-                            <img src="images/emoji/调皮.png" class="emoji" id="调皮" onclick="insertEmoji(this)">
-                            <img src="images/emoji/尴尬.png" class="emoji" id="尴尬" onclick="insertEmoji(this)">
-                            <img src="images/emoji/鬼脸.png" class="emoji" id="鬼脸" onclick="insertEmoji(this)">
-                            <img src="images/emoji/惊讶.png" class="emoji" id="惊讶" onclick="insertEmoji(this)">
-                            <img src="images/emoji/骷髅.png" class="emoji" id="骷髅" onclick="insertEmoji(this)">
-                            <img src="images/emoji/流泪.png" class="emoji" id="流泪" onclick="insertEmoji(this)">
-                            <img src="images/emoji/难过.png" class="emoji" id="难过" onclick="insertEmoji(this)">
-                            <img src="images/emoji/生气.png" class="emoji" id="生气" onclick="insertEmoji(this)">
-                             <img src="images/emoji/屎.png" class="emoji" id="屎" onclick="insertEmoji(this)">
-                            <img src="images/emoji/受伤.png" class="emoji" id="受伤" onclick="insertEmoji(this)">
-                            <img src="images/emoji/耍酷.png" class="emoji" id="耍酷" onclick="insertEmoji(this)">
-                            <img src="images/emoji/睡觉.png" class="emoji" id="睡觉" onclick="insertEmoji(this)">
-                            <img src="images/emoji/思考.png" class="emoji" id="思考" onclick="insertEmoji(this)">
-                            <img src="images/emoji/吐.png" class="emoji" id="吐" onclick="insertEmoji(this)">
-                            <img src="images/emoji/笑哭.png" class="emoji" id="笑哭" onclick="insertEmoji(this)">
-                            <img src="images/emoji/喜欢.png" class="emoji" id="喜欢" onclick="insertEmoji(this)">
-                            <img src="images/emoji/震惊.png" class="emoji" id="震惊" onclick="insertEmoji(this)">
+                            <img src="images/emoji/laugh.png" class="emoji" id="laugh" onclick="insertEmoji(this)">
+                            <img src="images/emoji/naughty.png" class="emoji" id="naughty" onclick="insertEmoji(this)">
+                            <img src="images/emoji/embarrassed.png" class="emoji" id="embarrassed" onclick="insertEmoji(this)">
+                            <img src="images/emoji/ghost.png" class="emoji" id="ghost" onclick="insertEmoji(this)">
+                            <img src="images/emoji/shocking.png" class="emoji" id="shocking" onclick="insertEmoji(this)">
+                            <img src="images/emoji/skeleton.png" class="emoji" id="skeleton" onclick="insertEmoji(this)">
+                            <img src="images/emoji/weap.png" class="emoji" id="weap" onclick="insertEmoji(this)">
+                            <img src="images/emoji/sad.png" class="emoji" id="sad" onclick="insertEmoji(this)">
+                            <img src="images/emoji/angry.png" class="emoji" id="angry" onclick="insertEmoji(this)">
+                             <img src="images/emoji/shit.png" class="emoji" id="shit" onclick="insertEmoji(this)">
+                            <img src="images/emoji/hurt.png" class="emoji" id="hurt" onclick="insertEmoji(this)">
+                            <img src="images/emoji/cool.png" class="emoji" id="cool" onclick="insertEmoji(this)">
+                            <img src="images/emoji/sleep.png" class="emoji" id="sleep" onclick="insertEmoji(this)">
+                            <img src="images/emoji/think.png" class="emoji" id="think" onclick="insertEmoji(this)">
+                            <img src="images/emoji/vomit.png" class="emoji" id="vomit" onclick="insertEmoji(this)">
+                            <img src="images/emoji/laughcry.png" class="emoji" id="laughcry" onclick="insertEmoji(this)">
+                            <img src="images/emoji/liking.png" class="emoji" id="liking" onclick="insertEmoji(this)">
+                            <img src="images/emoji/astonishing.png" class="emoji" id="astonishing" onclick="insertEmoji(this)">
                         </div>
                         <input type="file" name="file" id="uploadFiles" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" onchange="uploadFile(event)" />
                     </div>
                 </fieldset>
             </form>
-            <div id="information">
-                <div id="info_show">
-                    <div id="name">昵称</div>
-                    <div id="fan"><img src="images/fan.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 粉丝：0</div>
-                    <div id="guanzhu"><img src="images/guanzhu.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 关注：0</div>
-                    <div id="blog_num"><img src="images/boke.png" style="width: 15px; height: 15px;" /> 博客：0</div>
-                    <div id="like"><img src="images/dianzan.png" style="width: 15px; height: 15px;" /> 点赞：0</div>
-                </div>
-                <div id="info_hide">
-                </div>
-            </div>
+            <fieldset id="information">
+                <legend id="name">
+                    <script type="text/javascript">
+                    var userTemp = document.cookie.split("=");
+                    document.getElementById("name").innerHTML = userTemp[1];
+                    </script>
+                </legend>
+                <div id="fan"><img src="images/fan.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 粉丝：0</div>
+                <div id="guanzhu"><img src="images/guanzhu.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 关注：0</div>
+                <div id="blog_num"><img src="images/boke.png" style="width: 15px; height: 15px;" /> 博客：0</div>
+                <div id="like"><img src="images/dianzan.png" style="width: 15px; height: 15px;" /> 点赞：0</div>
+            </fieldset>
         </div>
     </div>
+<script type="text/javascript">
+    //点击div外会隐藏emojis和colorBar
+    window.onclick = function(event) {
+       var target = event ? event.target : window.event.srcElement;
+       if(target.id != "colorBar" && target.id != "ecolor" && target.id != "msg")
+            colorBarHide();
+       if(target.id != "emojis" && target.id != "xiaolian")
+            hideEmojis();
+        //console.log(document.cookie);
+    }
+</script>
+
 
 </body>
 </html>

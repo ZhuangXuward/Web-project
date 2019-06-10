@@ -6,83 +6,107 @@
 	border-bottom: solid 2px #919191;
 }
 
-#main #content #data {
-	position: relative;
-	width: 80%;
-	height: 80%;
-	left: 5%;
-	top: 5%;
+#main #content #data_board {
+    position: relative;
+    top: 20px;
+    left: 6%;
+    width: 80%;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    min-height: 500px;
+    max-width: 700px;
 }
 
-#main #content #name {
-	position: relative;
-	width: 100%;
-	height: 30px;
+#main #content #data_board #data {
+    position: relative;
+    width: 80%;
+    height: 100%;
+    top: 18px;
+    left: 30px;
 }
 
-#main #content #sex {
-	position: relative;
-	width: 100%;
-	height: 30px;
-}
-
-#main #content #sign {
-	position: relative;
-	width: 100%;
-	height: 30px;
-}
-
-#main #content #birthday {
+#main #content #data_board #data, #name, #sex, #sign, #birthday, #phone, #hobby, #hometown, #email, #job, #school, #company, #sign, #resume {
 	position: relative;
 	width: 100%;
-	height: 30px;
+	height: 35px;
 }
 
-#main #content #phone {
-	position: relative;
-	width: 100%;
-	height: 30px;
+#main #content #data_board #data .dataInput {
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    height: 15px;
+    font-size: 15px;
+    display: none;
+    width: 170px;
+} 
+
+#main #content #data_board #data #resumeText {
+	border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: #8a8a8a solid 1px;
+    height: 50px;
+    font-size: 15px;
+    width: 200px;
 }
 
-#main #content #hobby {
-	position: relative;
-	width: 100%;
-	height: 30px;
+#main #content #data_board #dataEdit {
+    position: relative;
+    float: right;
+    right: 0px;
+    top: -40px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
 }
 
-#main #content #hometown {
-	position: relative;
-	width: 100%;
-	height: 30px;
+#main #content #data_board #saveData {
+    position: relative;
+    float: right;
+    top: -40px;
+    font-size: 10px;
+    cursor: pointer;
+    display: none;
+}
+
+#main #content #data_board #exit {
+    position: relative;
+    float: right;
+    right: 0px;
+    top: -40px;
+    font-size: 10px;
+    cursor: pointer;
+    display: none;
+}
+
+#main #content #data_board #dataBamboo {
+    position: relative;
+    width: 200px; 
+    float: right;      
+    top: 150px; 
+    right: -100px; 
+    opacity: 0.8;
+}
+
+@media only screen and (max-width: 600px) {
+    #main #content #data_board #dataBamboo {
+        width: 100px;
+    }
 }
 
 
-#main #content #mail {
-	position: relative;
-	width: 100%;
-	height: 30px;
-}
 
-#main #content #job {
-	position: relative;
-	width: 100%;
-	height: 30px;
-}
 
-#main #content #school {
-	position: relative;
-	width: 100%;
-	height: 30px;
-}
 
-#main #content #company {
-	position: relative;
-	width: 100%;
-	height: 30px;
-}
 
-#main #content #resume {
-	position: relative;
-	width: 100%;
-	height: 30px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
