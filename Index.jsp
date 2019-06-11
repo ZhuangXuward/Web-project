@@ -1,3 +1,7 @@
+<%@page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"%>
+<% request.setCharacterEncoding("utf-8");
+    String userId = request.getParameter("userId");
+%> 
 <!DOCTYPE html>
 <html>
 
@@ -62,7 +66,7 @@
         <div id="menu">
             <a href="setting.html">设置</a><br><br> 
             <a href="about.html">关于</a><br><br>
-            <a href="search.jsp"><img src="./images/icon/search.png" style="width: 20px; opacity: 0.5;"></a>
+            <a href="search.jsp?userId=<%=userId%>"><img src="./images/icon/search.png" style="width: 20px; opacity: 0.5;"></a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>

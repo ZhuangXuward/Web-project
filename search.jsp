@@ -2,18 +2,24 @@
          contentType="text/html; charset=utf-8"
 %><%
 	request.setCharacterEncoding("utf-8");
-	String msg ="";
-    String sql ="";
+	String msg = "";
+    String sql = "";
 	String query = "";
+    String ifFollow = "";
+    int flag = 0;
+    String pid = request.getParameter("pid");
+    String userId = request.getParameter("userId");
 	String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202"
 					+ "?autoReconnect=true&useUnicode=true"
 					+ "&characterEncoding=UTF-8"; 
-        StringBuilder table=new StringBuilder("");
+    StringBuilder table=new StringBuilder("");
 	try{
 	  Class.forName("com.mysql.jdbc.Driver");
 	  Connection con=DriverManager.getConnection(connectString, 
 	                 "user", "123");
 	  Statement stmt=con.createStatement();
+      
+      //根据ID/email/phone查找用户
       if(request.getMethod().equalsIgnoreCase("post")) {
         query = request.getParameter("query");
         sql="select*from users where name like '%"+query+"%' or email like '%"+query+"%' or phone like '%"+query+"%'";
@@ -35,19 +41,34 @@
                 "</div>" + 
                 "<div class='user_content'><span class='user_name'>%s</span> <span class='user_hobby'>%s</span> <span class='user_follow'>%s</span></div></div>",
                 rs.getString("name"), rs.getString("hobby"),
-                "<button><a href='#?pid="+rs.getString("id")+"'>关注</a></button>"
-                //TODO 关注，添加到数据库
+                "<button class='follow_button'><a href='search.jsp?userId=" + userId + "&pid="+rs.getString("id")+"'>关注</a></button>"
+                //TODO 关注，添加到数据库，判断关注关系是否存在。可使用已关注样式
                 )
             );
 		}
       table.append("</div>");
       }
+
+      //关注用户
+      //rs=stmt.executeQuery("insert into followed_fans(fans_id, followed_id) values(userId, pid)");
+      if (pid != null) {
+        sql = "select * from followers where fans_id='"+userId+"' and followed_id='"+pid+"'";
+        rs=stmt.executeQuery(sql);
+        if(!rs.next()) {
+            String fmt="insert into followers(fans_id,followed_id) values('%s', '%s')";
+            sql = String.format(fmt,userId,pid);
+            //userId为当前用户id，pid为关注的用户id
+            int cnt2 = stmt.executeUpdate(sql);
+            if (cnt2>0) flag = 1;
+        }
+      }
+
 	  rs.close();
 	  stmt.close();
 	  con.close();
 	}
 	catch (Exception e){
-	  msg = e.getMessage();
+	  //msg = e.getMessage();
 	}
 %>
 
@@ -80,7 +101,7 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="Index.html" class="mobile_link">个人主页</a></li>
+            <li><a href="Index.jsp" class="mobile_link">个人主页</a></li>
             <li><a href="friends.html" class="mobile_link">好友动态</a></li>
             <li><a href="album.html" class="mobile_link">相册</a></li>
             <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
@@ -93,7 +114,7 @@
         <div id="mobile_head_portrait">
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
-        <a href="Index.html" id="mobile_com">「Lifeblog.com」</a>
+        <a href="Index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
     </div>
 
@@ -124,7 +145,7 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="Index.html" id="index" class="nav_hover">个人主页&nbsp</a></li>
+                <li id="li_index"><a href="Index.jsp" id="index" class="nav_hover">个人主页&nbsp</a></li>
                 <li id="li_friends"><a href="friends.html" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
                 <li id="li_album"><a href="album.html" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
                 <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
@@ -139,17 +160,48 @@
             </div>
         </div>
         <div id="content">
-            <div id="container">
-              <h1>查找ID</h1>  
+            <div id="container"> 
               <form action="search.jsp" method="post">
-                  输入查询：<input type="text" name="query" placeholder="输入昵称/邮箱/手机号码" value="<%=query%>">
+                  <span id="search_inner">userId:<%=userId%> pid:<%=pid%>输入查询：<input type="text" name="query" placeholder="输入昵称/邮箱/手机号码" value="<%=query%>"></span>
                   <input type="submit" value="查询">
-                  <a href="Index.html"><input type="button" value="返回"></a>
+                  <a href="Index.jsp?userId=<%=userId%>"><input type="button" value="返回"></a>
               </form>
               <%=table%><br><br>  
               <%=msg%>
             </div>
         </div>
     </div>
+    <div id="follow_result">关注成功٩(ˊᗜˋ*)و</div>
+    <script>
+        window.onload = function() {
+
+            // 关注成功效果
+            var Obtn = document.getElementsByClassName("follow_button");
+            for (let i = 0; i < Obtn.length; ++ i) {
+                Obtn[i].onclick = function() {
+                    if (<%=flag%> != 0) {//关注成功
+                    
+                        followSuccess();
+                    }
+                    else {//关注失败
+                        // followFail();
+                    } 
+                } //onclick
+            } //for
+        }
+
+        // ==============关注提示框===============
+        //当滚轮滚动时使关注提示框消失
+        window.onmousewheel = function() {
+            var followBorad = document.getElementById("follow_result");
+            followBorad.style.display = "none";
+        }
+
+        function followSuccess() {
+            var followBorad = document.getElementById("follow_result");
+            followBorad.style.display = "block";
+        }
+        // ==============END关注提示框===============
+    </script>
 </body>
 </html>
