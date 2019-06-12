@@ -18,8 +18,37 @@
 	  Connection con=DriverManager.getConnection(connectString, 
 	                 "user", "123");
 	  Statement stmt=con.createStatement();
+
+      Connection con_follow=DriverManager.getConnection(connectString, 
+	                 "user", "123");
+	  Statement stmt_follow=con_follow.createStatement();
       
-      //根据ID/email/phone查找用户
+      ResultSet rs;
+
+      //========================关注与取关数据库操作========================
+      if (pid != null) { //pid不为null说明点击了关注按钮
+        //查找数据库是否有关注关系
+        sql = "select * from followers where fans_id='"+userId+"' and followed_id='"+pid+"'";
+        rs=stmt.executeQuery(sql);
+
+        //1.原先不存在关注关系->关注
+        if(!rs.next()) { 
+            String fmt="insert into followers(fans_id,followed_id) values('%s', '%s')";
+            sql = String.format(fmt,userId,pid);
+            //userId为当前用户id，pid为关注的用户id
+            int cnt2 = stmt.executeUpdate(sql);
+            if (cnt2>0) flag = 1; //flag=1标记为原先没有关注，现在关注成功
+        }
+
+        //2.原先存在关注关系->取关
+        else {
+            sql = "delete from followers where fans_id='" + userId + "' and followed_id='" + pid + "'";
+            int cnt3 = stmt.executeUpdate(sql);
+        }
+      }
+      //========================END关注与取关数据库操作========================
+
+      //========================根据ID/email/phone查找用户========================
       if(request.getMethod().equalsIgnoreCase("post")) {
         query = request.getParameter("query");
         sql="select*from users where name like '%"+query+"%' or email like '%"+query+"%' or phone like '%"+query+"%'";
@@ -27,7 +56,7 @@
       else {
            sql="select*from users";
       }
-	  ResultSet rs=stmt.executeQuery(sql);
+	  rs=stmt.executeQuery(sql);
       if(!rs.next()) {
           msg = "没有该用户！";
       }
@@ -35,33 +64,40 @@
           rs=stmt.executeQuery(sql);
           table.append("<div class='user_searched'>");
           while(rs.next()) {
+            sql = "select * from followers where fans_id='"+userId+"' and followed_id='"+rs.getString("id")+"'";
+            ResultSet rs_follow=stmt_follow.executeQuery(sql);
+            String cssStr = "";
+            if(rs_follow.next()) {
+                ifFollow = "已关注";
+                cssStr = "<button class='follow_button followed'><a href='search.jsp?userId=" + userId + "&pid="+rs.getString("id")+"'>" + ifFollow + "</a></button>";
+            }
+            else {
+                ifFollow = "关注";
+                cssStr = "<button class='follow_button'><a href='search.jsp?userId=" + userId + "&pid="+rs.getString("id")+"'>" + ifFollow + "</a></button>";
+            }
+            rs_follow.close();
             table.append(String.format(
                 "<div class='user_item'>" +
                 "<div class='user_avatar'><img src='./images/default_avatar.jpeg' style='width: 60px; height: 60px; border-radius: 50px;'></img>" +
                 "</div>" + 
                 "<div class='user_content'><span class='user_name'>%s</span> <span class='user_hobby'>%s</span> <span class='user_follow'>%s</span></div></div>",
                 rs.getString("name"), rs.getString("hobby"),
-                "<button class='follow_button'><a href='search.jsp?userId=" + userId + "&pid="+rs.getString("id")+"'>关注</a></button>"
+                cssStr
                 //TODO 关注，添加到数据库，判断关注关系是否存在。可使用已关注样式
                 )
             );
 		}
       table.append("</div>");
       }
+      //========================END根据ID/email/phone查找用户========================
 
-      //关注用户
-      //rs=stmt.executeQuery("insert into followed_fans(fans_id, followed_id) values(userId, pid)");
-      if (pid != null) {
-        sql = "select * from followers where fans_id='"+userId+"' and followed_id='"+pid+"'";
-        rs=stmt.executeQuery(sql);
-        if(!rs.next()) {
-            String fmt="insert into followers(fans_id,followed_id) values('%s', '%s')";
-            sql = String.format(fmt,userId,pid);
-            //userId为当前用户id，pid为关注的用户id
-            int cnt2 = stmt.executeUpdate(sql);
-            if (cnt2>0) flag = 1;
-        }
-      }
+
+      //========================点击关注按钮后页面刷新回到当前位置========================
+      //TODO
+      //========================END点击关注按钮后页面刷新回到当前位置========================
+
+      stmt_follow.close();
+      con_follow.close();
 
 	  rs.close();
 	  stmt.close();
@@ -101,20 +137,20 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="Index.jsp" class="mobile_link">个人主页</a></li>
-            <li><a href="friends.html" class="mobile_link">好友动态</a></li>
-            <li><a href="album.html" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
-            <li><a href="Data.jsp" class="mobile_link">个人资料</a></li>
-            <li><a href="about.html" class="mobile_link">关于</a></li>
-            <li><a href="setting.html" class="mobile_link">设置</a></li>
+            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">个人主页</a></li>
+            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">好友动态</a></li>
+            <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
+            <li><a href="messageBoard.jsp?userId=<%=userId%>" class="mobile_link">留言板</a></li>
+            <li><a href="Data.jsp?userId=<%=userId%>" class="mobile_link">个人资料</a></li>
+            <li><a href="about.jsp?userId=<%=userId%>" class="mobile_link">关于</a></li>
+            <li><a href="setting.jsp?userId=<%=userId%>" class="mobile_link">设置</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
         <div id="mobile_head_portrait">
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
-        <a href="Index.jsp" id="mobile_com">「Lifeblog.com」</a>
+        <a href="index.jsp?userId=<%=userId%>" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
     </div>
 
@@ -133,9 +169,9 @@
             <p>Show your life this moment!</p>
         </div>
         <div id="menu">
-            <a href="setting.html">设置</a><br><br> 
-            <a href="about.html">关于</a><br><br>
-            <a href="search.jsp"><img src="./images/icon/search.png" style="width: 20px; opacity: 0.5;"></a>
+            <a href="setting.jsp?userId=<%=userId%>">设置</a><br><br> 
+            <a href="about.jsp?userId=<%=userId%>">关于</a><br><br>
+            <a href="search.jsp?userId=<%=userId%>"><img src="./images/icon/search.png" style="width: 20px; opacity: 0.5;"></a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
@@ -145,11 +181,11 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="Index.jsp" id="index" class="nav_hover">个人主页&nbsp</a></li>
-                <li id="li_friends"><a href="friends.html" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
-                <li id="li_album"><a href="album.html" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
-                <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
-                <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
+                <li id="li_index"><a href="index.jsp?userId=<%=userId%>" id="index" class="nav_hover">个人主页&nbsp</a></li>
+                <li id="li_friends"><a href="friends.jsp?userId=<%=userId%>" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
+                <li id="li_album"><a href="album.jsp?userId=<%=userId%>" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
+                <li id="li_messageBoard"><a href="messageBoard.jsp?userId=<%=userId%>" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
+                <li id="li_data"><a href="Data.jsp?userId=<%=userId%>" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
             </ul>
             <div id="welcomeBack">
                 欢迎回来!&nbsp;<font id="userName"></font>
@@ -161,47 +197,41 @@
         </div>
         <div id="content">
             <div id="container"> 
-              <form action="search.jsp" method="post">
-                  <span id="search_inner">userId:<%=userId%> pid:<%=pid%>输入查询：<input type="text" name="query" placeholder="输入昵称/邮箱/手机号码" value="<%=query%>"></span>
-                  <input type="submit" value="查询">
-                  <a href="Index.jsp?userId=<%=userId%>"><input type="button" value="返回"></a>
+              <form action="search.jsp?userId=<%=userId%>" method="post" name="searchForm"> 
+                  <div id="search_borad">
+                    <input type="text" name="query" placeholder="搜索用户" value="<%=query%>">
+                    <a href="#" onclick="searchForm.submit(); return false"><img src="./images/icon/search2.png"> </a>
+                  </div>
               </form>
               <%=table%><br><br>  
               <%=msg%>
             </div>
         </div>
     </div>
-    <div id="follow_result">关注成功٩(ˊᗜˋ*)و</div>
     <script>
         window.onload = function() {
-
-            // 关注成功效果
+            //===========关注成功效果===========
             var Obtn = document.getElementsByClassName("follow_button");
             for (let i = 0; i < Obtn.length; ++ i) {
                 Obtn[i].onclick = function() {
-                    if (<%=flag%> != 0) {//关注成功
-                    
-                        followSuccess();
-                    }
-                    else {//关注失败
-                        // followFail();
-                    } 
-                } //onclick
-            } //for
-        }
+                    if (Obtn[i].getElementsByTagName('a')[0].innerHTML == "关注") 
+                        alert("关注成功٩(ˊᗜˋ*)و");
+                    else
+                        alert("取消关注成功");
+                }
+            }
+            //===========END关注成功效果===========
 
-        // ==============关注提示框===============
-        //当滚轮滚动时使关注提示框消失
-        window.onmousewheel = function() {
-            var followBorad = document.getElementById("follow_result");
-            followBorad.style.display = "none";
+            //===========搜索框效果===========
+            var searchBorad = document.getElementById("search_borad");
+            searchBorad.getElementsByTagName("input")[0].onfocus = function() {
+                searchBorad.classList.add("search_active");
+            }
+            searchBorad.getElementsByTagName("input")[0].onblur = function() {
+                searchBorad.classList.remove("search_active");
+            }
+            //===========END搜索框效果===========
         }
-
-        function followSuccess() {
-            var followBorad = document.getElementById("follow_result");
-            followBorad.style.display = "block";
-        }
-        // ==============END关注提示框===============
     </script>
 </body>
 </html>

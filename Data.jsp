@@ -1,5 +1,6 @@
 <%@page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"%>
 <% request.setCharacterEncoding("utf-8");
+    String userId = request.getParameter("userId");
     String msg = "";
     String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
     String user="user"; 
@@ -42,8 +43,8 @@
             // 在响应头部添加cookie
             response.addCookie(suser);
             if (cnt>0) 
-            msg = "资料修改成功!";
-            response.sendRedirect("Data.jsp");
+                msg = "资料修改成功!";
+            response.sendRedirect("Data.jsp?userId=" + userId);
         } catch(Exception e) {
             msg = e.getMessage();
         }
@@ -125,20 +126,19 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="Index.html" class="mobile_link">个人主页</a></li>
-            <li><a href="friends.html" class="mobile_link">好友动态</a></li>
-            <li><a href="album.html" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
-            <li><a href="Data.jsp" class="mobile_link">个人资料</a></li>
-            <li><a href="about.html" class="mobile_link">关于</a></li>
-            <li><a href="setting.html" class="mobile_link">设置</a></li>
+            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">个人主页</a></li>
+            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">好友动态</a></li>
+            <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
+            <li><a href="messageBoard.jsp?userId=<%=userId%>" class="mobile_link">留言板</a></li>
+            <li><a href="about.jsp?userId=<%=userId%>" class="mobile_link">关于</a></li>
+            <li><a href="setting.jsp?userId=<%=userId%>" class="mobile_link">设置</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
         <div id="mobile_head_portrait">
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
-        <a href="Index.html" id="mobile_com">「Lifeblog.com」</a>
+        <a href="index.jsp?userId=<%=userId%>" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
     </div>
 
@@ -154,11 +154,11 @@
             <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
         </div>
         <div id="personal_signature">
-            <p>Show your life this moment!</p>
+            <p style="font-family: STKaiti"><%=sign_value%></p>
         </div>
         <div id="menu">
-            <a href="setting.html">设置</a><br><br> 
-            <a href="about.html">关于</a>
+            <a href="setting.jsp?userId=<%=userId%>">设置</a><br><br> 
+            <a href="about.jsp?userId=<%=userId%>">关于</a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
@@ -168,22 +168,18 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="Index.html" id="index" class="nav_hover">个人主页&nbsp</a></li>
-                <li id="li_friends"><a href="friends.html" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
-                <li id="li_album"><a href="album.html" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
-                <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
-                <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
+                <li id="li_index"><a href="index.jsp?userId=<%=userId%>" id="index" class="nav_hover">个人主页&nbsp</a></li>
+                <li id="li_friends"><a href="friends.jsp?userId=<%=userId%>" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
+                <li id="li_album"><a href="album.jsp?userId=<%=userId%>" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
+                <li id="li_messageBoard"><a href="messageBoard.jsp?userId=<%=userId%>" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
+                <li id="li_data"><a href="Data.jsp?userId=<%=userId%>" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
             </ul>
             <div id="welcomeBack">
-                欢迎回来!&nbsp;<font id="userName"></font>
-                <script type="text/javascript">
-                    var userTemp = document.cookie.split("=");
-                    document.getElementById("userName").innerHTML = userTemp[1];
-                </script>
+                欢迎回来!&nbsp;<font id="userName"><%=webUser%></font>
             </div>
         </div>
         <div id="content">
-            <form action="Data.jsp" method="post" id="dataForm">
+            <form action="Data.jsp?userId=<%=userId%>" method="post" id="dataForm">
                 <fieldset id="data_board">
                     <!-- 发表博客 -->
                     <legend>
@@ -279,7 +275,7 @@
                             <font class="dataValue"><%=resume_value%></font>
                         </div>                      
                     </div>
-                    <img src="images/icon/dataEdit.png" id="dataEdit" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="dataToEdit(this)" />
+                    <img src="images/icon/dataEdit.png" id="dataEdit" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="dataToEdit(this)" style="opacity: 0.5;" />
                     <input type="button" name="exit" id="exit" value="退出" onclick="if(window.confirm('是否放弃此次编辑？')) window.location.reload();" />
                     <input type="button" name="save" value="保存" id="saveData" onclick="uploadData()" />
                     <img src="images/bamboo.png" id="dataBamboo" />
@@ -328,7 +324,7 @@
         //设置修改资料
         //通过上一个跳转过来的网页是否是setting.html确定
         window.onload = function() {
-            if (document.referrer.search("setting.html") != -1) 
+            if (document.referrer.search("setting.jsp?userId=<%=userId%>") != -1) 
                 document.getElementById("dataEdit").click();
         }
 

@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=utf-8"%>
-<%request.setCharacterEncoding("utf-8");%>
+<%request.setCharacterEncoding("utf-8");
+    String userId = request.getParameter("userId");%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,12 +92,12 @@
     <div id="logInWrap">
         <div id="logInContain">
             <h1>登录</h1>
-            <form action="loginCheck.jsp" method="POST" name="formLogin">
+            <form action="loginCheck.jsp?userId=<%=userId%>" method="POST" name="formLogin">
                 <input type="text" placeholder="昵称/邮箱" name="name">
                 <input type="password" placeholder="密码" name="password">
-                <input type="button" value="登录" onclick="doCheck_logIn()">
+                <input type="button" value="登录" onclick="doCheck_logIn()" id="confirm">
             </form>
-            <p>还没有帐号？<a href="signup.jsp">前往注册</a></p>
+            <p>还没有帐号？<a href="signup.jsp?userId=<%=userId%>">前往注册</a></p>
     <%  
     String flag = request.getParameter("errNo");  
     try{

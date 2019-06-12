@@ -1,5 +1,6 @@
 <%@page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"%>
 <% request.setCharacterEncoding("utf-8");
+String userId = request.getParameter("userId");
 String msg = "";
 String query = "";
 String sql = "";
@@ -149,7 +150,7 @@ if (request.getMethod().equalsIgnoreCase("post")){
                 <input type="text" placeholder="邮箱" name="email" id="email">
                 <input type="password" placeholder="密码" name="password" id="password">
                 <input type="password" placeholder="确认密码" name="password2" id="password2">
-                <input type="button" value="注册" onclick="doCheck_Register()">
+                <input type="button" value="注册" onclick="doCheck_Register()" id="confirm">
             </form>
             <p>已有帐号？<a href="login.jsp">前往登录</a></p>
             <span id="registerMsg"><%=msg%><span>

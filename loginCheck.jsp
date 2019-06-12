@@ -21,7 +21,7 @@
 
             // 在响应头部添加cookie
             response.addCookie(user);
-            response.sendRedirect("Index.jsp?userId=" + userId); //密码正确跳转loGinsuccess.jsp
+            response.sendRedirect("index.jsp?userId=" + userId); //密码正确跳转index.jsp
         }else{
             response.sendRedirect("login.jsp?errNo");//密码不对返回到登陆  
         }

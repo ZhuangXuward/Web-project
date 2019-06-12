@@ -20,9 +20,16 @@
         }
     }
 
+    String visitName = "";    //要访问用户
+    visitName = request.getParameter("visitName");
+    //如果访问的用户是自己，就回到个人主页
+    if (visitName.equals(webUser)) {
+        response.sendRedirect("index.jsp?userId=<%=userId%>");
+    }
+
     //加载签名
     String sign_value = "";
-    ResultSet rsign = stmt.executeQuery("select * from users where name='"+webUser+"'");
+    ResultSet rsign = stmt.executeQuery("select * from users where name='"+visitName+"'");
     while (rsign.next()) {          
         sign_value = rsign.getString("sign");        
     }
@@ -85,12 +92,10 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">个人主页</a></li>
-            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">好友动态</a></li>
+            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">返回个人主页</a></li>
+            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">主页</a></li>
             <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
-            <li><a href="Data.jsp?userId=<%=userId%>" class="mobile_link">个人资料</a></li>
-            <li><a href="about.jsp?userId=<%=userId%>" class="mobile_link">关于</a></li>
-            <li><a href="setting.jsp?userId=<%=userId%>" class="mobile_link">设置</a></li>
+            <li><a href="Data.jsp?userId=<%=userId%>" class="mobile_link">资料</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
@@ -115,11 +120,6 @@
         <div id="personal_signature">
             <p style="font-family: STKaiti"><%=sign_value%></p>
         </div>
-        <div id="menu">
-            <a href="setting.jsp?userId=<%=userId%>">设置</a><br /><br /> 
-            <a href="about.jsp?userId=<%=userId%>">关于</a><br><br>
-            <a href="search.jsp?userId=<%=userId%>"><img src="./images/icon/search.png" style="width: 20px; opacity: 0.5;"></a>
-        </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
         </div>
@@ -128,14 +128,13 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="index.jsp?userId=<%=userId%>" id="index" class="nav_hover">个人主页&nbsp</a></li>
-                <li id="li_friends"><a href="friends.jsp?userId=<%=userId%>" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
-                <li id="li_album"><a href="album.jsp?userId=<%=userId%>" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
-                <li id="li_messageBoard"><a href="messageBoard.jsp?userId=<%=userId%>" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
-                <li id="li_data"><a href="Data.jsp?userId=<%=userId%>" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
+                <li id="li_index"><a href="visitHome.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="index" class="nav_hover">主页&nbsp;</a></li>
+                <li id="li_album"><a href="visitAlbum.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="album" class="nav_hover">&nbsp;相册&nbsp;</a></li>
+                <li id="li_messageBoard"><a href="visitMessageBoard.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
+                <li id="li_data"><a href="visitData.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="data" class="nav_hover">&nbsp;资料&nbsp;</a></li>
             </ul>
             <div id="welcomeBack">
-                欢迎回来!&nbsp;<font id="userName"><%=webUser%></font>
+                欢迎来访!&nbsp;<font id="userName"><%=webUser%></font>
             </div>
         </div>
         <div id="content">

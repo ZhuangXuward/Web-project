@@ -10,6 +10,45 @@
     margin-top: 20px;
 }
 
+#search_borad {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    position: relative;
+    width: 140px;
+    margin-top: 20px;
+    line-height: 30px;
+    transition-property: border;
+    transition-duration: 0.5s;
+    display: inline-block;
+}
+
+#search_borad input {
+    font-size: 15px;
+    margin-left: 10px;
+    border: none;
+    width: 100px;
+}
+
+#search_borad a img {
+    width: 30px;
+    position: absolute;
+    opacity: 0.5;
+    right: 0;
+}
+
+#search_borad:hover {
+    border: 1px solid black;
+}
+
+#search_borad a:hover img {
+    opacity: 1;
+}
+
+.search_active {
+    border: 1px solid black!important;
+}
+
+
 .user_avatar {
     /* float: left; */
     margin-right: 20px;
@@ -62,21 +101,29 @@
     display: block;
 }
 
-#follow_result {
+.follow_button {
+    cursor: pointer;
+    border: 1px solid lightgray;
+    width: 75px;
+    line-height: 30px;
+    border-radius: 5px;
+}
+
+.followed {
+    background-color: rgb(229, 233, 239);
+}
+
+.follow_button:hover {
+    border-color: black;
+}
+
+.follow_button:hover a {
+    color: black;
+}
+
+.follow_button a {
+    color: gray;
     font-family: 微软雅黑;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px;
-    text-align: center;
-    line-height: 50px;
-    background-color: rgb(51, 51, 51);
-    border-radius: 8px;
-    z-index: 200;
-    display: none;
-    transition-property: display;
-    transition-duration: 2s;
 }
 
 @media only screen and (max-width: 700px) {
