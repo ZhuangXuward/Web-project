@@ -102,6 +102,7 @@
 }
 
 .follow_button {
+    outline: none;
     cursor: pointer;
     border: 1px solid lightgray;
     width: 75px;

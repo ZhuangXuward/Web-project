@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <% request.setCharacterEncoding("utf-8");
+    String userId = request.getParameter("userId");
     String msg = "";
     String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
     String user = "user";
@@ -25,7 +26,7 @@
             int cnt = stmt.executeUpdate("delete from blog where date='"+date+"'");
             if (cnt > 0) {
                 msg = "删除该blog成功！";
-                response.sendRedirect("index.jsp?userId=<%=userId%>");
+                response.sendRedirect("index.jsp?userId=" + userId);
             }
         }
         catch (Exception e) {

@@ -1,3 +1,35 @@
+#shadow {
+	position: absolute;
+	display: block;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	background-color: gray;
+	opacity: 0.5;
+}
+
+#head_portrait_box {
+	color: black;
+	z-index: 3000;
+	position: fixed;
+	width: 300px;
+	height: 250px;
+	left: 50%;
+	top: 50%;
+	border: 1px solid black;
+	background: #ffffff;
+	box-shadow: 6px 8px 4px #808080;
+	box-sizing: border-box;
+	display: none;
+}
+
+#head_portrait_box #select_upload, #upload_img {
+	width: 298px;
+	height: 100px;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
 #mobile_shadow {
 	position: fixed;
 	display: none;

@@ -6,6 +6,116 @@
 	border-bottom: solid 2px #919191;
 }
 
+/*博客分区*/
+#blog_zone {
+    position: relative;
+    display: block;
+    top: 80px;
+    left: 6%;
+    width: 70%;
+    max-width: 70%;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.blog_block {
+    position: relative;
+    border-radius: 5px;
+    display: block;
+    margin: 0px auto;
+    margin-bottom: 20px; 
+    margin-top: 20px;
+    padding: 12px;
+    padding-bottom: 24px;
+    padding-top: 24px;
+    background: linear-gradient(to left, #8a8a8a, #ebebeb);
+    border-radius: 20px; 
+    width: 90%;
+    max-width: 90%;
+}
+
+.blog_block a {
+    color: black;
+    font-size: 14px;
+}
+
+.blog_block a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.blog_block .blog_time {
+    position: relative;
+    display: inline-block;
+    float: right;
+    right: 0px;
+    top: -5px;
+    font-size: 10px;
+    color: #ebebeb;
+}
+
+.blog_block .blog_content {
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+    left: 35px;
+    width: 90%;
+}
+
+.blog_block .blog_operator {
+    position: relative;
+    display: block;
+    bottom: 0px;
+    width: 100%;
+    height: 14px;   
+    font-size: 14px;   
+}
+
+.blog_block .blog_operator .azone {
+    position: relative;
+    float: right;
+    display: none;
+}
+
+.blog_block .replyText {
+    position: relative;
+    top: 20px;
+    left: 30px;
+    display: none;
+}
+
+.blog_block .replyText textarea {
+    position: relative;
+    border-radius: 5px;
+    outline: none;
+    font-size: 15px;
+    width: 85%;
+    height: 45px;
+    top: -8px;
+}
+
+.blog_block .replyText img {
+    position: relative;
+    cursor: pointer;
+    opacity: 0.5;
+    display: "block";
+}
+
+.blog_block .replyText .replyClose {
+    top: -43px;
+}
+
+.blog_block .replyText .replyImg {
+    left: -20px;
+    z-index: 100;
+    top: -8px;
+}
+
+.blog_block .replyText .img:hover {
+    opacity: 1;
+}
+
+/*博客主信息分区*/
 #main #content #information {
     position: absolute;
     width: 14%;
@@ -54,6 +164,71 @@
     margin: 0px auto;
 }
 
+/*回复区*/
+.reply_zone {
+    position: relative;
+    display: block;
+    /*border: 1px solid black;*/
+    width: 80%;
+    background: linear-gradient(to left, #fff, #ebebeb);
+    max-width: 80%;
+    top: -20px;
+    margin: 0px auto;
+    padding: 12px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.reply_block {
+    position: relative;
+    display: block;
+    padding-top: 12px;
+}
+
+.reply_left {
+    position: relative;
+    width: 25%;
+    display: block;
+    left: 20px;
+}
+
+.reply_head {
+    width: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.reply_person {
+    position: relative;
+    left: 4px;
+    top: -25px;
+    font-size: 12px;
+    text-shadow: 2px 2px 2px #8a8a8a;
+    cursor: pointer;
+}
+
+.reply_person a:hover {
+    text-decoration: underline;
+}
+
+.reply_date {
+    position: relative;
+    left: 47px;
+    top: -20px;
+    display: inline-block;
+    font-size: 10px;
+    color: #8a8a8a;
+}
+
+.reply_content {
+    position: relative;
+    left: 29%;
+    top: -55px;
+    width: 70%;
+    display: inline-block;
+}
+
+/*移动端*/
 @media only screen and (max-width: 740px) {
     #main #wrap #welcomeBack {
         display: none;

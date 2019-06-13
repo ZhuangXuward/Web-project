@@ -24,7 +24,7 @@
     visitName = request.getParameter("visitName");
     //如果访问的用户是自己，就回到个人主页
     if (visitName.equals(webUser)) {
-        response.sendRedirect("index.jsp?userId=<%=userId%>");
+        response.sendRedirect("index.jsp?userId=" + userId);
     }
 
     //加载签名
@@ -86,9 +86,6 @@
         }
         rsk.close();
     }
-
-
-
     stmt.close(); con.close();
 %>
 
@@ -104,188 +101,12 @@
     <meta name="referrer" content="always" />
     <meta name="author" content="superteam" />
     <meta name="date" content="2019-05-21T12:00:00+00:00" />
-    <title>的主页</title>
+    <title><%=visitName%>的主页</title>
     <script type="text/javascript" src="js/general.js"></script>
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
     <link rel="stylesheet" type="text/css" href="css/mobile.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
 </head>
-
-<style type="text/css">
-    /*博客分区*/
-    #blog_zone {
-        position: relative;
-        display: block;
-        top: 24px;
-        left: 6%;
-        width: 70%;
-        max-width: 70%;
-        border-top-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-    }
-
-    .blog_block {
-        position: relative;
-        border-radius: 5px;
-        display: block;
-        margin: 0px auto;
-        margin-bottom: 20px; 
-        margin-top: 20px;
-        padding: 12px;
-        padding-bottom: 24px;
-        padding-top: 24px;
-        background: linear-gradient(to left, #8a8a8a, #ebebeb);
-        border-radius: 20px; 
-        width: 90%;
-        max-width: 90%;
-    }
-
-    .blog_block a {
-        color: black;
-        font-size: 14px;
-    }
-
-    .blog_block a:hover {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-
-    .blog_block .blog_time {
-        position: relative;
-        display: inline-block;
-        float: right;
-        right: 0px;
-        top: -5px;
-        font-size: 10px;
-        color: #ebebeb;
-    }
-
-    .blog_block .blog_content {
-        position: relative;
-        display: inline-block;
-        font-size: 20px;
-        left: 35px;
-        width: 90%;
-    }
-
-    .blog_block .blog_operator {
-        position: relative;
-        display: block;
-        bottom: 0px;
-        width: 100%;
-        height: 14px;   
-        font-size: 14px;   
-    }
-
-    .blog_block .blog_operator .azone {
-        position: relative;
-        float: right;
-        display: none;
-    }
-
-    .blog_block .replyText {
-        position: relative;
-        top: 20px;
-        left: 30px;
-        display: none;
-    }
-
-    .blog_block .replyText textarea {
-        position: relative;
-        border-radius: 5px;
-        outline: none;
-        font-size: 15px;
-        width: 85%;
-        height: 45px;
-        top: -8px;
-    }
-
-    .blog_block .replyText img {
-        position: relative;
-        cursor: pointer;
-        opacity: 0.5;
-        display: "block";
-    }
-
-    .blog_block .replyText .replyClose {
-        top: -43px;
-    }
-
-    .blog_block .replyText .replyImg {
-        left: -20px;
-        z-index: 100;
-        top: -8px;
-    }
-
-    .blog_block .replyText .img:hover {
-        opacity: 1;
-    }
-
-    /*回复区*/
-    .reply_zone {
-        position: relative;
-        display: block;
-        /*border: 1px solid black;*/
-        width: 80%;
-        background: linear-gradient(to left, #fff, #ebebeb);
-        max-width: 80%;
-        top: -20px;
-        margin: 0px auto;
-        padding: 12px;
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-    }
-
-    .reply_block {
-        position: relative;
-        display: block;
-        padding-top: 12px;
-    }
-
-    .reply_left {
-        position: relative;
-        width: 25%;
-        display: block;
-        left: 20px;
-    }
-
-    .reply_head {
-        width: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    .reply_person {
-        position: relative;
-        left: 4px;
-        top: -25px;
-        font-size: 12px;
-        text-shadow: 2px 2px 2px #8a8a8a;
-        cursor: pointer;
-    }
-
-    .reply_person a:hover {
-        text-decoration: underline;
-    }
-
-    .reply_date {
-        position: relative;
-        left: 47px;
-        top: -20px;
-        display: inline-block;
-        font-size: 10px;
-        color: #8a8a8a;
-    }
-
-    .reply_content {
-        position: relative;
-        left: 29%;
-        top: -55px;
-        width: 70%;
-        display: inline-block;
-    }
-
-</style>
 
 <body onload="isBlogEmpty()">
     <!-- for mobile device -->
@@ -295,10 +116,9 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">返回我的主页</a></li>
-            <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.jsp?userId=<%=userId%>" class="mobile_link">留言板</a></li>
-            <li><a href="Data.jsp?userId=<%=userId%>" class="mobile_link">资料</a></li>
+            <li><a href="index.jsp" class="mobile_link">返回我的主页</a></li>
+            <li><a href="visitMessageBoard.jsp?visitName=<%=visitName%>" class="mobile_link">留言板</a></li>
+            <li><a href="visitData.jsp?visitName=<%=visitName%>" class="mobile_link">资料</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
@@ -331,16 +151,17 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="visitHome.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="index" class="nav_hover">主页&nbsp;</a></li>
-                <li id="li_album"><a href="visitAlbum.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="album" class="nav_hover">&nbsp;相册&nbsp;</a></li>
-                <li id="li_messageBoard"><a href="visitMessageBoard.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
-                <li id="li_data"><a href="visitData.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="data" class="nav_hover">&nbsp;资料&nbsp;</a></li>
+                <li id="li_index"><a href="visitHome.jsp?visitName=<%=visitName%>" id="index" class="nav_hover">主页&nbsp;</a></li>
+                <li id="li_messageBoard"><a href="visitMessageBoard.jsp?visitName=<%=visitName%>" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
+                <li id="li_data"><a href="visitData.jsp?visitName=<%=visitName%>" id="data" class="nav_hover">&nbsp;资料&nbsp;</a></li>
             </ul>
             <div id="welcomeBack">
                 欢迎来访!&nbsp;<font id="userName"><%=webUser%></font>
+                <a href="index.jsp">返回</a>
             </div>
         </div>
         <div id="content">
+            <!-- 用户信息 -->
             <fieldset id="information">
                 <legend id="name"><%=visitName%></legend>
                 <div id="fan"><img src="images/fan.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 粉丝：0</div>
@@ -381,7 +202,7 @@
                             <div class="reply_block">
                                 <div class="reply_left">
                                     <img src="images/default_avatar.jpeg" class="reply_head" />
-                                    <font class="reply_person"><a href="visitHome.jsp?userId=<%=userId%>&visitName=<%=replyPerson[i][j]%>"><%=replyPerson[i][j]%></a>：</font>
+                                    <font class="reply_person"><a href="visitHome.jsp?visitName=<%=replyPerson[i][j]%>"><%=replyPerson[i][j]%></a>：</font>
                                     <font class="reply_date"><%=replyDate2[i][j]%></font>   
                                     <br />
                                 </div>
@@ -392,8 +213,8 @@
                         <%}%>
                     </div>
                 <%}%>
-                <!-- 每条博客的留言区 -->
 
+                <!-- 每条博客的留言区 -->
                 <form action="delete.jsp?userId=<%=userId%>" id="deleteForm" method="post">
                     <input type="submit" name="deleteButton" id="deleteButton" style="display: none;" />
                 </form>

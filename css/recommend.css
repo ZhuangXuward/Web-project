@@ -1,0 +1,88 @@
+#main #wrap #nav #friends {
+    color: black;
+}
+
+#main #wrap #nav #li_friends  {
+	border-bottom: solid 2px #919191;
+}
+
+/* 轮播图样式表 */
+#content #carousel_wrap {
+	position: relative;
+	margin: 0 auto;
+	width: 100%; /* 轮播图宽度 */
+	overflow: hidden;
+}
+
+#content #carousel_wrap #carousel_images {
+	position: absolute;
+	border: 0;
+	outline: none;
+	white-space: nowrap; /* 将图片一行排列 */
+	width: 100%;
+	font-size: 0; /* 清除white-space间隙 */
+	margin: 0px; 
+}
+
+#content #carousel_wrap #carousel_images img {
+	width: 100%;
+}
+
+#content #carousel_wrap .arrow {
+	position: absolute;
+	font-weight: bold;
+	font-size: 50px;
+	color: lightgray;
+	top: 50%;
+	transform: translateY(-50%);
+	cursor: pointer;
+	transition-property: opacity;
+	transition-duration: 0.5s;
+}
+
+#content #carousel_wrap .arrow:hover {
+	opacity: 0.5;
+}
+
+#content #carousel_wrap .left-arrow {
+	left: 20px;
+}
+
+#content #carousel_wrap .right-arrow {
+	right: 20px;
+}
+
+#content #carousel_wrap #dots {
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%)
+}
+
+#content #carousel_wrap .dot {
+	background-color: white;
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	margin: 4px;
+	opacity: 0.2;
+	cursor: pointer;
+}
+
+#content #carousel_wrap .active {
+	opacity: 1;
+}
+
+.transition {
+	transition-property: left;
+	transition-duration: 1s;
+}
+
+
+@media only screen and (max-width: 600px) {
+	#content #carousel_wrap .arrow {
+		opacity: 0;
+	}
+}
+/* END 轮播图样式表 */

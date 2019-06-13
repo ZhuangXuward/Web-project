@@ -84,17 +84,16 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">返回我的主页</a></li>
-            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">主页</a></li>
-            <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.jsp?userId=<%=userId%>" class="mobile_link">留言板</a></li>
+            <li><a href="index.jsp" class="mobile_link">返回我的主页</a></li>
+            <li><a href="visitHome.jsp?visitName=<%=visitName%>" class="mobile_link">主页</a></li>
+            <li><a href="visitMessageBoard.jsp?visitName=<%=visitName%>" class="mobile_link">留言板</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
         <div id="mobile_head_portrait">
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
-        <a href="index.jsp?userId=<%=userId%>" id="mobile_com">「Lifeblog.com」</a>
+        <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
     </div>
 
@@ -117,10 +116,9 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="visitHome.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="index" class="nav_hover">主页&nbsp;</a></li>
-                <li id="li_album"><a href="visitAlbum.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="album" class="nav_hover">&nbsp;相册&nbsp;</a></li>
-                <li id="li_messageBoard"><a href="visitMessageBoard.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
-                <li id="li_data"><a href="visitData.jsp?userId=<%=userId%>&visitName=<%=visitName%>" id="data" class="nav_hover">&nbsp;资料&nbsp;</a></li>
+                <li id="li_index"><a href="visitHome.jsp?visitName=<%=visitName%>" id="index" class="nav_hover">主页&nbsp;</a></li>
+                <li id="li_messageBoard"><a href="visitMessageBoard.jsp?visitName=<%=visitName%>" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
+                <li id="li_data"><a href="visitData.jsp?visitName=<%=visitName%>" id="data" class="nav_hover">&nbsp;资料&nbsp;</a></li>
             </ul>
             <div id="welcomeBack">
                 欢迎来访!&nbsp;<font id="userName"><%=webUser%></font>
@@ -176,21 +174,4 @@
         </div>
     </div>
 </body>
-
-<style type="text/css">
-    #main #content #data_board #dataBamboo {
-        position: relative;
-        width: 200px; 
-        float: right;      
-        top: 150px; 
-        right: -100px; 
-        opacity: 0.8;
-    }
-
-@media only screen and (max-width: 600px) {
-    #main #content #data_board #dataBamboo {
-        width: 100px;
-    }
-}  
-</style>
 </html>

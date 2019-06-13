@@ -70,11 +70,11 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">个人主页</a></li>
-            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">好友动态</a></li>
-            <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.jsp?userId=<%=userId%>" class="mobile_link">留言板</a></li>
-            <li><a href="about.jsp?userId=<%=userId%>" class="mobile_link">关于</a></li>
+            <li><a href="index.jsp" class="mobile_link">个人主页</a></li>
+            <li><a href="friends.jsp" class="mobile_link">好友动态</a></li>
+            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
+            <li><a href="recommend.jsp" class="mobile_link">推荐</a></li>
+            <li><a href="about.jsp" class="mobile_link">关于</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
@@ -84,7 +84,7 @@
             </div>  
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
-        <a href="index.jsp?userId=<%=userId%>" id="mobile_com">「Lifeblog.com」</a>
+        <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow()" />
     </div>
 
@@ -103,8 +103,8 @@
             <p>Show your life this moment!</p>
         </div>
         <div id="menu">
-            <a href="setting.jsp?userId=<%=userId%>">设置</a><br><br> 
-            <a href="about.jsp?userId=<%=userId%>">关于</a>
+            <a href="setting.jsp">设置</a><br><br> 
+            <a href="about.jsp">关于</a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
@@ -114,10 +114,11 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="index.jsp?userId=<%=userId%>" id="index" class="nav_hover">个人主页&nbsp</a></li>
-                <li id="li_friends"><a href="friends.jsp?userId=<%=userId%>" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
-                <li id="li_album"><a href="album.jsp?userId=<%=userId%>" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
-                <li id="li_messageBoard"><a href="messageBoard.jsp?userId=<%=userId%>" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
+                <li id="li_index"><a href="index.jsp" id="index" class="nav_hover">个人主页&nbsp;</a></li>
+                <li id="li_friends"><a href="friends.jsp" id="friends" class="nav_hover">&nbsp;好友动态&nbsp;</a></li>
+                <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
+                <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp;个人资料&nbsp;</a></li>
+                <li id="li_recommend"><a href="recommend.jsp" id="album" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
             </ul>
             <div id="welcomeBack">
                 欢迎回来!&nbsp;<font id="userName"></font>
@@ -156,14 +157,14 @@
                 </div>
                 <!-- 修改资料 -->
                 <div id="updateData" class="settingRow">
-                    <font onclick="window.location.href = 'Data.jsp?userId=<%=userId%>';" class="fonts">修改资料</font>
+                    <font onclick="window.location.href = 'Data.jsp';" class="fonts">修改资料</font>
                 </div>
                 <!-- 退出登录 -->
                 <div id="exitLogin" class="settingRow">
                     <font onclick="exitLogin()" class="fonts">退出登录</font>
                 </div>
                 <img src="images/horse.png" width="400px" id="horse" />
-                <form method="post" action="setting.jsp?userId=<%=userId%>" id="updateForm"> 
+                <form method="post" action="setting.jsp" id="updateForm"> 
                     <input type="password" placeholder="输入旧密码" class="password" id="password1" /> 
                     <span id="alert1" class="alert">&nbsp;</span>
                     <input type="password" placeholder="输入新密码" class="password" id="password2" />

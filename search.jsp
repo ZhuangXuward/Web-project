@@ -15,38 +15,11 @@
     StringBuilder table=new StringBuilder("");
 	try{
 	  Class.forName("com.mysql.jdbc.Driver");
-	  Connection con=DriverManager.getConnection(connectString, 
-	                 "user", "123");
+	  Connection con=DriverManager.getConnection(connectString, "user", "123");
 	  Statement stmt=con.createStatement();
-
-      Connection con_follow=DriverManager.getConnection(connectString, 
-	                 "user", "123");
+      Connection con_follow=DriverManager.getConnection(connectString, "user", "123");
 	  Statement stmt_follow=con_follow.createStatement();
-      
       ResultSet rs;
-
-      //========================关注与取关数据库操作========================
-      if (pid != null) { //pid不为null说明点击了关注按钮
-        //查找数据库是否有关注关系
-        sql = "select * from followers where fans_id='"+userId+"' and followed_id='"+pid+"'";
-        rs=stmt.executeQuery(sql);
-
-        //1.原先不存在关注关系->关注
-        if(!rs.next()) { 
-            String fmt="insert into followers(fans_id,followed_id) values('%s', '%s')";
-            sql = String.format(fmt,userId,pid);
-            //userId为当前用户id，pid为关注的用户id
-            int cnt2 = stmt.executeUpdate(sql);
-            if (cnt2>0) flag = 1; //flag=1标记为原先没有关注，现在关注成功
-        }
-
-        //2.原先存在关注关系->取关
-        else {
-            sql = "delete from followers where fans_id='" + userId + "' and followed_id='" + pid + "'";
-            int cnt3 = stmt.executeUpdate(sql);
-        }
-      }
-      //========================END关注与取关数据库操作========================
 
       //========================根据ID/email/phone查找用户========================
       if(request.getMethod().equalsIgnoreCase("post")) {
@@ -64,23 +37,23 @@
           rs=stmt.executeQuery(sql);
           table.append("<div class='user_searched'>");
           while(rs.next()) {
-            sql = "select * from followers where fans_id='"+userId+"' and followed_id='"+rs.getString("id")+"'";
+            sql = "select * from followers where fans_id='" + userId + "' and followed_id='" + rs.getString("id") + "'";
             ResultSet rs_follow=stmt_follow.executeQuery(sql);
             String cssStr = "";
             if(rs_follow.next()) {
                 ifFollow = "已关注";
-                cssStr = "<button class='follow_button followed'><a href='search.jsp?userId=" + userId + "&pid="+rs.getString("id")+"'>" + ifFollow + "</a></button>";
+                cssStr = "<a href='#' onclick='get(" + userId + ", " + rs.getString("id") + "); return false'><button class='follow_button followed' id='" + rs.getString("id") + "'>" + ifFollow + "</button></a>";
             }
             else {
                 ifFollow = "关注";
-                cssStr = "<button class='follow_button'><a href='search.jsp?userId=" + userId + "&pid="+rs.getString("id")+"'>" + ifFollow + "</a></button>";
+                cssStr = "<a href='#' onclick='get(" + userId + ", " + rs.getString("id") + "); return false'><button class='follow_button' id='" + rs.getString("id") + "'>" + ifFollow + "</button></a>";
             }
             rs_follow.close();
             table.append(String.format(
                 "<div class='user_item'>" +
                 "<div class='user_avatar'><img src='./images/default_avatar.jpeg' style='width: 60px; height: 60px; border-radius: 50px;'></img>" +
                 "</div>" + 
-                "<div class='user_content'><span class='user_name'>%s</span> <span class='user_hobby'>%s</span> <span class='user_follow'>%s</span></div></div>",
+                "<div class='user_content'><a class='user_name' href='visitHome.jsp?visitName=" + rs.getString("name") + "' style='text-decoration: underline;'>%s</a> <span class='user_hobby'>%s</span> <span class='user_follow'>%s</span></div></div>",
                 rs.getString("name"), rs.getString("hobby"),
                 cssStr
                 //TODO 关注，添加到数据库，判断关注关系是否存在。可使用已关注样式
@@ -91,10 +64,6 @@
       }
       //========================END根据ID/email/phone查找用户========================
 
-
-      //========================点击关注按钮后页面刷新回到当前位置========================
-      //TODO
-      //========================END点击关注按钮后页面刷新回到当前位置========================
 
       stmt_follow.close();
       con_follow.close();
@@ -137,20 +106,19 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">个人主页</a></li>
-            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">好友动态</a></li>
-            <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.jsp?userId=<%=userId%>" class="mobile_link">留言板</a></li>
-            <li><a href="Data.jsp?userId=<%=userId%>" class="mobile_link">个人资料</a></li>
-            <li><a href="about.jsp?userId=<%=userId%>" class="mobile_link">关于</a></li>
-            <li><a href="setting.jsp?userId=<%=userId%>" class="mobile_link">设置</a></li>
+            <li><a href="friends.jsp" class="mobile_link">好友动态</a></li>
+            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
+            <li><a href="Data.jsp" class="mobile_link">个人资料</a></li>
+            <li><a href="recommend.jsp" class="mobile_link">推荐</a></li>
+            <li><a href="about.jsp" class="mobile_link">关于</a></li>
+            <li><a href="setting.jsp" class="mobile_link">设置</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
         <div id="mobile_head_portrait">
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
-        <a href="index.jsp?userId=<%=userId%>" id="mobile_com">「Lifeblog.com」</a>
+        <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
     </div>
 
@@ -169,9 +137,9 @@
             <p>Show your life this moment!</p>
         </div>
         <div id="menu">
-            <a href="setting.jsp?userId=<%=userId%>">设置</a><br><br> 
-            <a href="about.jsp?userId=<%=userId%>">关于</a><br><br>
-            <a href="search.jsp?userId=<%=userId%>"><img src="./images/icon/search.png" style="width: 20px; opacity: 0.5;"></a>
+            <a href="search.jsp?userId=<%=userId%>"><img src="./images/icon/search.png" style="width: 20px; opacity: 0.5;"></a><br><br>
+            <a href="setting.jsp">设置</a><br><br> 
+            <a href="about.jsp">关于</a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
@@ -181,11 +149,11 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="index.jsp?userId=<%=userId%>" id="index" class="nav_hover">个人主页&nbsp</a></li>
-                <li id="li_friends"><a href="friends.jsp?userId=<%=userId%>" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
-                <li id="li_album"><a href="album.jsp?userId=<%=userId%>" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
-                <li id="li_messageBoard"><a href="messageBoard.jsp?userId=<%=userId%>" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
-                <li id="li_data"><a href="Data.jsp?userId=<%=userId%>" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
+                <li id="li_index"><a href="index.jsp" id="index" class="nav_hover">个人主页&nbsp;</a></li>
+                <li id="li_friends"><a href="friends.jsp" id="friends" class="nav_hover">&nbsp;好友动态&nbsp;</a></li>
+                <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
+                <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp;个人资料&nbsp;</a></li>
+                <li id="li_recommend"><a href="recommend.jsp" id="album" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
             </ul>
             <div id="welcomeBack">
                 欢迎回来!&nbsp;<font id="userName"></font>
@@ -197,9 +165,9 @@
         </div>
         <div id="content">
             <div id="container"> 
-              <form action="search.jsp?userId=<%=userId%>" method="post" name="searchForm"> 
+              <form action="search.jsp?userId=<%=userId%>&pid=<%=pid%>" method="post" name="searchForm"> 
                   <div id="search_borad">
-                    <input type="text" name="query" placeholder="搜索用户" value="<%=query%>">
+                    <input type="text" name="query" placeholder="搜索用户" value="<%=query%>" style="outline: none;">
                     <a href="#" onclick="searchForm.submit(); return false"><img src="./images/icon/search2.png"> </a>
                   </div>
               </form>
@@ -214,10 +182,8 @@
             var Obtn = document.getElementsByClassName("follow_button");
             for (let i = 0; i < Obtn.length; ++ i) {
                 Obtn[i].onclick = function() {
-                    if (Obtn[i].getElementsByTagName('a')[0].innerHTML == "关注") 
-                        alert("关注成功٩(ˊᗜˋ*)و");
-                    else
-                        alert("取消关注成功");
+                    if (Obtn[i].innerHTML == "关注") 
+                    {}
                 }
             }
             //===========END关注成功效果===========
@@ -232,6 +198,40 @@
             }
             //===========END搜索框效果===========
         }
+
+        //===========关注AJAX请求===========
+        function get(follower, followed) {
+            // 创建http请求
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                // 当http请求的状态变化时执行 
+                if(xmlhttp.readyState==4) { // 4-已收到http响应数据
+                    if (xmlhttp.status >= 200 && xmlhttp.status < 300 || xmlhttp.status == 304) {
+                        // 200~299-OK 304-unmodified
+                        // alert(xmlhttp.responseText);
+                        // http响应的正文 
+                        var oTest = document.getElementById(followed);
+                        oTest.innerHTML = xmlhttp.responseText;
+                        if(!oTest.classList.contains("followed")) {
+                            oTest.classList.add("followed");
+                        }
+                        else {
+                            oTest.classList.remove("followed");
+                        }
+                        console.log("xmlhttp.responseText:" + xmlhttp.responseText);
+                    } else {
+                        alert("error");
+                    }
+                };
+            }; //打开http请求（open）的参数：get|post，url，是否异步发送 
+            var param = "userId=" + follower + "&followedId=" + followed;
+            xmlhttp.open("get", "ajaxGet.jsp?userId=" + follower + "&followedId=" + followed, true);
+            xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xmlhttp.send(null);
+            //发送http请求。get只能用null作为参数 
+        }
+        //===========END关注AJAX请求===========
+
     </script>
 </body>
 </html>

@@ -45,7 +45,7 @@
             String sql = String.format(fmt, date, username, blog, level, link, replyDate);
             int cnt = stmt.executeUpdate(sql);
             if (cnt > 0) 
-                {msg = "保存成功！";response.sendRedirect("index.jsp?userId=<%=userId%>");}
+                {msg = "保存成功！";response.sendRedirect("index.jsp?userId=" + userId);}
         }
         catch (Exception e) {
             msg = e.getMessage();
@@ -58,11 +58,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>菜鸟教程(runoob.com)</title>
+    <meta charset="utf-8">
+    <title>菜鸟教程(runoob.com)</title>
 </head>
 <body>
-
-<h1><%=msg%></h1>
+    <h1><%=msg%></h1>
 </body>
 </html>

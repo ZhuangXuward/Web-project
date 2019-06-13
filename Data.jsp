@@ -77,9 +77,9 @@
         school_value = rs.getString("school");
         company_value = rs.getString("company");
         sign_value = rs.getString("sign");
-        resume_value = rs.getString("resume");
+        resume_value = rs.getString("resume");     
+        userId = rs.getString("id");
         //用户名更改
-        
     }
 
     rs.close(); 
@@ -100,8 +100,7 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    
+<head>  
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport"
@@ -126,19 +125,19 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">个人主页</a></li>
-            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">好友动态</a></li>
-            <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.jsp?userId=<%=userId%>" class="mobile_link">留言板</a></li>
-            <li><a href="about.jsp?userId=<%=userId%>" class="mobile_link">关于</a></li>
-            <li><a href="setting.jsp?userId=<%=userId%>" class="mobile_link">设置</a></li>
+            <li><a href="index.jsp" class="mobile_link">个人主页</a></li>
+            <li><a href="friends.jsp" class="mobile_link">好友动态</a></li>
+            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
+            <li><a href="recommend.jsp" class="mobile_link">推荐</a></li>
+            <li><a href="about.jsp" class="mobile_link">关于</a></li>
+            <li><a href="setting.jsp" class="mobile_link">设置</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
         <div id="mobile_head_portrait">
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
-        <a href="index.jsp?userId=<%=userId%>" id="mobile_com">「Lifeblog.com」</a>
+        <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
     </div>
 
@@ -157,8 +156,8 @@
             <p style="font-family: STKaiti"><%=sign_value%></p>
         </div>
         <div id="menu">
-            <a href="setting.jsp?userId=<%=userId%>">设置</a><br><br> 
-            <a href="about.jsp?userId=<%=userId%>">关于</a>
+            <a href="setting.jsp">设置</a><br><br> 
+            <a href="about.jsp">关于</a>
         </div>
         <div id="footer">
            <span>Copyright © 2019 LifeBlog.com</span>
@@ -168,18 +167,18 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="index.jsp?userId=<%=userId%>" id="index" class="nav_hover">个人主页&nbsp</a></li>
-                <li id="li_friends"><a href="friends.jsp?userId=<%=userId%>" id="friends" class="nav_hover">&nbsp好友动态&nbsp</a></li>
-                <li id="li_album"><a href="album.jsp?userId=<%=userId%>" id="album" class="nav_hover">&nbsp相册&nbsp</a></li>
-                <li id="li_messageBoard"><a href="messageBoard.jsp?userId=<%=userId%>" id="message_board" class="nav_hover">&nbsp留言板&nbsp</a></li>
-                <li id="li_data"><a href="Data.jsp?userId=<%=userId%>" id="data" class="nav_hover">&nbsp个人资料&nbsp</a></li>
+                <li id="li_index"><a href="index.jsp" id="index" class="nav_hover">个人主页&nbsp;</a></li>
+                <li id="li_friends"><a href="friends.jsp" id="friends" class="nav_hover">&nbsp;好友动态&nbsp;</a></li>
+                <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
+                <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp;个人资料&nbsp;</a></li>
+                <li id="li_recommend"><a href="recommend.jsp" id="album" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
             </ul>
             <div id="welcomeBack">
                 欢迎回来!&nbsp;<font id="userName"><%=webUser%></font>
             </div>
         </div>
         <div id="content">
-            <form action="Data.jsp?userId=<%=userId%>" method="post" id="dataForm">
+            <form action="Data.jsp" method="post" id="dataForm">
                 <fieldset id="data_board">
                     <!-- 发表博客 -->
                     <legend>
@@ -283,103 +282,5 @@
             </form>
         </div>
     </div>
-
-    <script>
-        //生成1950年到2019年
-        for(var i = 2019; i >= 1950; i--) {
-            var option = document.createElement('option');
-            option.setAttribute('value', i);
-            option.innerHTML = i;
-            sel1.appendChild(option);
-        }
-        //生成1月-12月
-        for(var i = 1; i <= 12; i ++) {
-            var option = document.createElement('option');
-            option.setAttribute('value', i);
-            option.innerHTML = i;
-            sel2.appendChild(option);    
-        }
-        //生成1日—31日
-        sel2.onchange = function() {
-            var dayNum = getDayNum(sel2.value, sel1.value);
-            for(var i = 1; i <= dayNum; i ++) {
-                var option = document.createElement('option');
-                option.setAttribute('value', i);
-                option.innerHTML = i;
-                sel3.appendChild(option);    
-            }
-            showDay();
-        }
-
-        sel3.onchange = function() {
-            document.getElementById('sel3').removeAttribute("disabled");
-            document.getElementById("birthday_result").innerHTML = sel1.value + "-" + sel2.value + "-" + sel3.value;
-            sel1.style.display = "none";
-            sel2.style.display = "none";
-            sel3.style.display = "none";
-            document.getElementById("forChange").style.display = "inline-block";
-            document.getElementById("birthdayPost").value = document.getElementById("birthday_result").innerHTML;
-        }
-
-        //设置修改资料
-        //通过上一个跳转过来的网页是否是setting.html确定
-        window.onload = function() {
-            if (document.referrer.search("setting.jsp?userId=<%=userId%>") != -1) 
-                document.getElementById("dataEdit").click();
-        }
-
-        function uploadData() {
-            if (window.confirm('是否进行资料修改？')) 
-            { 
-                var nameFlag = true;
-                var emailFlag = true;
-                //检查用户名是否被注册
-                <%for (int i = 0; i < index; i ++) { %>
-                    //注意要加双引号！
-                    if ("<%=name_array[i]%>" == namePost.value && namePost.value != "<%=webUser%>")
-                    {
-                        alert('"'+namePost.value+'"'+"这个用户名已被注册");
-                        flag = false;
-                        namePost.value = "<%=webUser%>";
-                    }
-                <%}%>
-
-                //检查邮箱是否被注册
-                if (nameFlag == true) {
-                    <%for (int i = 0; i < index; i ++) { %>
-                        if ("<%=email_array[i]%>" == emailPost.value && emailPost.value != "<%=email_value%>")
-                        {
-                            alert('"'+emailPost.value+'"'+"这个邮箱已被注册");
-                            flag = false;
-                            emailPost.value = "<%=email_value%>";
-                        }
-                    <%}%>
-                }
-
-                if (nameFlag == true && emailFlag == true) {
-                    document.getElementById('dataForm').submit();  
-                    datatoShow();           
-                }
-            }
-        }
-
-    </script>
 </body>
-
-<style type="text/css">
-    #main #content #data_board #dataBamboo {
-        position: relative;
-        width: 200px; 
-        float: right;      
-        top: 150px; 
-        right: -100px; 
-        opacity: 0.8;
-    }
-
-@media only screen and (max-width: 600px) {
-    #main #content #data_board #dataBamboo {
-        width: 100px;
-    }
-}  
-</style>
 </html>

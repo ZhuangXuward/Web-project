@@ -50,7 +50,7 @@
             if (cnt > 0) 
             { 
                 msg = "保存成功！"; 
-                String temp = "visitHome.jsp?userId=<%=userId%>&visitName=";
+                String temp = "visitHome.jsp?visitName=";
                 temp += visitname; 
                 //返回访问主页
                 response.sendRedirect(temp);
@@ -67,7 +67,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>菜鸟教程(runoob.com)</title>
+<title>test</title>
 </head>
 <body>
 

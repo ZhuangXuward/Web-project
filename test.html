@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+        function get() {
+            // 创建http请求
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                // 当http请求的状态变化时执行 
+                if(xmlhttp.readyState==4) { // 4-已收到http响应数据
+                    if (xmlhttp.status >= 200 && xmlhttp.status < 300 || xmlhttp.status == 304) {
+                        // 200~299-OK 304-unmodified
+                        // alert(xmlhttp.responseText);
+                        // http响应的正文 
+                        var oTest = document.getElementById("p2");
+                        oTest.value = xmlhttp.responseText;
+                    } else {
+                        alert("error");
+                    }
+                };
+            }; //打开http请求（open）的参数：get|post，url，是否异步发送 
+            var op3 = document.getElementById("p3");
+            var name = "name=" + op3.value;
+            xmlhttp.open("post", "ajaxGet.jsp", true);
+            xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xmlhttp.send(name);
+            //发送http请求。get只能用null作为参数 
+        }
+    </script>
+</head>
+<body>
+    <form name="p3">
+        <p id="p4">hello world!</p>
+        <input id="p3" type="text">
+        <input id="p2" type="button" value="follow" />
+    </form>
+    <script type="text/javascript"> 
+        p2 = document.getElementById("p2"); p2.addEventListener("click", get);
+    </script> 
+</body>
+</html>

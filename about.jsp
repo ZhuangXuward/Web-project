@@ -1,7 +1,80 @@
 <%@page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"%>
-<% request.setCharacterEncoding("utf-8");
-    String userId = request.getParameter("userId");
+<% request.setCharacterEncoding("utf-8");%>
+<%@ page import="java.io.*, java.util.*, org.apache.commons.io.*"%>
+<%@ page import="org.apache.commons.fileupload.*"%>
+<%@ page import="org.apache.commons.fileupload.disk.*"%>
+<%@ page import="org.apache.commons.fileupload.servlet.*"%>
+<%
+    String webUser = "";    //登录用户
+    String imageName = "";
+    Cookie cookies[] = request.getCookies(); //读出用户硬盘上的Cookie，并将所有的Cookie放到一个cookie对象数组里面
+    if (cookies != null) {
+        for (int i = 0; i < cookies.length; i ++) {    //用一个循环语句遍历刚才建立的Cookie对象数组
+            if(cookies[i].getName().equals("user")){//如果cookie对象的名称是mrCookie
+                webUser = cookies[i].getValue(); //获取用户名
+            }
+        }
+    }
+
+    if (request.getMethod().equalsIgnoreCase("post")){
+        request.setCharacterEncoding("utf-8");
+        String msg = "false";
+        String imagePath = "";  // 图片路径
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);   // 检查表单中是否包含文件
+        if (isMultipart) {
+            
+            FileItemFactory factory = new DiskFileItemFactory();
+            //factory.setSizeThreshold(yourMaxMemorySize); // 设置使用的内存最大值
+            //factory.setRepository(yourTempDirectory);   // 设置文件临时目录
+            
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            // upload.setSizeMax(yourMaxRequestSize);   // 允许的最大文件尺寸
+            
+            List items = upload.parseRequest(request);
+            String Id = "";
+            for (int i = 0; i < items.size(); i ++) {
+                FileItem fi = (FileItem) items.get(i);
+                if (fi.isFormField()) {     // 如果是表单字段，获取对应的id信息
+                    if (fi.getFieldName().equals("id")) {
+                        Id = fi.getString("utf-8");
+                    }
+                }
+                else {
+                    DiskFileItem dfi = (DiskFileItem) fi;
+                    if (!dfi.getName().trim().equals("")) {   // getName()返回文件名称或空串
+                        String fileName = application.getRealPath("/images") + System.getProperty("file.separator") + FilenameUtils.getName(dfi.getName());
+                        imagePath = new File(fileName).getAbsolutePath();            // 获取图片路径
+                        imageName = FilenameUtils.getName(dfi.getName()); // 获取图片名字
+                        out.print(imagePath);
+                        System.out.println(new File(fileName).getAbsolutePath());
+                        dfi.write(new File(fileName));
+                        
+                        // 保存图片
+                        String path = imageName;
+                        String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
+                        String user = "user";
+                        String pwd = "123";
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection(connectString, user, pwd);
+                        Statement stmt = con.createStatement();
+                        try {   
+                            String sql = "update users set avatar='" + imageName + "' where name='" + webUser + "'";
+                            int cnt = stmt.executeUpdate(sql);
+                            if (cnt > 0) msg = "保存成功！";
+                        }
+                        catch (Exception e) {
+                            msg = e.getMessage();
+                        }
+                    }
+                }
+            }
+        }
+    } 
+    else {
+        imageName = "default_avatar.jpeg";
+    }
 %>
+
 <!DOCTYPE html>
 <html>
 
@@ -15,6 +88,7 @@
     <meta name="author" content="superteam" />
     <meta name="date" content="2019-05-21T12:00:00+00:00" />
     <title>ABOUT</title>
+    <script type="text/javascript" src="js/shadow.js"></script>
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
     <link rel="stylesheet" type="text/css" href="css/mobile.css" />
     <link rel="stylesheet" type="text/css" href="css/about.css" />
@@ -114,36 +188,43 @@
 
 <body>
     <!-- for mobile devices -->
+    <div id="shadow"></div>
+    <div id="head_portrait_box">
+        <h2>请选择要上传的头像</h2>
+        <form name="fileUpload" action="about.jsp" method="POST" enctype="multipart/form-data">
+            <div id="select_upload">
+                <p><input type="file" name="file" size=40 value="" id="upload_img"/></p>
+            </div>
+            <p><input type=submit name="submit" value="OK"/></p>
+        </form>
+    </div>
     <div id="mobile_shadow">
     </div>
     <div id="mobile_box">
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="index.jsp?userId=<%=userId%>" class="mobile_link">个人主页</a></li>
-            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">好友动态</a></li>
-            <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.jsp?userId=<%=userId%>" class="mobile_link">留言板</a></li>
-            <li><a href="Data.jsp?userId=<%=userId%>" class="mobile_link">个人资料</a></li>
-            <li><a href="setting.jsp?userId=<%=userId%>" class="mobile_link">设置</a></li>
+            <li><a href="index.jsp" class="mobile_link">个人主页</a></li>
+            <li><a href="friends.jsp" class="mobile_link">好友动态</a></li>
+            <li><a href="album.jsp" class="mobile_link">相册</a></li>
+            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
+            <li><a href="Data.jsp" class="mobile_link">个人资料</a></li>
+            <li><a href="setting.jsp" class="mobile_link">设置</a></li>
         </ul>
     </div>
     <!-- normal -->
     <div id="home">
         <div id="com">
-            <a href="about.jsp?userId=<%=userId%>">「About」</a>
+            <a href="about.jsp">「About」</a>
         </div>
-        <div id="head_portrait">
-            <div id="select_upload">
-                <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="upload_img" />
-            </div>
-            <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
+        <div id="head_portrait" onclick="test()">
+            <img src="images/<%=imageName%>" style="width: 80px; height: 80px; border-radius: 50px;">
         </div>
         <div id="personal_signature">
             <p>Show your life this moment!</p>
         </div>
         <div id="menu">
-            <a href="index.jsp?userId=<%=userId%>">返回主页</a>
+            <a href="index.jsp">返回主页</a>
         </div>
         <div id="footer">
             <span>Copyright © 2019 LifeBlog.com</span>
@@ -162,7 +243,7 @@
             <p>每一个人的人生经历都有所不同。择路的茫然，无助的恍惚，梦想破碎的落寞，收获成功的喜悦，甚至是生活中不经意发现的小惊喜，都值得记录，分享和回味。为什么要记录，分享和回味？</p>
             <p>“幸福就像玻璃,平时从未察觉,只要稍微改变看的角度,就会映照出光芒!”当记录下生活的点滴，分享给不同的人，在不同的时间回味，就会得到新的收获，甚至是收获幸福！</p>
             <p>这个博客平台建立的目的就是方便用户记录生活的点点滴滴，可以是成长的历程，学习的收获，甚至也可以是一点点生活上的吐槽。整个平台的风格基调是简约、中国水墨风，以黑、白、灰三色为主颜色。
-                <p>就像我们平台的核心语句：“show your life this moment”，尽情地感受、记录和分享自己独一无二的生活吧！希望在这个平台您能收获喜悦、快乐！</p>
+            <p>就像我们平台的核心语句：“show your life this moment”，尽情地感受、记录和分享自己独一无二的生活吧！希望在这个平台您能收获喜悦、快乐！</p>
         </fieldset>
 
         <fieldset id="team">

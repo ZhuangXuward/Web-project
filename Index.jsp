@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <% request.setCharacterEncoding("utf-8");
-    String userId = request.getParameter("userId");
+    String userId = "";
     String msg = "";
     String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
     String user = "user";
@@ -20,11 +20,16 @@
         }
     }
 
+    if (webUser == "") {
+        response.sendRedirect("login.jsp"); 
+    }   //如何没有用户信息转到登录页面
+
     //加载签名
     String sign_value = "";
     ResultSet rsign = stmt.executeQuery("select * from users where name='"+webUser+"'");
     while (rsign.next()) {          
         sign_value = rsign.getString("sign");        
+        userId = rsign.getString("id");
     }
     rsign.close();
     
@@ -99,6 +104,34 @@
         rsk.close();
     }
 
+    //==================获取粉丝、关注、博客、点赞数量==================
+    //粉丝数量
+    String sql = "select count(*) num from followers where followed_id='" + userId + "'";
+    ResultSet rs_fans = stmt.executeQuery(sql);
+    String fans_amount = "";
+    if (rs_fans.next()) {
+        fans_amount = rs_fans.getString("num");
+    }
+    rs_fans.close();
+
+    //关注数量
+    sql = "select count(*) num from followers where fans_id='" + userId + "'";
+    ResultSet rs_follow = stmt.executeQuery(sql);
+    String follow_amount = "";
+    if (rs_follow.next()) {
+        follow_amount = rs_follow.getString("num");
+    }
+    rs_follow.close();
+
+    //博客数量
+    sql = "select count(*) num from blog where username='" + webUser + "' and level=1";
+    ResultSet rs_blog = stmt.executeQuery(sql);
+    String blog_amount = "";
+    if (rs_blog.next()) {
+        blog_amount = rs_blog.getString("num");
+    }
+    rs_blog.close();
+    //==================END获取粉丝、关注、博客、点赞数量==================
 
 
     stmt.close(); con.close();
@@ -118,186 +151,11 @@
     <meta name="date" content="2019-05-21T12:00:00+00:00" />
     <title>我的主页</title>
     <script type="text/javascript" src="js/general.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
     <link rel="stylesheet" type="text/css" href="css/mobile.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
 </head>
-
-<style type="text/css">
-    /*博客分区*/
-    #blog_zone {
-        position: relative;
-        display: block;
-        top: 80px;
-        left: 6%;
-        width: 70%;
-        max-width: 70%;
-        border-top-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-    }
-
-    .blog_block {
-        position: relative;
-        border-radius: 5px;
-        display: block;
-        margin: 0px auto;
-        margin-bottom: 20px; 
-        margin-top: 20px;
-        padding: 12px;
-        padding-bottom: 24px;
-        padding-top: 24px;
-        background: linear-gradient(to left, #8a8a8a, #ebebeb);
-        border-radius: 20px; 
-        width: 90%;
-        max-width: 90%;
-    }
-
-    .blog_block a {
-        color: black;
-        font-size: 14px;
-    }
-
-    .blog_block a:hover {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-
-    .blog_block .blog_time {
-        position: relative;
-        display: inline-block;
-        float: right;
-        right: 0px;
-        top: -5px;
-        font-size: 10px;
-        color: #ebebeb;
-    }
-
-    .blog_block .blog_content {
-        position: relative;
-        display: inline-block;
-        font-size: 20px;
-        left: 35px;
-        width: 90%;
-    }
-
-    .blog_block .blog_operator {
-        position: relative;
-        display: block;
-        bottom: 0px;
-        width: 100%;
-        height: 14px;   
-        font-size: 14px;   
-    }
-
-    .blog_block .blog_operator .azone {
-        position: relative;
-        float: right;
-        display: none;
-    }
-
-    .blog_block .replyText {
-        position: relative;
-        top: 20px;
-        left: 30px;
-        display: none;
-    }
-
-    .blog_block .replyText textarea {
-        position: relative;
-        border-radius: 5px;
-        outline: none;
-        font-size: 15px;
-        width: 85%;
-        height: 45px;
-        top: -8px;
-    }
-
-    .blog_block .replyText img {
-        position: relative;
-        cursor: pointer;
-        opacity: 0.5;
-        display: "block";
-    }
-
-    .blog_block .replyText .replyClose {
-        top: -43px;
-    }
-
-    .blog_block .replyText .replyImg {
-        left: -20px;
-        z-index: 100;
-        top: -8px;
-    }
-
-    .blog_block .replyText .img:hover {
-        opacity: 1;
-    }
-
-    /*回复区*/
-    .reply_zone {
-        position: relative;
-        display: block;
-        /*border: 1px solid black;*/
-        width: 80%;
-        background: linear-gradient(to left, #fff, #ebebeb);
-        max-width: 80%;
-        top: -20px;
-        margin: 0px auto;
-        padding: 12px;
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-    }
-
-    .reply_block {
-        position: relative;
-        display: block;
-        padding-top: 12px;
-    }
-
-    .reply_left {
-        position: relative;
-        width: 25%;
-        display: block;
-        left: 20px;
-    }
-
-    .reply_head {
-        width: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    .reply_person {
-        position: relative;
-        left: 4px;
-        top: -25px;
-        font-size: 12px;
-        text-shadow: 2px 2px 2px #8a8a8a;
-        cursor: pointer;
-    }
-
-    .reply_person a:hover {
-        text-decoration: underline;
-    }
-
-    .reply_date {
-        position: relative;
-        left: 47px;
-        top: -20px;
-        display: inline-block;
-        font-size: 10px;
-        color: #8a8a8a;
-    }
-
-    .reply_content {
-        position: relative;
-        left: 29%;
-        top: -55px;
-        width: 70%;
-        display: inline-block;
-    }
-
-</style>
 
 <body onload="isBlogEmpty()">
     <!-- for mobile device -->
@@ -307,12 +165,12 @@
         <a href="#" id="mobile_back" onclick="hideShadow()"><img src="images/close.png"
                 style="height: 20px; width: 20px;" /></a>
         <ul>
-            <li><a href="friends.jsp?userId=<%=userId%>" class="mobile_link">好友动态</a></li>
-            <li><a href="album.jsp?userId=<%=userId%>" class="mobile_link">相册</a></li>
-            <li><a href="messageBoard.jsp?userId=<%=userId%>" class="mobile_link">留言板</a></li>
-            <li><a href="Data.jsp?userId=<%=userId%>" class="mobile_link">个人资料</a></li>
-            <li><a href="about.jsp?userId=<%=userId%>" class="mobile_link">关于</a></li>
-            <li><a href="setting.jsp?userId=<%=userId%>" class="mobile_link">设置</a></li>
+            <li><a href="friends.jsp" class="mobile_link">好友动态</a></li>
+            <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
+            <li><a href="Data.jsp" class="mobile_link">个人资料</a></li>
+            <li><a href="recommend.jsp" class="mobile_link">推荐</a></li>
+            <li><a href="about.jsp" class="mobile_link">关于</a></li>
+            <li><a href="setting.jsp" class="mobile_link">设置</a></li>
         </ul>
     </div>
     <div id="mobile_wrap">
@@ -322,14 +180,14 @@
             </div>  
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
-        <a href="index.jsp?userId=<%=userId%>" id="mobile_com">「Lifeblog.com」</a>
+        <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow()" />
     </div>
 
     <!-- normal -->
     <div id="home">
         <div id="com">
-            <a href="text.html">「Lifeblog.com」</a>
+            <a href="#">「Lifeblog.com」</a>
         </div>
         <div id="head_portrait">  
             <div id="select_upload">
@@ -340,9 +198,9 @@
         <div id="personal_signature">
             <p style="font-family: STKaiti"><%=sign_value%></p>
         </div>
-        <div id="menu">
-            <a href="setting.jsp?userId=<%=userId%>">设置</a><br><br> 
-            <a href="about.jsp?userId=<%=userId%>">关于</a><br><br>
+        <div id="menu">       
+            <a href="setting.jsp">设置</a><br><br> 
+            <a href="about.jsp">关于</a><br><br>
             <a href="search.jsp?userId=<%=userId%>"><img src="./images/icon/search.png" style="width: 20px; opacity: 0.5;"></a>
         </div>
         <div id="footer">
@@ -353,11 +211,11 @@
     <div id="main">
         <div id="wrap">
             <ul id="nav">
-                <li id="li_index"><a href="index.jsp?userId=<%=userId%>" id="index" class="nav_hover">个人主页&nbsp;</a></li>
-                <li id="li_friends"><a href="friends.jsp?userId=<%=userId%>" id="friends" class="nav_hover">&nbsp;好友动态&nbsp;</a></li>
-                <li id="li_album"><a href="album.jsp?userId=<%=userId%>" id="album" class="nav_hover">&nbsp;相册&nbsp;</a></li>
-                <li id="li_messageBoard"><a href="messageBoard.jsp?userId=<%=userId%>" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
-                <li id="li_data"><a href="Data.jsp?userId=<%=userId%>" id="data" class="nav_hover">&nbsp;个人资料&nbsp;</a></li>
+                <li id="li_index"><a href="index.jsp" id="index" class="nav_hover">个人主页&nbsp;</a></li>
+                <li id="li_friends"><a href="friends.jsp" id="friends" class="nav_hover">&nbsp;好友动态&nbsp;</a></li>
+                <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
+                <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp;个人资料&nbsp;</a></li>
+                <li id="li_recommend"><a href="recommend.jsp" id="album" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
             </ul>
             <div id="welcomeBack">
                 欢迎回来!&nbsp;<font id="userName"><%=webUser%></font>
@@ -376,23 +234,21 @@
                     <!-- 编辑 -->
                     <div id="bianji" name="bianji">
                         <!-- <div id="mjs:tip" class="tip" style="position:fixed; left:0;top:0; display:none;"></div> -->
-                        <img src="images/icon/jinghao.png" id="jinghao" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" tips="话题" onclick="hotTopic()" />
-                        <img src="images/icon/xiaolian.png" id="xiaolian" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onmouseover="tip.start(this)" tips="表情" onclick="showEmojis()" />
-                        <img src="images/icon/picture.png" id="picture" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" tips="图片" onclick="picClick()" />
+                        <img src="images/icon/jinghao.png" id="jinghao" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="hotTopic()" title="话题" />
+                        <img src="images/icon/xiaolian.png" id="xiaolian" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onmouseover="tip.start(this)" title="表情" onclick="showEmojis()" />
+                        <img src="images/icon/picture.png" id="picture" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" title="图片" onclick="picClick()" />
                         <!-- 高级编辑 -->
-                        <img src="images/icon/gaojibianji.png" id="gaojibianji" onmouseover="appendixto2(this)" onmouseout="editOut(this)" tips="高级编辑" onclick="topEdit()" />
+                        <img src="images/icon/gaojibianji.png" id="gaojibianji" onmouseover="appendixto2(this)" onmouseout="editOut(this)" title="高级编辑" onclick="topEdit()" />
                         <div id="edit">           
-                            <img src="images/icon/title.png" id="etitle" onmouseover="appendixto2(this)" onmouseout="editHide(0, this)" onclick="Title(this)" />
-                            <img src="images/icon/bold.png" id="ebold" onmouseover="appendixto2(this)" onmouseout="editHide(1, this)" onclick="bold(this)" />
-                            <img src="images/icon/xieti.png" id="exieti" onmouseover="appendixto2(this)" onmouseout="editHide(2, this)" onclick="italic()" />
-                            <img src="images/icon/underline.png" id="eunderline" onmouseover="appendixto2(this)" onmouseout="editHide(3, this)" onclick="underline(this)" />
+                            <img src="images/icon/title.png" id="etitle" onmouseover="appendixto2(this)" onmouseout="editHide(0, this)" onclick="Title(this)" title="字体"/>
+                            <img src="images/icon/bold.png" id="ebold" onmouseover="appendixto2(this)" onmouseout="editHide(1, this)" onclick="bold(this)" title="粗体"/>
+                            <img src="images/icon/xieti.png" id="exieti" onmouseover="appendixto2(this)" onmouseout="editHide(2, this)" onclick="italic()" title="斜体"/>
+                            <img src="images/icon/underline.png" id="eunderline" onmouseover="appendixto2(this)" onmouseout="editHide(3, this)" onclick="underline(this)" title="下划线" />
                             <input type="button" id="ecolor" onclick="showColors()" onmouseover="colorHover(this)" onmouseout="colorOut(this)" />
-                            <img src="images/icon/link.png" id="elink" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="linka()" />
+                            <img src="images/icon/link.png" id="elink" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="linka()" title="链接" />
                         </div>
-                        <img src="images/icon/huanyuan.png" id="huanyuan" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="huanYuan()" onmouseover="tip.start(this)" tips="还原" />
-                        <img src="images/icon/submit.png" id="submit" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="submit2=document.getElementById('submit2'); submit2.click()" />
-                        <img src="images/icon/quanping.png" id="quanping" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="quanPing()" onmouseover="tip.start(this)" tips="全屏" />
-                        <img src="images/icon/huanyuan.png" id="huanyuan" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="huanYuan()" onmouseover="tip.start(this)" tips="还原" />
+                        <img src="images/icon/huanyuan.png" id="huanyuan" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="huanYuan()" onmouseover="tip.start(this)" title="还原" />
+                        <img src="images/icon/submit.png" id="submit" onmouseover="appendixto2(this)" onmouseout="removethe2(this)" onclick="submit2=document.getElementById('submit2'); submit2.click()" title="发表" />
                         <!-- 颜色条 -->
                         <div id="colorBar">
                             <input type="button" id="red_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('red')" />
@@ -405,38 +261,41 @@
                             <input type="button" id="brown_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('brown')" />
                         </div>
                         <div id="emojis">
-                            <img src="images/emoji/laugh.png" class="emoji" id="laugh" onclick="insertEmoji(this)">
-                            <img src="images/emoji/naughty.png" class="emoji" id="naughty" onclick="insertEmoji(this)">
-                            <img src="images/emoji/embarrassed.png" class="emoji" id="embarrassed" onclick="insertEmoji(this)">
-                            <img src="images/emoji/ghost.png" class="emoji" id="ghost" onclick="insertEmoji(this)">
-                            <img src="images/emoji/shocking.png" class="emoji" id="shocking" onclick="insertEmoji(this)">
-                            <img src="images/emoji/skeleton.png" class="emoji" id="skeleton" onclick="insertEmoji(this)">
-                            <img src="images/emoji/weap.png" class="emoji" id="weap" onclick="insertEmoji(this)">
-                            <img src="images/emoji/sad.png" class="emoji" id="sad" onclick="insertEmoji(this)">
-                            <img src="images/emoji/angry.png" class="emoji" id="angry" onclick="insertEmoji(this)">
-                             <img src="images/emoji/shit.png" class="emoji" id="shit" onclick="insertEmoji(this)">
-                            <img src="images/emoji/hurt.png" class="emoji" id="hurt" onclick="insertEmoji(this)">
-                            <img src="images/emoji/cool.png" class="emoji" id="cool" onclick="insertEmoji(this)">
-                            <img src="images/emoji/sleep.png" class="emoji" id="sleep" onclick="insertEmoji(this)">
-                            <img src="images/emoji/think.png" class="emoji" id="think" onclick="insertEmoji(this)">
-                            <img src="images/emoji/vomit.png" class="emoji" id="vomit" onclick="insertEmoji(this)">
-                            <img src="images/emoji/laughcry.png" class="emoji" id="laughcry" onclick="insertEmoji(this)">
-                            <img src="images/emoji/liking.png" class="emoji" id="liking" onclick="insertEmoji(this)">
-                            <img src="images/emoji/astonishing.png" class="emoji" id="astonishing" onclick="insertEmoji(this)">
+                            <img src="images/emoji/laugh.png" class="emoji" id="laugh" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/naughty.png" class="emoji" id="naughty" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/embarrassed.png" class="emoji" id="embarrassed" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/ghost.png" class="emoji" id="ghost" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/shocking.png" class="emoji" id="shocking" onclick="insertEmoji(this)" /> 
+                            <img src="images/emoji/skeleton.png" class="emoji" id="skeleton" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/weap.png" class="emoji" id="weap" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/sad.png" class="emoji" id="sad" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/angry.png" class="emoji" id="angry" onclick="insertEmoji(this)" />
+                             <img src="images/emoji/shit.png" class="emoji" id="shit" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/hurt.png" class="emoji" id="hurt" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/cool.png" class="emoji" id="cool" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/sleep.png" class="emoji" id="sleep" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/think.png" class="emoji" id="think" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/vomit.png" class="emoji" id="vomit" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/laughcry.png" class="emoji" id="laughcry" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/liking.png" class="emoji" id="liking" onclick="insertEmoji(this)" />
+                            <img src="images/emoji/astonishing.png" class="emoji" id="astonishing" onclick="insertEmoji(this)" />
                         </div>
                         <input type="file" name="file" id="uploadFiles" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" onchange="uploadFile(event)" />
                     </div>
                     <input type="submit" name="cntt" id="cntt" style="display: none;">
-                    <input onclick="this.form.cntt.value=document.getElementById('msg').innerHTML; this.form.cntt.click()" type="button" id="submit2" style="display: none;">
+                    <input onclick="submitMyBlog(this)" type="button" id="submit2" style="display: none;">
                 </fieldset>
             </form>
+
+            <!-- 用户信息 -->
             <fieldset id="information">
                 <legend id="name"><%=webUser%></legend>
-                <div id="fan"><img src="images/fan.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 粉丝：0</div>
-                <div id="guanzhu"><img src="images/guanzhu.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 关注：0</div>
-                <div id="blog_num"><img src="images/boke.png" style="width: 15px; height: 15px;" /> 博客：0</div>
+                <div id="fan"><img src="images/fan.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 粉丝：<%=fans_amount%></div>
+                <div id="guanzhu"><img src="images/guanzhu.png" style="position:relative; width: 15px; height: 15px; left: 0px;" /> 关注：<%=follow_amount%></div>
+                <div id="blog_num"><img src="images/boke.png" style="width: 15px; height: 15px;" /> 博客：<%=blog_amount%></div>
                 <div id="like"><img src="images/dianzan.png" style="width: 15px; height: 15px;" /> 点赞：0</div>
             </fieldset>
+
             <fieldset id="blog_zone">
                 <!-- 博客区 -->
                 <legend>
@@ -492,100 +351,107 @@
                 </form>
             </fieldset>
         </div>
-
     </div>
-
+</body>
 <script type="text/javascript">
     //点击div外会隐藏emojis和colorBar
-    window.onclick = function(event) {
-       var target = event ? event.target : window.event.srcElement;
-       if(target.id != "colorBar" && target.id != "ecolor" && target.id != "msg")
-            colorBarHide();
-       if(target.id != "emojis" && target.id != "xiaolian")
-            hideEmojis();
-        //console.log(document.cookie);
-    } 
+window.onclick = function(event) {
+   var target = event ? event.target : window.event.srcElement;
+   if(target.id != "colorBar" && target.id != "ecolor" && target.id != "msg")
+        colorBarHide();
+   if(target.id != "emojis" && target.id != "xiaolian")
+        hideEmojis();
+    //console.log(document.cookie);
+} 
 
-    function isBlogEmpty() {
-        if (<%=index%> == 0) {            
-            document.getElementById("blog_zone").style.cssText = "background: url('images/blogEmpty.jpg') no-repeat; background-size: cover; height:330px; background-position: 0% 80%;";
+//提交博客内容
+function submitMyBlog(obj) {
+    if (document.getElementById('msg').innerHTML != "") {
+        obj.form.cntt.value=document.getElementById('msg').innerHTML; 
+        obj.form.cntt.click();
+    }
+    else {
+        alert("未输入博客内容");
+    }
+}
+
+/****************** 博客区用到的JS *****************/
+function isBlogEmpty() {
+    if (<%=index%> == 0) {            
+        document.getElementById("blog_zone").style.cssText = "background: url('images/blogEmpty.jpg') no-repeat; background-size: cover; height:330px; background-position: 0% 80%;";
+    }
+}
+
+//是否拉出回复框的标志
+var replyFlag = [];
+var index = <%=index%>;
+for (var k = index - 1; k >= 0; k --) {
+    replyFlag[k] = false;
+}
+
+function blockHover(obj) {
+    var temp = obj.id;
+    if (!replyFlag[temp - 1]) {
+        obj.style.opacity = "0.9";       
+        obj.lastElementChild.lastElementChild.style.display = "block";
+    }
+}
+
+function bolckOut(obj) {
+    var temp = obj.id;
+    if (!replyFlag[temp - 1]) {
+        obj.style.opacity = "1";
+        obj.lastElementChild.lastElementChild.style.display = "none";
+    }
+}
+
+//删除某博客，以时间为介定
+function deleteBlog(obj) {
+    if(window.confirm("确定删除此博客？")) {
+        document.getElementById("deleteButton").value = obj.id;
+        document.getElementById("deleteButton").click();
+    }
+}
+
+//展开回复框
+function replyShow(obj) {
+    //展开的回复框之外的回复框要隐藏
+    for (var i = index - 1; i >= 0; i --) {
+        if (replyFlag[i - 1] == true) {
+            replyClose(document.getElementById(i.toString()).children[2].lastElementChild);
         }
     }
+    //显示replyText
+    obj.parentNode.parentNode.previousElementSibling.style.display = "block";
+    //隐藏blog_operator
+    obj.parentNode.style.display = "none";
+    var temp = obj.parentNode.parentNode.parentNode.id;
+    replyFlag[temp - 1] = true;
+}
 
-    //是否拉出回复框的标志
-    var replyFlag = [];
-    var index = <%=index%>;
-    for (var k = index - 1; k >= 0; k --) {
-        replyFlag[k] = false;
+//隐藏回复框
+function replyClose(obj) {
+    //显示blog_operator
+    obj.parentNode.nextElementSibling.style.display = "block";
+    //隐藏replyText
+    obj.parentNode.style.display = "none";
+    var temp = obj.parentNode.parentNode.id;
+    replyFlag[temp - 1] = false;
+}
+
+//回复博客
+function replyBlog(obj) {
+    if (obj.parentNode.children[0].value != "") {
+        //回复框的值
+        document.getElementById("replyButton").value = obj.parentNode.children[0].value;
+        //回复框所属的博客的日期
+        document.getElementById("blogDate").value = obj.parentNode.parentNode.children[0].id; 
+        document.getElementById("replyButton").click();
     }
 
-    function blockHover(obj) {
-        var temp = obj.id;
-        if (!replyFlag[temp - 1]) {
-            obj.style.opacity = "0.9";       
-            obj.lastElementChild.lastElementChild.style.display = "block";
-        }
+    else {
+        window.alert("尚未输入回复内容");
     }
-
-    function bolckOut(obj) {
-        var temp = obj.id;
-        if (!replyFlag[temp - 1]) {
-            obj.style.opacity = "1";
-            obj.lastElementChild.lastElementChild.style.display = "none";
-        }
-    }
-
-    //删除某博客，以时间为介定
-    function deleteBlog(obj) {
-        if(window.confirm("确定删除此博客？")) {
-            document.getElementById("deleteButton").value = obj.id;
-            document.getElementById("deleteButton").click();
-        }
-    }
-
-    //展开回复框
-    function replyShow(obj) {
-        //展开的回复框之外的回复框要隐藏
-        for (var i = index - 1; i >= 0; i --) {
-            if (replyFlag[i - 1] == true) {
-                replyClose(document.getElementById(i.toString()).children[2].lastElementChild);
-            }
-        }
-        //显示replyText
-        obj.parentNode.parentNode.previousElementSibling.style.display = "block";
-        //隐藏blog_operator
-        obj.parentNode.style.display = "none";
-        var temp = obj.parentNode.parentNode.parentNode.id;
-        replyFlag[temp - 1] = true;
-    }
-
-    //隐藏回复框
-    function replyClose(obj) {
-        //显示blog_operator
-        obj.parentNode.nextElementSibling.style.display = "block";
-        //隐藏replyText
-        obj.parentNode.style.display = "none";
-        var temp = obj.parentNode.parentNode.id;
-        replyFlag[temp - 1] = false;
-    }
-
-    //回复博客
-    function replyBlog(obj) {
-        if (obj.parentNode.children[0].value != "") {
-            //回复框的值
-            document.getElementById("replyButton").value = obj.parentNode.children[0].value;
-            //回复框所属的博客的日期
-            document.getElementById("blogDate").value = obj.parentNode.parentNode.children[0].id; 
-            document.getElementById("replyButton").click();
-        }
-
-        else {
-            window.alert("尚未输入回复内容");
-        }
-    }
-
-    //console.log();
+}
 </script>
-
-</body>
 </html>
