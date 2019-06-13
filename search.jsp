@@ -165,7 +165,7 @@
         </div>
         <div id="content">
             <div id="container"> 
-              <form action="search.jsp?userId=<%=userId%>&pid=<%=pid%>" method="post" name="searchForm"> 
+              <form action="search.jsp?userId=<%=userId%>" method="post" name="searchForm"> 
                   <div id="search_borad">
                     <input type="text" name="query" placeholder="搜索用户" value="<%=query%>" style="outline: none;">
                     <a href="#" onclick="searchForm.submit(); return false"><img src="./images/icon/search2.png"> </a>

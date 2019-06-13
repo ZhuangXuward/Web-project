@@ -79,7 +79,7 @@ body {
     height: 80px;
     border-radius: 50px;
 }
-/* 
+
 #home #head_portrait #select_upload {
     position: absolute;
     width: 82px;
@@ -102,7 +102,7 @@ body {
     border-radius: 50px;
     background-color: black;
     overflow: hidden;
-} */
+}
 
 input[type='file'] {
     position: absolute;
