@@ -7,18 +7,25 @@
 <%
     String webUser = "";    //登录用户
     String imageName = "";
+    String msg = "";
+    String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
+    String user = "user";
+    String pwd = "123";
+    Class.forName("com.mysql.jdbc.Driver");
+    Connection con = DriverManager.getConnection(connectString, user, pwd);
+    Statement stmt = con.createStatement();
+    
     Cookie cookies[] = request.getCookies(); //读出用户硬盘上的Cookie，并将所有的Cookie放到一个cookie对象数组里面
     if (cookies != null) {
         for (int i = 0; i < cookies.length; i ++) {    //用一个循环语句遍历刚才建立的Cookie对象数组
-            if(cookies[i].getName().equals("user")){//如果cookie对象的名称是mrCookie
-                webUser = cookies[i].getValue(); //获取用户名
+            if(cookies[i].getName().equals("user")){    //如果cookie对象的名称是mrCookie
+                webUser = cookies[i].getValue();    //获取用户名
             }
         }
     }
 
     if (request.getMethod().equalsIgnoreCase("post")){
         request.setCharacterEncoding("utf-8");
-        String msg = "false";
         String imagePath = "";  // 图片路径
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);   // 检查表单中是否包含文件
         if (isMultipart) {
@@ -42,32 +49,22 @@
                 else {
                     DiskFileItem dfi = (DiskFileItem) fi;
                     if (!dfi.getName().trim().equals("")) {   // getName()返回文件名称或空串
-                        String fileName = application.getRealPath("/avatar") + System.getProperty("file.separator") + FilenameUtils.getName(dfi.getName());
+                        String fileName = application.getRealPath("/images") + System.getProperty("file.separator") + FilenameUtils.getName(dfi.getName());
                         imagePath = new File(fileName).getAbsolutePath();            // 获取图片路径
                         imageName = FilenameUtils.getName(dfi.getName()); // 获取图片名字
                         out.print(imagePath);
                         System.out.println(new File(fileName).getAbsolutePath());
-                        dfi.write(new File(fileName)); // 保存图片到文件夹
-        
-                        try {
-                        //存储图片路径到数据库
-                            String path = imageName;
-                            String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
-                            String user = "user";
-                            String pwd = "123";
-                            Class.forName("com.mysql.jdbc.Driver");
-                            Connection con = DriverManager.getConnection(connectString, user, pwd);
-                            Statement stmt = con.createStatement();
-                            try {   
-                                String sql = "update users set avatar='" + imageName + "' where name='" + webUser + "'";
-                                int cnt = stmt.executeUpdate(sql);
-                                if (cnt > 0) msg = "保存成功！";
-                            }
-                            catch (Exception e) {
-                                msg = e.getMessage();
-                            }
-                        } catch (Exception e) {
-                                msg = e.getMessage();
+                        dfi.write(new File(fileName));
+                        
+                        // 保存图片
+                        String path = imageName;
+                        try {   
+                            String sql = "update users set avatar='" + imageName + "' where name='" + webUser + "'";
+                            int cnt = stmt.executeUpdate(sql);
+                            if (cnt > 0) msg = "保存成功！";
+                        }
+                        catch (Exception e) {
+                            msg = e.getMessage();
                         }
                     }
                 }
@@ -75,8 +72,14 @@
         }
     } 
     else {
-        imageName = "default_avatar.jpeg";
+    	//String[] image = new String[1000];
+    	ResultSet rs = stmt.executeQuery("select avatar from users where name='" + webUser + "'");
+    	if (rs.next()) {
+    		imageName = rs.getString("avatar");
+    	}
+    	rs.close(); 
     }
+    stmt.close(); con.close();
 %>
 
 <!DOCTYPE html>
@@ -197,9 +200,10 @@
         <h2>请选择要上传的头像</h2>
         <form name="fileUpload" action="about.jsp" method="POST" enctype="multipart/form-data">
             <div id="select_upload">
-                <p><input type="file" name="file" size=40 value="" id="upload_img"/></p>
+                <p><input type="file" name="file" value="选择" id="upload_img" onchange="onSubmit(this)" accept="image/*" /></p>
+            	<img src="" id="Preview" style="width: 80px; height: 80px; border-radius: 50px;"/>
             </div>
-            <p><input type=submit name="submit" value="OK"/></p>
+            <p><input id="submit_ok" type=submit name="submit" value="OK"/></p>
         </form>
     </div>
     <div id="mobile_shadow">

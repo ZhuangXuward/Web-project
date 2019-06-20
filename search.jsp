@@ -51,7 +51,7 @@
             rs_follow.close();
             table.append(String.format(
                 "<div class='user_item'>" +
-                "<div class='user_avatar'><img src='./images/default_avatar.jpeg' style='width: 60px; height: 60px; border-radius: 50px;'></img>" +
+                "<div class='user_avatar'><img src='./images/default_avatar.jpg' style='width: 60px; height: 60px; border-radius: 50px;'></img>" +
                 "</div>" + 
                 "<div class='user_content'><a class='user_name' href='visitHome.jsp?visitName=" + rs.getString("name") + "' style='text-decoration: underline;'>%s</a> <span class='user_hobby'>%s</span> <span class='user_follow'>%s</span></div></div>",
                 rs.getString("name"), rs.getString("hobby"),

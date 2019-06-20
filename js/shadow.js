@@ -53,3 +53,12 @@ function handleImageFile(file) {
 	})(img);
 	reader.readAsDataURL(file);
 }
+
+function onSubmit() {
+    var reads = new FileReader();
+    f = document.getElementById("upload_img").files[0];
+    reads.readAsDataURL(f);
+    reads.onload = function (e) {
+        document.getElementById("Preview").src = this.result;
+    }
+}

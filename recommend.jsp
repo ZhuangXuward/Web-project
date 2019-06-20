@@ -97,11 +97,105 @@
                     <span class="dot"></span>
                 </div>
             </div>
-            <div id="test">
-                <h1>blog</h1>
-                <h1>blogs</h1>
-                <h1>blog</h1>
-                <h1>blog</h1>
+            <div id="inner_content">
+                <a href="https://www.bilibili.com/video/av37295820">
+                    <div class="inner_item">
+                        <div class="inner_img" style="background-image: url(./images/recommend/leaves.jpg);"></div>
+                        <div class="inner_user">
+                            <div class="inner_avatar" style="background-image: url(./images/avatar/zhuang.jpg)"></div>
+                            <div class="inner_username">
+                                绣花DIARY
+                            </div>
+                        </div>
+                        <div class="inner_intro">
+                            vlog也能混剪？快来看
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.bilibili.com/video/av55954291">
+                    <div class="inner_item">
+                        <div class="inner_img" style="background-image: url(./images/recommend/fon.jpg)"></div>
+                        <div class="inner_user">
+                            <div class="inner_avatar" style="background-image: url(./images/avatar/fon.jpg)"></div>
+                            <div class="inner_username">
+                                叫GG就好
+                            </div>
+                        </div>
+                        <div class="inner_intro">
+                            跨越城市穿过人海的跑步路线
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.bilibili.com/video/av55571607/">
+                    <div class="inner_item">
+                        <div class="inner_img" style="background-image: url(./images/recommend/zhou.png)"></div>
+                        <div class="inner_user">
+                            <div class="inner_avatar" style="background-image: url(./images/avatar/zhou.png)"></div>
+                            <div class="inner_username">
+                                卡布叻_周深
+                            </div>
+                        </div>
+                        <div class="inner_intro">
+                            亲爱的旅人啊【千与千寻】
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.bilibili.com/video/av55210171/">
+                    <div class="inner_item">
+                        <div class="inner_img" style="background-image: url(./images/recommend/prin.png)"></div>
+                        <div class="inner_user">
+                            <div class="inner_avatar" style="background-image: url(./images/avatar/prin.png)"></div>
+                            <div class="inner_username">
+                                D2KMON_柠檬
+                            </div>
+                        </div>
+                        <div class="inner_intro">
+                            【中字.迪士尼反派系列2】后妈们的抱怨
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.bilibili.com/video/av55484165">
+                    <div class="inner_item">
+                        <div class="inner_img" style="background-image: url(./images/recommend/tomato.png)"></div>
+                        <div class="inner_user">
+                            <div class="inner_avatar" style="background-image: url(./images/avatar/tomato.png)"></div>
+                            <div class="inner_username">
+                                老番茄
+                            </div>
+                        </div>
+                        <div class="inner_intro">
+                            【老番茄】史上最骚大侦探(第二集)
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.bilibili.com/video/av55915329/">
+                    <div class="inner_item">
+                        <div class="inner_img" style="background-image: url(./images/recommend/lexBurner.png)"></div>
+                        <div class="inner_user">
+                            <div class="inner_avatar" style="background-image: url(./images/avatar/lexBurner.png)"></div>
+                            <div class="inner_username">
+                                lexBurner
+                            </div>
+                        </div>
+                        <div class="inner_intro">
+                            一拳超人最强角色竟然是他？一拳超人有趣的梗！
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.bilibili.com/video/av54127949/">
+                    <div class="inner_item">
+                        <div class="inner_img" style="background-image: url(./images/recommend/hh.png)"></div>
+                        <div class="inner_user">
+                            <div class="inner_avatar" style="background-image: url(./images/avatar/hh.png)"></div>
+                            <div class="inner_username">
+                                满江红红
+                            </div>
+                        </div>
+                        <div class="inner_intro">
+                            【雨女无瓜】轮到游乐王子给你洗脑了
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
         <!-- END 轮播图和好友动态 -->
