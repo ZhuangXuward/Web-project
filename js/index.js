@@ -20,19 +20,7 @@ function submitMyBlog(obj) {
 }
 
 /****************** 博客区用到的JS *****************/
-function isBlogEmpty() {
-    if (<%=index%> == 0) {            
-        document.getElementById("blog_zone").style.cssText = "background: url('images/blogEmpty.jpg') no-repeat; background-size: cover; height:330px; background-position: 0% 80%;";
-    }
-}
-
-//是否拉出回复框的标志
-var replyFlag = [];
-var index = <%=index%>;
-for (var k = index - 1; k >= 0; k --) {
-    replyFlag[k] = false;
-}
-
+//放在博客区
 function blockHover(obj) {
     var temp = obj.id;
     if (!replyFlag[temp - 1]) {
@@ -41,6 +29,7 @@ function blockHover(obj) {
     }
 }
 
+//离开博客区
 function bolckOut(obj) {
     var temp = obj.id;
     if (!replyFlag[temp - 1]) {

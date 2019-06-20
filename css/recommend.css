@@ -1,8 +1,8 @@
-#main #wrap #nav #friends {
-    color: black;
+#main #wrap #nav #recommend {
+	color: black;
 }
 
-#main #wrap #nav #li_friends  {
+#main #wrap #nav #li_recommend {
 	border-bottom: solid 2px #919191;
 }
 
@@ -25,7 +25,7 @@
 }
 
 #content #carousel_wrap #carousel_images img {
-	width: 100%;
+	width: 100%;http://localhost:8080/Web-project7/images/carousel/3.jpg
 }
 
 #content #carousel_wrap .arrow {

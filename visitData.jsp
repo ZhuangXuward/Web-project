@@ -122,6 +122,7 @@
             </ul>
             <div id="welcomeBack">
                 欢迎来访!&nbsp;<font id="userName"><%=webUser%></font>
+                <a href="index.jsp"><img src="images/icon/exit.png" width="12px" style="vertical-align: middle; opacity: 0.5;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5" title="离开" /></a>
             </div>
         </div>
         <div id="content">

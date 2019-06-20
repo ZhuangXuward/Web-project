@@ -6,7 +6,61 @@
 	border-bottom: solid 2px #919191;
 }
 
-/*博客分区*/
+
+/****************************博客主信息分区**************************************/
+#main #content #information {
+    position: absolute;
+    width: 14%;
+    height: 215px;
+    right: 20px;
+    top: 25px;
+    display: block;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background: linear-gradient(to right, #ebebeb, #8a8a8a);
+}
+
+#main #content #information legend {
+    text-shadow: 2px 2px 3px black;
+}
+
+#main #content #information #fan {
+    position: relative;
+    height: 20px;
+    width: 120px;
+    top: 20px;
+    margin: 0px auto;
+    text-align: center;
+}
+
+#main #content #information #guanzhu {
+    position: relative;
+    height: 20px;
+    width: 120px;
+    top: 40px;
+    margin: 0px auto;
+    text-align: center;
+}
+
+#main #content #information #blog_num {
+    position: relative;
+    height: 20px;
+    width: 120px;
+    top: 60px;
+    margin: 0px auto;
+    text-align: center;
+}
+
+#main #content #information #like {
+    position: relative;
+    height: 20px;
+    width: 120px;
+    top: 80px;
+    margin: 0px auto;
+    text-align: center;
+}
+
+/**********************博客分区**************************/
 #blog_zone {
     position: relative;
     display: block;
@@ -16,6 +70,7 @@
     max-width: 70%;
     border-top-left-radius: 20px;
     border-bottom-right-radius: 20px;
+    margin-bottom: 10px;
 }
 
 .blog_block {
@@ -101,6 +156,10 @@
     display: "block";
 }
 
+.blog_block .replyText img:hover {
+    opacity: 1;
+}
+
 .blog_block .replyText .replyClose {
     top: -43px;
 }
@@ -115,120 +174,7 @@
     opacity: 1;
 }
 
-/*博客主信息分区*/
-#main #content #information {
-    position: absolute;
-    width: 14%;
-    height: 215px;
-    right: 20px;
-    top: 25px;
-    display: block;
-    border-top-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    background: linear-gradient(to right, #ebebeb, #8a8a8a);
-}
-
-#main #content #information legend {
-    text-shadow: 2px 2px 3px black;
-}
-
-#main #content #information #fan {
-    position: relative;
-    height: 20px;
-    width: 80px;
-    top: 20px;
-    margin: 0px auto;
-}
-
-#main #content #information #guanzhu {
-    position: relative;
-    height: 20px;
-    width: 80px;
-    top: 40px;
-    margin: 0px auto;
-}
-
-#main #content #information #blog_num {
-    position: relative;
-    height: 20px;
-    width: 80px;
-    top: 60px;
-    margin: 0px auto;
-}
-
-#main #content #information #like {
-    position: relative;
-    height: 20px;
-    width: 80px;
-    top: 80px;
-    margin: 0px auto;
-}
-
-/*回复区*/
-.reply_zone {
-    position: relative;
-    display: block;
-    /*border: 1px solid black;*/
-    width: 80%;
-    background: linear-gradient(to left, #fff, #ebebeb);
-    max-width: 80%;
-    top: -20px;
-    margin: 0px auto;
-    padding: 12px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-
-.reply_block {
-    position: relative;
-    display: block;
-    padding-top: 12px;
-}
-
-.reply_left {
-    position: relative;
-    width: 25%;
-    display: block;
-    left: 20px;
-}
-
-.reply_head {
-    width: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.reply_person {
-    position: relative;
-    left: 4px;
-    top: -25px;
-    font-size: 12px;
-    text-shadow: 2px 2px 2px #8a8a8a;
-    cursor: pointer;
-}
-
-.reply_person a:hover {
-    text-decoration: underline;
-}
-
-.reply_date {
-    position: relative;
-    left: 47px;
-    top: -20px;
-    display: inline-block;
-    font-size: 10px;
-    color: #8a8a8a;
-}
-
-.reply_content {
-    position: relative;
-    left: 29%;
-    top: -55px;
-    width: 70%;
-    display: inline-block;
-}
-
-/*移动端*/
+/************************移动端******************************/
 @media only screen and (max-width: 740px) {
     #main #wrap #welcomeBack {
         display: none;
@@ -255,25 +201,30 @@
     #main #content #information #fan {
         top: 15px;
         margin: 0px;
-        left: 60px;
+        left: 10%;
     }
 
     #main #content #information #guanzhu {
         top: -5px;
         margin: 0px;
-        left: 200px;
+        left: 50%;
     }
 
     #main #content #information #blog_num {
         top: 15px;
         margin: 0px;
-        left: 60px;
+        left: 10%;
     }
 
     #main #content #information #like {
         top: -5px;
         margin: 0px;
-        left: 200px;
+        left: 50%;
+    }
+
+    #blog_zone {
+        top: 225px;
+        left: 50px;
     }
 }
 
@@ -282,6 +233,12 @@
         right: 0px;
     }
 }
+
+
+
+
+
+
 
 
 

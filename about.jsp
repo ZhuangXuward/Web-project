@@ -42,28 +42,32 @@
                 else {
                     DiskFileItem dfi = (DiskFileItem) fi;
                     if (!dfi.getName().trim().equals("")) {   // getName()返回文件名称或空串
-                        String fileName = application.getRealPath("/images") + System.getProperty("file.separator") + FilenameUtils.getName(dfi.getName());
+                        String fileName = application.getRealPath("/avatar") + System.getProperty("file.separator") + FilenameUtils.getName(dfi.getName());
                         imagePath = new File(fileName).getAbsolutePath();            // 获取图片路径
                         imageName = FilenameUtils.getName(dfi.getName()); // 获取图片名字
                         out.print(imagePath);
                         System.out.println(new File(fileName).getAbsolutePath());
-                        dfi.write(new File(fileName));
-                        
-                        // 保存图片
-                        String path = imageName;
-                        String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
-                        String user = "user";
-                        String pwd = "123";
-                        Class.forName("com.mysql.jdbc.Driver");
-                        Connection con = DriverManager.getConnection(connectString, user, pwd);
-                        Statement stmt = con.createStatement();
-                        try {   
-                            String sql = "update users set avatar='" + imageName + "' where name='" + webUser + "'";
-                            int cnt = stmt.executeUpdate(sql);
-                            if (cnt > 0) msg = "保存成功！";
-                        }
-                        catch (Exception e) {
-                            msg = e.getMessage();
+                        dfi.write(new File(fileName)); // 保存图片到文件夹
+        
+                        try {
+                        //存储图片路径到数据库
+                            String path = imageName;
+                            String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
+                            String user = "user";
+                            String pwd = "123";
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection(connectString, user, pwd);
+                            Statement stmt = con.createStatement();
+                            try {   
+                                String sql = "update users set avatar='" + imageName + "' where name='" + webUser + "'";
+                                int cnt = stmt.executeUpdate(sql);
+                                if (cnt > 0) msg = "保存成功！";
+                            }
+                            catch (Exception e) {
+                                msg = e.getMessage();
+                            }
+                        } catch (Exception e) {
+                                msg = e.getMessage();
                         }
                     }
                 }

@@ -37,7 +37,15 @@ if (request.getMethod().equalsIgnoreCase("post")){
                 int cnt = stmt.executeUpdate(sql);
                 if (cnt > 0) {
                     msg = "注册成功啦！";
-                    response.sendRedirect("signUpSuccess.jsp");
+                    // 设置 name 和 url cookie 
+                    Cookie newuser = new Cookie("user", username);
+                    userId = username;
+                    // 设置cookie过期时间为一周。
+                    newuser.setMaxAge(7*60*60*24); 
+
+                    // 在响应头部添加cookie
+                    response.addCookie(newuser);
+                    response.sendRedirect("index.jsp");
                 }
             }
             else { //用户名相同，但是邮箱已注册
@@ -158,11 +166,11 @@ if (request.getMethod().equalsIgnoreCase("post")){
             <h1>注册</h1>
             <form action="signup.jsp" method="post" name="formRegister">
                 <div>
-                    <input type="text" placeholder="昵称" name="name" id="username" onchange="register_check(id)">
+                    <input type="text" placeholder="昵称" name="name" id="username" oninput="register_check(id)">
                     <span class="username"></span>
                 </div>
                 <div>
-                    <input type="text" placeholder="邮箱" name="email" id="email" onchange="register_check(id)">
+                    <input type="text" placeholder="邮箱" name="email" id="email" oninput="register_check(id)">
                     <span class="email"></span>
                 </div>
                 <div>
@@ -204,6 +212,8 @@ if (request.getMethod().equalsIgnoreCase("post")){
             };
         }; //打开http请求（open）的参数：get|post，url，是否异步发送 
         console.log(inPut_value);
+        if (id == "username" || id == "email")
+            inPut_value = inPut_value.split("'").join("");
         xmlhttp.open("get", "registerCheck.jsp?id=" + id + "&value=" + inPut_value, true);
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xmlhttp.send(null);

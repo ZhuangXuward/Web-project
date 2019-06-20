@@ -33,15 +33,5 @@
             msg = e.getMessage();
         }
     }
-    
-    String[] blog_output = new String[1000];
-    String[] date_output = new String[1000];
-    int index = 0;
-    ResultSet rs = stmt.executeQuery("select * from blog where username='"+webUser+"'");
-    while (rs.next()) {
-        blog_output[index] = rs.getString("blog");
-        date_output[index] = rs.getString("date");
-        index ++;
-    }
-    rs.close(); stmt.close(); con.close();
+    stmt.close(); con.close();
 %>

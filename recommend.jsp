@@ -47,37 +47,16 @@
             <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
         <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
-        <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
+        <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow()" />
     </div>
     <!-- END for mobile device -->
 
     <!-- normal -->
     <!-- sidebar -->
-    <div id="home">
-        <div id="com">
-            <a href="">「Lifeblog.com」</a>
-        </div>
-        <div id="head_portrait">
-            <div id="select_upload">
-                <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="upload_img" />
-            </div>
-            <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
-        </div>
-        <div id="personal_signature">
-            <p>Show your life this moment!</p>
-        </div>
-        <div id="menu">
-            <a href="setting.jsp">设置</a><br><br>
-            <a href="about.jsp">关于</a>
-        </div>
-        <div id="footer">
-            <span>Copyright © 2019 LifeBlog.com</span>
-        </div>
-    </div>
     <!-- sidebar -->
 
     <!-- 主要内容 -->
-    <div id="main" style="width: 100%; z-index: 99;">
+    <div id="main" style="left: 0px; width: 100%; z-index: 99;">
         <!-- 调节main宽度 -->
         <!-- 标题导航栏 -->
         <div id="wrap">
@@ -86,7 +65,7 @@
                 <li id="li_friends"><a href="friends.jsp" id="friends" class="nav_hover">&nbsp;好友动态&nbsp;</a></li>
                 <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
                 <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp;个人资料&nbsp;</a></li>
-                <li id="li_recommend"><a href="recommend.jsp" id="album" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
+                <li id="li_recommend"><a href="recommend.jsp" id="recommend" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
             </ul>
             <div id="welcomeBack">
                 欢迎回来!&nbsp;<font id="userName"></font>

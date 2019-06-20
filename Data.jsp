@@ -19,6 +19,14 @@
         }
     }
 
+    //查看是否隐藏边栏
+    String showHome = "";
+    ResultSet rHome = stmt.executeQuery("select * from users where name='"+webUser+"'");
+    while (rHome.next()) {          
+        showHome = rHome.getString("showHome");        
+    }
+    rHome.close();
+
     //上传表单修改数据库内容
     if (request.getMethod().equalsIgnoreCase("post")) {
         String namePost = request.getParameter("namePost");
@@ -35,13 +43,21 @@
         String resumePost = request.getParameter("resumeText");
         try {
             int cnt = stmt.executeUpdate("update users set name='"+namePost+"', sex='"+sexPost+"', birthday='"+birthdayPost+"', phone='"+phonePost+"', hobby='"+hobbyPost+"', hometown='"+hometownPost+"', email='"+emailPost+"', job='"+jobPost+"', school='"+schoolPost+"', company='"+companyPost+"', sign='"+signPost+"', resume='"+resumePost+"' where name='"+webUser+"'");
-            Cookie suser = new Cookie("user", namePost);
 
+            //其他表格也要更改名字
+            stmt.executeUpdate("update blog set blogOwner='"+namePost+"' where blogOwner='"+webUser+"'");
+            stmt.executeUpdate("update blog set username='"+namePost+"' where username='"+webUser+"'");
+            stmt.executeUpdate("update blog set level3ToWho='"+namePost+"' where level3ToWho='"+webUser+"'");
+            stmt.executeUpdate("update messageBoard set boardOwner='"+namePost+"' where boardOwner='"+webUser+"'");
+            stmt.executeUpdate("update messageBoard set visitName='"+namePost+"' where visitName='"+webUser+"'");
+
+            //也需要更改cookie的用户名
+            Cookie suser = new Cookie("user", namePost);
             // 设置cookie过期时间为一周。
             suser.setMaxAge(7*60*60*24); 
-
             // 在响应头部添加cookie
             response.addCookie(suser);
+
             if (cnt>0) 
                 msg = "资料修改成功!";
             response.sendRedirect("Data.jsp?userId=" + userId);
@@ -171,7 +187,11 @@
                 <li id="li_friends"><a href="friends.jsp" id="friends" class="nav_hover">&nbsp;好友动态&nbsp;</a></li>
                 <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
                 <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp;个人资料&nbsp;</a></li>
-                <li id="li_recommend"><a href="recommend.jsp" id="album" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
+                <li id="li_recommend"><a href="recommend.jsp" id="recommend" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
+                <%if(showHome.equals("false")) {%>
+                    <li id="li_setting"><a href="setting.jsp" id="setting" class="nav_hover">&nbsp;设置&nbsp;</a></li>
+                    <li id="li_about"><a href="about.jsp" id="about" class="nav_hover">&nbsp;关于&nbsp;</a></li>
+                <%}%>
             </ul>
             <div id="welcomeBack">
                 欢迎回来!&nbsp;<font id="userName"><%=webUser%></font>
@@ -268,7 +288,7 @@
                         </div>
                         <div id="resume">个人简介：  
                             <div class="dataInput">
-                                <textarea style="vertical-align: top;" id="resumeText" maxlength="120" placeholder="<%=resume_value%>" name="resumeText"></textarea>
+                                <textarea style="vertical-align: top;" id="resumeText" maxlength="120" name="resumeText"><%=resume_value%></textarea>
                                 <!-- 注意textarea之间不能留有空格 -->
                             </div>
                             <font class="dataValue"><%=resume_value%></font>
@@ -283,4 +303,101 @@
         </div>
     </div>
 </body>
+<script type="text/javascript">
+    if("<%=showHome%>" == "false") {
+        document.getElementById("home").style.display = "none";
+        document.getElementById("main").style.setProperty('left','0%');
+        document.getElementById("main").style.setProperty('width','100%');
+        document.getElementById("nav").style.setProperty('width','460px');
+    }
+
+    //一定要把jsp定义的移到外面来
+    //修改用户资料
+    function uploadData() {
+        if (window.confirm('是否进行资料修改？')) 
+        { 
+            var nameFlag = true;
+            var emailFlag = true;
+            //检查用户名是否被注册
+            <%for (int i = 0; i < index; i ++) { %>
+                //注意要加双引号！
+                if ("<%=name_array[i]%>" == namePost.value && namePost.value != "<%=webUser%>")
+                {
+                    alert('"'+namePost.value+'"'+"这个用户名已被注册");
+                    flag = false;
+                    namePost.value = "<%=webUser%>";
+                }
+            <%}%>
+
+            //检查邮箱是否被注册
+            if (nameFlag == true) {
+                <%for (int i = 0; i < index; i ++) { %>
+                    if ("<%=email_array[i]%>" == emailPost.value && emailPost.value != "<%=email_value%>")
+                    {
+                        alert('"'+emailPost.value+'"'+"这个邮箱已被注册");
+                        flag = false;
+                        emailPost.value = "<%=email_value%>";
+                    }
+                <%}%>
+            }
+
+            if (nameFlag == true && emailFlag == true) {
+                document.getElementById('dataForm').submit();  
+                datatoShow();           
+            }
+        }
+    }
+
+    //这些直接引用也要抽出来
+    //生成1日—31日
+    sel2.onchange = function() {
+        var dayNum = getDayNum(sel2.value, sel1.value);
+        for(var i = 1; i <= dayNum; i ++) {
+            var option = document.createElement('option');
+            option.setAttribute('value', i);
+            option.innerHTML = i;
+            sel3.appendChild(option);    
+        }
+        showDay();
+    }
+
+    sel3.onchange = function() {
+        document.getElementById('sel3').removeAttribute("disabled");
+        document.getElementById("birthday_result").innerHTML = sel1.value + "-" + sel2.value + "-" + sel3.value;
+        sel1.style.display = "none";
+        sel2.style.display = "none";
+        sel3.style.display = "none";
+        document.getElementById("forChange").style.display = "inline-block";
+        document.getElementById("birthdayPost").value = document.getElementById("birthday_result").innerHTML;
+    }
+
+    //更改前一次修改的生日
+    function changeBirthDay() {
+        document.getElementById('sel1').value = "";
+        document.getElementById('sel2').value = "";
+        document.getElementById('sel3').value = "";
+        document.getElementById('sel1').removeAttribute("disabled");
+        document.getElementById('sel3').setAttribute("disabled", "true");
+        sel1.style.display = "inline-block";
+        sel2.style.display = "inline-block";
+        sel3.style.display = "inline-block";
+        document.getElementById("forChange").style.display = "none";
+        document.getElementById("birthday_result").innerHTML = "";   
+    }
+
+    //生成1950年到2019年
+    for(var i = 2019; i >= 1950; i--) {
+        var option = document.createElement('option');
+        option.setAttribute('value', i);
+        option.innerHTML = i;
+        sel1.appendChild(option);
+    }
+    //生成1月-12月
+    for(var i = 1; i <= 12; i ++) {
+        var option = document.createElement('option');
+        option.setAttribute('value', i);
+        option.innerHTML = i;
+        sel2.appendChild(option);    
+    }
+</script>
 </html>

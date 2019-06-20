@@ -24,6 +24,15 @@
         response.sendRedirect("login.jsp"); 
     }   //如何没有用户信息转到登录页面
 
+
+    //查看是否隐藏边栏
+    String showHome = "";
+    ResultSet rHome = stmt.executeQuery("select * from users where name='"+webUser+"'");
+    while (rHome.next()) {          
+        showHome = rHome.getString("showHome");        
+    }
+    rHome.close();
+
     //加载签名
     String sign_value = "";
     ResultSet rsign = stmt.executeQuery("select * from users where name='"+webUser+"'");
@@ -33,6 +42,7 @@
     }
     rsign.close();
     
+    String blogOwner = webUser;
     if (request.getMethod().equalsIgnoreCase("post")) {
         java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yy年MM月dd日 HH:mm:ss");
         java.util.Date currentTime = new java.util.Date();
@@ -42,8 +52,8 @@
         int level = 1;
         int link = 0;
         try {
-            String fmt = "insert into blog(date, username, blog, level, link) values('%s', '%s', '%s', '%s', '%s')";
-            String sql = String.format(fmt, date, username, blog, level, link);
+            String fmt = "insert into blog(blogOwner, date, username, blog, level, link) values('%s', '%s', '%s', '%s', '%s', '%s')";
+            String sql = String.format(fmt, blogOwner, date, username, blog, level, link);
             int cnt = stmt.executeUpdate(sql);
             if (cnt > 0) msg = "保存成功！";
         }
@@ -64,22 +74,24 @@
     }
     rs.close();
 
-    //输出回复内容
+    /************************************输出回复内容*****************************************/
 
-    //记录每个博客的2级回复
+    /*********************************记录每个博客的2级回复************************************/
     String msgs = "";
     int[] level2Num = new int[index];
     //按分类存储回复信息和对应时间
     String[][] replyContent = new String[index][1000];
+    String[][] replyLink = new String[index][1000];
     String[][] replyDate = new String[index][1000];
     String[][] replyDate2 = new String[index][1000];    //第二种格式
     //用户
     String[][] replyPerson = new String[index][1000];
     for (int i = 0; i < index; i ++) {
         int count = 0;
-        ResultSet rsk = stmt.executeQuery("select * from blog where date='"+date_output[i]+"' and level='"+2+"'");
+        ResultSet rsk = stmt.executeQuery("select * from blog where blogOwner='"+webUser+"' and date='"+date_output[i]+"' and level='"+2+"'");
         while (rsk.next()) {
             replyContent[i][count] = rsk.getString("blog");
+            replyLink[i][count] = rsk.getString("link");
             replyDate[i][count] = rsk.getString("replyDate");
             String dateTemp1 = rsk.getString("replyDate").substring(3, 9);
             String dateTemp2 = rsk.getString("replyDate").substring(10, 15);
@@ -90,10 +102,10 @@
         level2Num[i] = count;    
         try {
             //存储每条博客被回复的level2留言数到表单
-            String fmt = "update blog set replyNum = '"+count+"' where date='"+date_output[i]+"' and level='"+1+"'";
+            String fmt = "update blog set replyNum = '"+count+"' where blogOwner='"+webUser+"' and date='"+date_output[i]+"' and level='"+1+"'";
             String sql = String.format(fmt, count);
             int cntc = stmt.executeUpdate(sql);
-            
+
             if (cntc > 0) {
                 msgs = "保存成功！";
             }
@@ -102,6 +114,50 @@
             msgs = e.getMessage();
         }
         rsk.close();
+    }
+
+    /*********************************记录每个博客的3级回复************************************/
+    int[][] level3Num = new int[index][1000];
+    String msgss = "";
+    //按分类存储回复信息和对应时间
+    String[][][] replyContentLevel3 = new String[index][1000][1000];
+    String[][][] replyDateLevel3 = new String[index][1000][1000];
+    String[][][] replyDate2Level3 = new String[index][1000][1000];    //第二种格式
+    //用户
+    String[][][] replyPersonLevel3 = new String[index][1000][1000];
+    //对谁
+    String[][][] replyToWhoLevel3 = new String[index][1000][1000];
+    for (int i = 0; i < index; i ++) {
+        for (int j = 0; j < level2Num[i]; j ++) {
+            int linkTemp = j + 1;
+            int count2 = 0;
+            ResultSet rsk2 = stmt.executeQuery("select * from blog where blogOwner='"+webUser+"' and level='"+3+"' and link='"+linkTemp+"' and date='"+date_output[i]+"'");
+            while (rsk2.next()) {
+                replyContentLevel3[i][j][count2] = rsk2.getString("blog");
+                replyDateLevel3[i][j][count2] = rsk2.getString("replyDate");
+                String dateTemp1Level3 = rsk2.getString("replyDate").substring(3, 9);
+                String dateTemp2Level3 = rsk2.getString("replyDate").substring(10, 15);
+                replyDate2Level3[i][j][count2] = dateTemp1Level3 + ' ' + dateTemp2Level3;
+                replyPersonLevel3[i][j][count2] = rsk2.getString("username");
+                replyToWhoLevel3[i][j][count2] = rsk2.getString("level3ToWho");
+                count2 ++;
+            }
+            level3Num[i][j] = count2;    
+            try {
+                //存储每条博客被回复的level3留言数到表单
+                String fmt = "update blog set replyNum = '"+count2+"' where blogOwner='"+webUser+"' and level='"+2+"' and link='"+linkTemp+"'";
+                String sql = String.format(fmt, count2);
+                int cntcc= stmt.executeUpdate(sql);
+
+                if (cntcc > 0) {
+                    msgss = "保存成功！";
+                }
+            }
+            catch (Exception e) {
+                msgs = e.getMessage();
+            }
+            rsk2.close();
+        }  
     }
 
     //==================获取粉丝、关注、博客、点赞数量==================
@@ -187,7 +243,7 @@
     <!-- normal -->
     <div id="home">
         <div id="com">
-            <a href="#">「Lifeblog.com」</a>
+            <a href="index.jsp">「Lifeblog.com」</a>
         </div>
         <div id="head_portrait">  
             <div id="select_upload">
@@ -215,7 +271,11 @@
                 <li id="li_friends"><a href="friends.jsp" id="friends" class="nav_hover">&nbsp;好友动态&nbsp;</a></li>
                 <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
                 <li id="li_data"><a href="Data.jsp" id="data" class="nav_hover">&nbsp;个人资料&nbsp;</a></li>
-                <li id="li_recommend"><a href="recommend.jsp" id="album" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
+                <li id="li_recommend"><a href="recommend.jsp" id="recommend" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
+                <%if(showHome.equals("false")) {%>
+                    <li id="li_setting"><a href="setting.jsp" id="setting" class="nav_hover">&nbsp;设置&nbsp;</a></li>
+                    <li id="li_about"><a href="about.jsp" id="about" class="nav_hover">&nbsp;关于&nbsp;</a></li>
+                <%}%>
             </ul>
             <div id="welcomeBack">
                 欢迎回来!&nbsp;<font id="userName"><%=webUser%></font>
@@ -260,7 +320,7 @@
                             <input type="button" id="black_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('black')" />
                             <input type="button" id="brown_block" class="colors" onmouseover="colorHover(this)" onmouseout="colorOut(this)" onclick="changeColor('brown')" />
                         </div>
-                        <div id="emojis">
+                        <div id="emojis" style="z-index: 100; opacity: 1">
                             <img src="images/emoji/laugh.png" class="emoji" id="laugh" onclick="insertEmoji(this)" />
                             <img src="images/emoji/naughty.png" class="emoji" id="naughty" onclick="insertEmoji(this)" />
                             <img src="images/emoji/embarrassed.png" class="emoji" id="embarrassed" onclick="insertEmoji(this)" />
@@ -296,6 +356,7 @@
                 <div id="like"><img src="images/dianzan.png" style="width: 15px; height: 15px;" /> 点赞：0</div>
             </fieldset>
 
+
             <fieldset id="blog_zone">
                 <!-- 博客区 -->
                 <legend>
@@ -324,6 +385,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 2级回复区 -->
                     <div class="reply_zone">
                         <%for (int j = 0; j < level2Num[i]; j ++) { %>
                             <div class="reply_block">
@@ -336,12 +398,50 @@
                                 <div class="reply_content">
                                     <font><%=replyContent[i][j]%></font>
                                 </div>
+                                <img src="images/icon/level3Comment.png" width="15px" class="level3Comment" onclick="showCommentLevel3(this)" />
+
+                                <!-- id保留link信息 -->
+                                <div class="level3ReplyText" id="<%=replyLink[i][j]%>">
+                                    <textarea placeholder="回复<%=replyPerson[i][j]%>的留言" id="<%=replyPerson[i][j]%>"></textarea>
+                                    <img src="images/back.png" width="15px" class="level3ReplyClose" onclick="level3ReplyClose(this)" />
+                                    <!-- 获取这个的id值作为日期 -->
+                                    <img src="images/icon/submit.png" width="18px" class="level3ReplyImg" onclick="level3ReplyBlog(this)" id="<%=date_output[i]%>" />
+                                </div>
+                                
+                                <!-- 3级回复区 -->
+                                <%for (int k = 0; k < level3Num[i][j]; k ++) { %>
+                                    <div class="reply_blockLevel3">
+                                        <div class="reply_leftLevel3">
+                                            <img src="images/default_avatar.jpeg" class="reply_headLevel3" />
+                                            <font class="reply_personLevel3">
+                                                <a href="visitHome.jsp?visitName=<%=replyPersonLevel3[i][j][k]%>" class="replyName1" style="font-size: 12px; text-shadow: 2px 2px 2px #8a8a8a"><%=replyPersonLevel3[i][j][k]%></a> 
+                                                <font style="font-size: 10px; color: #8a8a8a">回复</font>
+                                                <a href="visitHome.jsp?visitName=<%=replyToWhoLevel3[i][j][k]%>" class="replyName2" style="font-size: 12px; text-shadow: 2px 2px 2px #8a8a8a"><%=replyToWhoLevel3[i][j][k]%></a>
+                                                <font style="font-size: 10px;">：</font>
+                                            </font>
+                                            <font class="reply_dateLevel3"><%=replyDate2Level3[i][j][k]%></font>  <br />
+                                        </div>
+                                        <div class="reply_contentLevel3">
+                                            <font><%=replyContentLevel3[i][j][k]%></font>
+                                        </div>
+                                        <img src="images/icon/level3Comment.png" width="15px" class="level3Comment" onclick="showCommentLevel3(this)" />
+                                        <!-- 回复框 -->
+
+                                        <!-- 内嵌三级留言回复 -->
+                                        <!-- id保留link信息 -->
+                                        <div class="level3ReplyText" id="<%=replyLink[i][j]%>">
+                                            <textarea placeholder="回复<%=replyPersonLevel3[i][j][k]%>的留言" id="<%=replyPersonLevel3[i][j][k]%>"></textarea>
+                                            <img src="images/back.png" width="15px" class="level3ReplyClose" onclick="level3ReplyClose(this)" />
+                                            <!-- 获取这个的id值作为日期 -->
+                                            <img src="images/icon/submit.png" width="18px" class="level3ReplyImg" onclick="level3ReplyBlog(this)" id="<%=date_output[i]%>" />
+                                        </div>
+                                    </div>
+                                <%}%>
                             </div>
                         <%}%>
                     </div>
                 <%}%>
-                <!-- 每条博客的留言区 -->
-
+                <!-- 上传留言 -->
                 <form action="delete.jsp" id="deleteForm" method="post">
                     <input type="submit" name="deleteButton" id="deleteButton" style="display: none;" />
                 </form>
@@ -349,109 +449,260 @@
                     <input type="submit" name="replyButton" id="replyButton" style="display: none;" />
                     <input type="hidden" name="blogDate" id="blogDate" />
                 </form>
+                <!-- 上传三级留言 -->
+                <form action="replyLevel3.jsp" id="replyFormLevel3" method="post">
+                    <input type="submit" name="replyButtonLevel3" id="replyButtonLevel3" style="display: none;" />
+                    <input type="hidden" name="blogDateLevel3" id="blogDateLevel3" />
+                    <!-- 上传link信息 -->
+                    <input type="hidden" name="blogLinkLevel3" id="blogLinkLevel3" />
+                    <!-- 上传‘发给谁’的信息 -->
+                    <input type="hidden" name="blogToWhoLevel3" id="blogToWhoLevel3" />
+                </form>
+            </fieldset>
+
+            <!-- -----------------------附加区---------------------------------- -->
+            <fieldset id="appendix1">
+                <legend>关注</legend>
+
             </fieldset>
         </div>
     </div>
 </body>
 <script type="text/javascript">
-    //点击div外会隐藏emojis和colorBar
-window.onclick = function(event) {
-   var target = event ? event.target : window.event.srcElement;
-   if(target.id != "colorBar" && target.id != "ecolor" && target.id != "msg")
-        colorBarHide();
-   if(target.id != "emojis" && target.id != "xiaolian")
-        hideEmojis();
-    //console.log(document.cookie);
-} 
-
-//提交博客内容
-function submitMyBlog(obj) {
-    if (document.getElementById('msg').innerHTML != "") {
-        obj.form.cntt.value=document.getElementById('msg').innerHTML; 
-        obj.form.cntt.click();
+    //是否为注册而来的
+    if (document.referrer.search("signup.jsp") != -1) {
+        alert("注册成功！");
     }
-    else {
-        alert("未输入博客内容");
+
+    if("<%=showHome%>" == "false") {
+        document.getElementById("home").style.display = "none";
+        document.getElementById("main").style.setProperty('left','0%');
+        document.getElementById("main").style.setProperty('width','100%');
+        document.getElementById("nav").style.setProperty('width','460px');
     }
-}
-
-/****************** 博客区用到的JS *****************/
-function isBlogEmpty() {
-    if (<%=index%> == 0) {            
-        document.getElementById("blog_zone").style.cssText = "background: url('images/blogEmpty.jpg') no-repeat; background-size: cover; height:330px; background-position: 0% 80%;";
-    }
-}
-
-//是否拉出回复框的标志
-var replyFlag = [];
-var index = <%=index%>;
-for (var k = index - 1; k >= 0; k --) {
-    replyFlag[k] = false;
-}
-
-function blockHover(obj) {
-    var temp = obj.id;
-    if (!replyFlag[temp - 1]) {
-        obj.style.opacity = "0.9";       
-        obj.lastElementChild.lastElementChild.style.display = "block";
-    }
-}
-
-function bolckOut(obj) {
-    var temp = obj.id;
-    if (!replyFlag[temp - 1]) {
-        obj.style.opacity = "1";
-        obj.lastElementChild.lastElementChild.style.display = "none";
-    }
-}
-
-//删除某博客，以时间为介定
-function deleteBlog(obj) {
-    if(window.confirm("确定删除此博客？")) {
-        document.getElementById("deleteButton").value = obj.id;
-        document.getElementById("deleteButton").click();
-    }
-}
-
-//展开回复框
-function replyShow(obj) {
-    //展开的回复框之外的回复框要隐藏
-    for (var i = index - 1; i >= 0; i --) {
-        if (replyFlag[i - 1] == true) {
-            replyClose(document.getElementById(i.toString()).children[2].lastElementChild);
+    //一定要把jsp定义的移到外面来
+    
+    //如果为空显示空空如也图片
+    function isBlogEmpty() {
+        if (<%=index%> == 0) {            
+            document.getElementById("blog_zone").style.cssText = "background: url('images/blogEmpty.jpg') no-repeat; background-size: cover; height:330px; background-position: 0% 80%;";
         }
     }
-    //显示replyText
-    obj.parentNode.parentNode.previousElementSibling.style.display = "block";
-    //隐藏blog_operator
-    obj.parentNode.style.display = "none";
-    var temp = obj.parentNode.parentNode.parentNode.id;
-    replyFlag[temp - 1] = true;
-}
 
-//隐藏回复框
-function replyClose(obj) {
-    //显示blog_operator
-    obj.parentNode.nextElementSibling.style.display = "block";
-    //隐藏replyText
-    obj.parentNode.style.display = "none";
-    var temp = obj.parentNode.parentNode.id;
-    replyFlag[temp - 1] = false;
-}
-
-//回复博客
-function replyBlog(obj) {
-    if (obj.parentNode.children[0].value != "") {
-        //回复框的值
-        document.getElementById("replyButton").value = obj.parentNode.children[0].value;
-        //回复框所属的博客的日期
-        document.getElementById("blogDate").value = obj.parentNode.parentNode.children[0].id; 
-        document.getElementById("replyButton").click();
+    //是否拉出回复框的标志
+    var replyFlag = [];
+    var index = <%=index%>;
+    for (var k = index - 1; k >= 0; k --) {
+        replyFlag[k] = false;
     }
 
-    else {
-        window.alert("尚未输入回复内容");
+    //显示三级回复框
+    function showCommentLevel3(obj) {
+        //把其它回复框都除去
+        var level3ReplyText = document.getElementsByClassName("level3ReplyText");
+        for (var i = 0; i < level3ReplyText.length; i ++) {
+
+            level3ReplyText[i].style.display = "none";
+        }
+        obj.nextElementSibling.style.display = "block";
     }
-}
+
+    //3级回复
+    function level3ReplyBlog(obj) {
+        if (obj.parentNode.children[0].value != "") {
+            //回复框的值
+            document.getElementById("replyButtonLevel3").value = obj.parentNode.children[0].value;
+            //回复框所属的博客的日期
+            document.getElementById("blogDateLevel3").value = obj.id; 
+            document.getElementById("blogLinkLevel3").value = obj.parentNode.id; 
+            document.getElementById("blogToWhoLevel3").value = obj.parentNode.children[0].id;
+            //console.log(document.getElementById("blogLinkLevel3").value);
+            document.getElementById("replyButtonLevel3").click();
+        }
+
+        else {
+            window.alert("尚未输入回复内容");
+        }
+    }
+
+    //隐藏3级回复 
+    function level3ReplyClose(obj) {
+        obj.parentNode.style.display = "none";
+    }
 </script>
+    
+<style type="text/css">
+
+    /*回复区*/
+    .reply_zone {
+        position: relative;
+        display: block;
+        /*border: 1px solid black;*/
+        width: 80%;
+        background: linear-gradient(to left, #fff, #ebebeb);
+        max-width: 80%;
+        top: -20px;
+        margin: 0px auto;
+        padding: 12px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .reply_zone .reply_block {
+        position: relative;
+        display: block;
+        padding-top: 12px;
+    }
+
+    .reply_zone .reply_block .reply_left {
+        position: relative;
+        width: 100px;
+        display: block;
+        left: 20px;
+    }
+
+    .reply_zone .reply_block .reply_left .reply_head {
+        width: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .reply_zone .reply_block .reply_left .reply_person {
+        position: relative;
+        left: 4px;
+        top: -5px;
+        font-size: 12px;
+        text-shadow: 2px 2px 2px #8a8a8a;
+        cursor: pointer;
+    }
+
+    .reply_zone .reply_block .reply_left .reply_person a:hover {
+        text-decoration: underline;
+    }
+
+    .reply_zone .reply_block .reply_left .reply_date {
+        position: relative;
+        left: 47px;
+        top: -40px;
+        display: inline-block;
+        font-size: 10px;
+        color: #8a8a8a;
+    }
+
+    .reply_zone .reply_block .reply_content {
+        position: relative;
+        padding-top: 20px;
+        left: 120px;
+    }
+
+    /*三级回复区*/
+    .level3Comment {
+        position: absolute;
+        cursor: pointer;
+        z-index: 100;
+    }
+
+    .level3ReplyText {
+        position: relative;
+        left: 30px;
+        width: 100%;
+        display: none;
+    } 
+
+    .level3ReplyText textarea {
+        position: relative;
+        width: 80%;
+    } 
+
+    .level3ReplyText img {
+        position: relative;
+        cursor: pointer;
+        opacity: 0.5;
+        display: "block";
+    }
+
+    .level3ReplyText img:hover {
+        opacity: 1;
+    }
+
+    .level3ReplyClose { 
+        top: -20px;
+        width: 10px;
+    }
+
+    .level3ReplyImg {
+        left: -15px;
+        width: 12px;
+    }
+
+    .reply_leftLevel3 {
+        position: relative;
+        width: 200px;
+        left: 1%;
+    } 
+
+    .reply_headLevel3 {
+        width: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .reply_blockLevel3 {
+        position: relative;
+        width: 70%;
+        left: 15%;
+    }
+
+    .reply_personLevel3 {
+        position: absolute;
+        bottom: 5px;
+    }
+
+    .replyName1:hover, .replyName2:hover {
+        text-decoration: underline;
+    }
+
+    .reply_dateLevel3 {
+        position: absolute;
+        font-size: 10px;
+        color: #8a8a8a;
+        bottom: 25px;
+        display: block;
+        left: 45px;
+    }
+
+    .reply_contentLevel3 {
+        position: relative;
+        display: inline-block;
+        width: 80%;
+        max-width: 80%;
+        left: 30px;
+        padding: 20px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .reply_content {
+            padding-top: 40px;
+            left: 80px;
+        }
+    }
+
+    /**************************附加区***********************/
+    #main #content #appendix1 {
+        position: absolute;
+        width: 14%;
+        min-height: 215px;
+        right: 20px;
+        top: 290px;
+        display: block;
+        border-bottom-left-radius: 20px;
+        border-top-right-radius: 20px;
+        background: linear-gradient(to right, #ebebeb, #8a8a8a);
+    }
+
+    #main #content #appendix1 legend {
+        text-shadow: 2px 2px 3px black;
+    }
+
+</style>
 </html>

@@ -20,58 +20,42 @@
         }
     }
 
-    String visitname = "";    //要访问用户
-    visitname = request.getParameter("visitName");
-
-    String datePost = request.getParameter("blogDate");
-
-    String link_value = "";
-    int index_link = 0;
-    ResultSet rss = stmt.executeQuery("select * from blog where date='"+datePost+"'");
-    while (rss.next()) {    
-        index_link ++;
-    }
-    link_value = Integer.toString(index_link);
-    rss.close();
+    String datePost = request.getParameter("blogDateLevel3");
+    String link_value = request.getParameter("blogLinkLevel3");
+    String toWho_value = request.getParameter("blogToWhoLevel3");
     
-    String blogOwner = visitname;
+    String blogOwner = webUser;
     if (request.getMethod().equalsIgnoreCase("post")) {
         java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yy年MM月dd日 HH:mm:ss");
         java.util.Date currentTime = new java.util.Date();
         String replyDate = formatter.format(currentTime);
         String date = datePost;
         String username = webUser;
-        String blog = request.getParameter("replyButton");
-        String level = "2";
+        String blog = request.getParameter("replyButtonLevel3");
+        String level = "3";
         String link = link_value;
+        String level3ToWho = toWho_value;
         try {
-            String fmt = "insert into blog(blogOwner, date, username, blog, level, link, replyDate) values('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
-            String sql = String.format(fmt, blogOwner, date, username, blog, level, link, replyDate);
+            String fmt = "insert into blog(blogOwner, date, username, blog, level, link, replyDate, level3ToWho) values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+            String sql = String.format(fmt, blogOwner, date, username, blog, level, link, replyDate, level3ToWho);
             int cnt = stmt.executeUpdate(sql);
             if (cnt > 0) 
-            { 
-                msg = "保存成功！"; 
-                String temp = "visitHome.jsp?visitName=";
-                temp += visitname; 
-                //返回访问主页
-                response.sendRedirect(temp);
-            }
+                {msg = "保存成功！";response.sendRedirect("index.jsp");}
         }
         catch (Exception e) {
             msg = e.getMessage();
         }
     }
+    
     stmt.close(); con.close();
 %>
 
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>test</title>
+    <meta charset="utf-8">
 </head>
 <body>
-
-<h1><%=msg%></h1>
+    <h1><%=msg%></h1>
 </body>
 </html>

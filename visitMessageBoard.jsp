@@ -22,10 +22,8 @@
 
     String visitName = "";    //要访问用户
     visitName = request.getParameter("visitName");
-    //如果访问的用户是自己，就回到个人主页
-    if (visitName.equals(webUser)) {
-        response.sendRedirect("index.jsp");
-    }
+    String own = "";
+    own = request.getParameter("visitName");
 
     //加载签名
     String sign_value = "";
@@ -42,8 +40,8 @@
 
 		String content = request.getParameter("cntt");
 		try {
-			String fmt = "insert into messageboard(date, content) values('%s', '%s')";
-			String sql = String.format(fmt, date, content);
+			String fmt = "insert into messageboard(boardOwner, visitName, date, content) values('%s', '%s', '%s', '%s')";
+			String sql = String.format(fmt, own, webUser, date, content);
 			int cnt = stmt.executeUpdate(sql);
 			if (cnt > 0) msg = "保存成功！";
 		}
@@ -52,16 +50,19 @@
 		}
 	}
 	
-	String[] content_output = new String[1000];
-	String[] date_output = new String[1000];
-	int index = 0;
-	ResultSet rs = stmt.executeQuery("select * from messageboard");
-	while (rs.next()) {
-		content_output[index] = rs.getString("content");
-		date_output[index] = rs.getString("date");
-		index ++;
-	}
-	rs.close(); stmt.close(); con.close();
+	
+    String[] name_output = new String[1000];
+    String[] content_output = new String[1000];
+    String[] date_output = new String[1000];
+    int index = 0;
+    ResultSet rs = stmt.executeQuery("select * from messageboard where boardOwner='"+visitName+"'");
+    while (rs.next()) {
+        content_output[index] = rs.getString("content");
+        date_output[index] = rs.getString("date");
+        name_output[index] = rs.getString("visitName");
+        index ++;
+    }
+    rs.close(); stmt.close(); con.close();
 %>
 
 <!DOCTYPE html>
@@ -78,13 +79,12 @@
     <meta name="date" content="2019-05-21T12:00:00+00:00" />
     <title>Lifeblog.com</title>
     <script type="text/javascript" src="js/general.js"></script>
-    <script type="text/javascript" src="js/visitMessageBoard.js"></script>
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
     <link rel="stylesheet" type="text/css" href="css/mobile.css" />
     <link rel="stylesheet" type="text/css" href="css/messageBoard.css" />
 </head>
 
-<body>
+<body onload="isBlogEmpty()">
     <!-- for mobile device -->
     <div id="mobile_shadow">
     </div>
@@ -133,10 +133,11 @@
             </ul>
             <div id="welcomeBack">
                 欢迎来访!&nbsp;<font id="userName"><%=webUser%></font>
+                <a href="index.jsp"><img src="images/icon/exit.png" width="12px" style="vertical-align: middle; opacity: 0.5;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5" title="离开" /></a>
             </div>
         </div>
         <div id="content">
-            <form action="visitMessageBoard.jsp" method="post" id="board">
+            <form action="visitMessageBoard.jsp?visitName=<%=visitName%>" method="post" id="board">
                 <fieldset id="board_set">
                     <!-- 发表留言 -->
                     <legend>
@@ -208,33 +209,70 @@
                     <b style="position: relative; left: -3px; top: -2px; text-shadow: 2.5px 2.5px 2px #8a8a8a;">留言区域</b>
                 </legend>
                 <%for (int i = index - 1; i >= 0; i --) { %>
-                    <div class="messageboard_block" onmouseover="blockHover(this)" onmouseout="bolckOut(this)">
+                    <div class="messageboard_block">
                         <img class="head_portraits" src="images/default_avatar.jpeg" />
                         <div class="messageboard_top">
-                            <div class="messageboard_name">昵称</div>
+                            <div class="messageboard_name"><%= name_output[i] %></div>
                             <div class="messageboard_floor">
                             <font>第<%= i+1 %>楼</font>
                             </div>     
                         </div>
-                        <div class="messageboard_time">
+                        <div class="messageboard_time"> 
                             <font><%= date_output[i] %></font>
                         </div>
                         <div class="messageboard_content">
                             <font><%= content_output[i] %></font>                       
                         </div>
-                        <div class="messageboard_operator">
-                            <div class="azone">
-                                <a href="#">删除</a>
-                                |
-                                <a href="#">回复</a>
+                        <%if(name_output[i].equals(webUser)) {%>
+                            <div class="messageboard_operator">
+                                <div class="azone" style="display: block;">
+                                    <a style="cursor: pointer;" onclick="deleteBlock(this)" id="<%= date_output[i] %>">删除</a>
+                                </div>
                             </div>
-                        </div>
+                        <%}%>
                     </div>
                 <%}%>
+                <form action="deleteMessageBoard.jsp?visitName=<%=visitName%>" method="post">
+                    <input type="submit" name="deleteBoard" id="delete" style="display: none;" />
+                </form>
             </fieldset>
         </div>
     </div>
-    <div id="footer">
-    </div>
 </body>
+<script type="text/javascript">
+    //点击div外会隐藏emojis和colorBar
+    window.onclick = function(event) {
+       var target = event ? event.target : window.event.srcElement;
+       if(target.id != "colorBar" && target.id != "ecolor" && target.id != "msg")
+            colorBarHide();
+       if(target.id != "emojis" && target.id != "xiaolian")
+            hideEmojis();
+        //console.log(document.cookie);
+    } 
+
+    //提交博客内容
+    function submitMyMessage(obj) {
+        if (document.getElementById('msg').innerHTML != "") {
+            obj.form.cntt.value=document.getElementById('msg').innerHTML; 
+            obj.form.cntt.click();
+        }
+        else {
+            alert("未输入留言内容");
+        }
+    }
+
+    //删除自己发的留言
+    function deleteBlock(obj) {
+        document.getElementById("delete").value = obj.id;
+        console.log(document.getElementById("delete").value);
+        document.getElementById("delete").click();
+    }
+
+    //如果为空显示空空如也图片
+    function isBlogEmpty() {
+        if (<%=index%> == 0) {            
+            document.getElementById("messageboard_zone").style.cssText = "background: url('images/blogEmpty.jpg') no-repeat; background-size: cover; height:330px; background-position: 0% 80%;";
+        }
+    }
+</script>
 </html>

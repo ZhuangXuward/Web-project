@@ -88,7 +88,6 @@ window.onload = function () {
 			(index == (index_length - 1)) ? index = 0: index += 1;
 		}
 		carouImg.style.left = newLeft + 'px'; // 不要忘记添加'px'
-		console.log(newLeft);
 	}
 
 	// 上一张图片
@@ -108,7 +107,6 @@ window.onload = function () {
 			(index == 0) ? index = (index_length - 1): index -= 1;
 		}
 		carouImg.style.left = newLeft + 'px';
-		console.log(newLeft);
 	}
 
 	function showCurrentDot(index) {
