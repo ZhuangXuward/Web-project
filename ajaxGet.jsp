@@ -10,8 +10,7 @@
     Connection con=DriverManager.getConnection(conStr, "user", "123");
     Statement stmt=con.createStatement(); //创建MySQL语句的对象
     ResultSet rs=stmt.executeQuery("select * from followers where fans_id='" + follower + "' and followed_id='" + followed + "'");
-    //int cnt = stmt.executeUpdate("delete from followers where fans_id='"+follower+"'");
-    //int cnt =stmt.executeQuery("delete from followers where fans_id='" + follower + "' and followed_id='" + followed + "'");
+    
     //1.原先不存在关注关系->执行关注操作
     if (!rs.next()) {
         String fmt="insert into followers(fans_id, followed_id) values('%s', '%s')";

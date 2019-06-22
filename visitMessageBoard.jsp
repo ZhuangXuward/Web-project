@@ -7,6 +7,7 @@
 	String user = "user";
 	String pwd = "123";
 	Class.forName("com.mysql.jdbc.Driver");
+    String avatar_img = "";
 	Connection con = DriverManager.getConnection(connectString, user, pwd);
 	Statement stmt = con.createStatement();
 
@@ -29,7 +30,8 @@
     String sign_value = "";
     ResultSet rsign = stmt.executeQuery("select * from users where name='"+visitName+"'");
     while (rsign.next()) {          
-        sign_value = rsign.getString("sign");        
+        sign_value = rsign.getString("sign");   
+        avatar_img = rsign.getString("avatar");       
     }
     rsign.close();
 	
@@ -99,7 +101,7 @@
     </div>
     <div id="mobile_wrap">
         <div id="mobile_head_portrait">
-            <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
+            <img src="images/avatar/<%=avatar_img%>" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
         <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
@@ -112,9 +114,9 @@
         </div>
         <div id="head_portrait">  
             <div id="select_upload">
-                <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="upload_img" />
+                <%-- <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="upload_img" /> --%>
             </div>
-            <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
+            <img src="images/avatar/<%=avatar_img%>" style="width: 80px; height: 80px; border-radius: 50px;">
         </div>
         <div id="personal_signature">
             <p style="font-family: STKaiti"><%=sign_value%></p>

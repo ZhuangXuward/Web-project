@@ -5,6 +5,7 @@
     String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
     String user="user"; 
     String pwd="123";
+    String avatar_img = "";
     Class.forName("com.mysql.jdbc.Driver");
     Connection con = DriverManager.getConnection(connectString, user, pwd);
     Statement stmt = con.createStatement();
@@ -23,7 +24,8 @@
     String showHome = "";
     ResultSet rHome = stmt.executeQuery("select * from users where name='"+webUser+"'");
     while (rHome.next()) {          
-        showHome = rHome.getString("showHome");        
+        showHome = rHome.getString("showHome");
+        avatar_img = rHome.getString("avatar");           
     }
     rHome.close();
 
@@ -54,6 +56,8 @@
     while (rs.next()) {    
         oldPassword = rs.getString("password");       
     } 
+
+    
 
     rs.close(); stmt.close(); con.close();
 %>
@@ -87,7 +91,6 @@
                 style="height: 20px; width: 20px;" /></a>
         <ul>
             <li><a href="index.jsp" class="mobile_link">个人主页</a></li>
-            <li><a href="friends.jsp" class="mobile_link">好友动态</a></li>
             <li><a href="messageBoard.jsp" class="mobile_link">留言板</a></li>
             <li><a href="recommend.jsp" class="mobile_link">推荐</a></li>
             <li><a href="about.jsp" class="mobile_link">关于</a></li>
@@ -98,7 +101,7 @@
             <div id="mobile_select_upload">
                 <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="mobile_upload_img" />
             </div>  
-            <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
+            <img src="images/avatar/<%=avatar_img%>" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
         <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow()" />
@@ -113,7 +116,7 @@
             <div id="select_upload">
                 <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="upload_img" />
             </div>
-            <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
+            <img src="images/avatar/<%=avatar_img%>" style="width: 80px; height: 80px; border-radius: 50px;">
         </div>
         <div id="personal_signature">
             <p>Show your life this moment!</p>
@@ -131,7 +134,6 @@
         <div id="wrap">
             <ul id="nav">
                 <li id="li_index"><a href="index.jsp" id="index" class="nav_hover">个人主页&nbsp;</a></li>
-                <li id="li_friends"><a href="friends.jsp" id="friends" class="nav_hover">&nbsp;好友动态&nbsp;</a></li>
                 <li id="li_messageBoard"><a href="messageBoard.jsp" id="message_board" class="nav_hover">&nbsp;留言板&nbsp;</a></li>
                 <li id="li_recommend"><a href="recommend.jsp" id="recommend" class="nav_hover">&nbsp;推荐&nbsp;</a></li>
                 <li id="li_about" style="display: none;"><a href="about.jsp" id="about" class="nav_hover">&nbsp;关于&nbsp;</a></li>
@@ -165,7 +167,9 @@
                 </div>
                 <!-- 上传头像 -->
                 <div id="uploadHead" class="settingRow">
-                    <font onclick="uploadHead()" class="fonts">上传头像</font>
+                    <form action="avatarUpload.jsp">
+                        <font class="fonts">上传头像</font>
+                    </form>
                 </div>
                 <!-- 修改密码 -->
                 <div id="updatePassword" class="settingRow">

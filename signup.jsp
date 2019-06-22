@@ -25,6 +25,7 @@ if (request.getMethod().equalsIgnoreCase("post")){
     Connection con = DriverManager.getConnection(connectString, user, pwd);
     Statement stmt = con.createStatement();
     query = request.getParameter("query");
+    //TODO 解决MySQL注入问题
     sql="select*from users where name='" + username +"'"; //查询数据库中是否有相同用户名
     sql2="select*from users where email='" + email + "'"; //查询数据库中是否有相同邮箱
     ResultSet rs=stmt.executeQuery(sql); 
@@ -168,18 +169,22 @@ if (request.getMethod().equalsIgnoreCase("post")){
                 <div>
                     <input type="text" placeholder="昵称" name="name" id="username" oninput="register_check(id)">
                     <span class="username"></span>
+                    <%-- 显示提示消息 --%>
                 </div>
                 <div>
                     <input type="text" placeholder="邮箱" name="email" id="email" oninput="register_check(id)">
                     <span class="email"></span>
+                    <%-- 显示提示消息 --%>
                 </div>
                 <div>
                     <input type="password" placeholder="密码" name="password" id="password" onchange="register_check(id)">
                     <span class="password"></span>
+                    <%-- 显示提示消息 --%>
                 </div>
                 <div>
                     <input type="password" placeholder="确认密码" name="password2" id="password2" onchange="register_check(id)">
                     <span class="password2"></span>
+                    <%-- 显示提示消息 --%>
                 </div>
                 <input type="button" value="注册" onclick="doCheck_Register()" id="confirm">
             </form>
@@ -211,7 +216,8 @@ if (request.getMethod().equalsIgnoreCase("post")){
                 }
             };
         }; //打开http请求（open）的参数：get|post，url，是否异步发送 
-        console.log(inPut_value);
+
+        // 提交输入值前进行判断，解决MySQL注入单引号问题，不过未完全解决MySQL注入的问题，TODO
         if (id == "username" || id == "email")
             inPut_value = inPut_value.split("'").join("");
         xmlhttp.open("get", "registerCheck.jsp?id=" + id + "&value=" + inPut_value, true);

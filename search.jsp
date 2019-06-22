@@ -6,6 +6,7 @@
     String sql = "";
 	String query = "";
     String ifFollow = "";
+    String avatar_img = "";
     int flag = 0;
     String pid = request.getParameter("pid");
     String userId = request.getParameter("userId");
@@ -20,6 +21,12 @@
       Connection con_follow=DriverManager.getConnection(connectString, "user", "123");
 	  Statement stmt_follow=con_follow.createStatement();
       ResultSet rs;
+
+      ResultSet rHome = stmt.executeQuery("select * from users where id='" + userId + "'");
+        while (rHome.next()) {            
+            avatar_img = rHome.getString("avatar");   
+        }
+        rHome.close();
 
       //========================根据ID/email/phone查找用户========================
       if(request.getMethod().equalsIgnoreCase("post")) {
@@ -40,6 +47,7 @@
             sql = "select * from followers where fans_id='" + userId + "' and followed_id='" + rs.getString("id") + "'";
             ResultSet rs_follow=stmt_follow.executeQuery(sql);
             String cssStr = "";
+            //不同用户拥有不同的且唯一标识的id
             if(rs_follow.next()) {
                 ifFollow = "已关注";
                 cssStr = "<a href='#' onclick='get(" + userId + ", " + rs.getString("id") + "); return false'><button class='follow_button followed' id='" + rs.getString("id") + "'>" + ifFollow + "</button></a>";
@@ -51,12 +59,11 @@
             rs_follow.close();
             table.append(String.format(
                 "<div class='user_item'>" +
-                "<div class='user_avatar'><img src='./images/default_avatar.jpg' style='width: 60px; height: 60px; border-radius: 50px;'></img>" +
+                "<div class='user_avatar'><img src='./images/avatar/" + rs.getString("avatar") + "' style='width: 60px; height: 60px; border-radius: 50px;'></img>" +
                 "</div>" + 
                 "<div class='user_content'><a class='user_name' href='visitHome.jsp?visitName=" + rs.getString("name") + "' style='text-decoration: underline;'>%s</a> <span class='user_hobby'>%s</span> <span class='user_follow'>%s</span></div></div>",
                 rs.getString("name"), rs.getString("hobby"),
                 cssStr
-                //TODO 关注，添加到数据库，判断关注关系是否存在。可使用已关注样式
                 )
             );
 		}
@@ -116,7 +123,7 @@
     </div>
     <div id="mobile_wrap">
         <div id="mobile_head_portrait">
-            <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
+            <img src="images/avatar/<%=avatar_img%>" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
         <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
@@ -129,9 +136,9 @@
         </div>
         <div id="head_portrait">  
             <div id="select_upload">
-                <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="upload_img" />
+                <%-- <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="upload_img" /> --%>
             </div>
-            <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
+            <img src="images/avatar/<%=avatar_img%>" style="width: 80px; height: 80px; border-radius: 50px;">
         </div>
         <div id="personal_signature">
             <p>Show your life this moment!</p>
@@ -178,16 +185,6 @@
     </div>
     <script>
         window.onload = function() {
-            //===========关注成功效果===========
-            var Obtn = document.getElementsByClassName("follow_button");
-            for (let i = 0; i < Obtn.length; ++ i) {
-                Obtn[i].onclick = function() {
-                    if (Obtn[i].innerHTML == "关注") 
-                    {}
-                }
-            }
-            //===========END关注成功效果===========
-
             //===========搜索框效果===========
             var searchBorad = document.getElementById("search_borad");
             searchBorad.getElementsByTagName("input")[0].onfocus = function() {
@@ -214,17 +211,19 @@
                         oTest.innerHTML = xmlhttp.responseText;
                         if(!oTest.classList.contains("followed")) {
                             oTest.classList.add("followed");
+                            // 添加关注按钮样式
                         }
                         else {
                             oTest.classList.remove("followed");
+                            // 移除关注按钮样式，显示未关注样式
                         }
-                        console.log("xmlhttp.responseText:" + xmlhttp.responseText);
                     } else {
                         alert("error");
                     }
                 };
-            }; //打开http请求（open）的参数：get|post，url，是否异步发送 
+            }; // 打开http请求（open）的参数：get|post，url，是否异步发送
             var param = "userId=" + follower + "&followedId=" + followed;
+            // userId为当前登录用户，followedId为被关注的用户
             xmlhttp.open("get", "ajaxGet.jsp?userId=" + follower + "&followedId=" + followed, true);
             xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xmlhttp.send(null);

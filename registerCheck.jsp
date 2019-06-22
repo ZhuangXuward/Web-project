@@ -1,15 +1,13 @@
 <%@page language="java" import="java.util.*,java.sql.*" contentType="text/html; charset=utf-8"%>
 <% request.setCharacterEncoding("utf-8");
-    String msg=""; 
     String param = request.getParameter("id");
     String value = request.getParameter("value");
-    String search = "";
     String conStr = "jdbc:mysql://172.18.187.10:3306/blog_15336202"
     + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
-
     Class.forName("com.mysql.jdbc.Driver"); // 查找数据库驱动类
     Connection con=DriverManager.getConnection(conStr, "user", "123");
     Statement stmt=con.createStatement(); //创建MySQL语句的对象
+    
     if (value.equals("")) {
         out.print("输入点东西嘛~这么小气╭(╯^╰)╮");
     }

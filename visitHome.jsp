@@ -6,6 +6,7 @@
     String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
     String user = "user";
     String pwd = "123";
+    String avatar_img = "";
     Class.forName("com.mysql.jdbc.Driver");
     Connection con = DriverManager.getConnection(connectString, user, pwd);
     Statement stmt = con.createStatement();
@@ -31,6 +32,7 @@
     String ifAccess = "";
     ResultSet rAccess = stmt.executeQuery("select * from users where name='"+visitName+"'");
     while (rAccess.next()) {          
+        avatar_img = rAccess.getString("avatar");   
         ifAccess = rAccess.getString("Access");      
     }
     rAccess.close();
@@ -211,7 +213,7 @@
             <div id="mobile_select_upload">
                 <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" id="mobile_upload_img" />
             </div>  
-            <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
+            <img src="images/avatar/<%=avatar_img%>" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
         <a href="index.jsp?userId=<%=userId%>" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow()" />
@@ -223,7 +225,7 @@
             <a href="">「Lifeblog.com」</a>
         </div>
         <div id="head_portrait">  
-            <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
+            <img src="images/avatar/<%=avatar_img%>" style="width: 80px; height: 80px; border-radius: 50px;">
         </div>
         <div id="personal_signature">
             <p style="font-family: STKaiti"><%=sign_value%></p>
@@ -404,7 +406,7 @@
 
     //删除某博客，以时间为介定
     function deleteBlog(obj) {
-        if(window.confirm("确定删除此博客？")) {
+        if(window.confirm("确定点赞此博客？")) {
             document.getElementById("deleteButton").value = obj.id;
             document.getElementById("deleteButton").click();
         }
@@ -505,26 +507,26 @@
         border-bottom-right-radius: 20px;
     }
 
-    .reply_block {
+    .reply_zone .reply_block {
         position: relative;
         display: block;
         padding-top: 12px;
     }
 
-    .reply_left {
+    .reply_zone .reply_block .reply_left {
         position: relative;
         width: 100px;
         display: block;
         left: 20px;
     }
 
-    .reply_head {
+    .reply_zone .reply_block .reply_left .reply_head {
         width: 40px;
         border-radius: 50%;
         cursor: pointer;
     }
 
-    .reply_person {
+    .reply_zone .reply_block .reply_left .reply_person {
         position: relative;
         left: 4px;
         top: -5px;
@@ -533,11 +535,11 @@
         cursor: pointer;
     }
 
-    .reply_person a:hover {
+    .reply_zone .reply_block .reply_left .reply_person a:hover {
         text-decoration: underline;
     }
 
-    .reply_date {
+    .reply_zone .reply_block .reply_left .reply_date {
         position: relative;
         left: 47px;
         top: -40px;
@@ -546,17 +548,36 @@
         color: #8a8a8a;
     }
 
-    .reply_content {
+    .reply_zone .reply_block .reply_content {
         position: relative;
-        padding-top: 20px;
+        top: -35px;
         left: 120px;
     }
 
+    @media only screen and (max-width: 600px) { 
+        .reply_zone .reply_block .reply_content {
+            position: relative;
+            top: -35px;
+            left: 85px;
+        }
+    }
+
     /*三级回复区*/
-    .level3Comment {
-        position: absolute;
+    .reply_block .level3Comment {
+        position: relative;
         cursor: pointer;
         z-index: 100;
+        float: right;
+        right: 20px;
+        top: -70px;
+    }
+
+    .reply_block .reply_blockLevel3 .level3Comment {
+        position: relative;
+        cursor: pointer;
+        z-index: 100;
+        float: right;
+        top: -20px;
     }
 
     .level3ReplyText {
@@ -641,6 +662,12 @@
         .reply_content {
             padding-top: 40px;
             left: 80px;
+        }
+
+        #blog_zone {
+            position: absolute;
+            display: block;
+            margin-top: 160px;
         }
     }
 </style>

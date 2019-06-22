@@ -5,6 +5,7 @@
     String connectString = "jdbc:mysql://172.18.187.10:3306/blog_15336202" + "?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8";
     String user="user"; 
     String pwd="123";
+    String avatar_img = "";
     Class.forName("com.mysql.jdbc.Driver");
     Connection con = DriverManager.getConnection(connectString, user, pwd);
     Statement stmt = con.createStatement();
@@ -38,6 +39,7 @@
 
     ResultSet rs = stmt.executeQuery("select * from users where name='"+visitName+"'");
     while (rs.next()) {    
+        avatar_img = rs.getString("avatar");   
         name_value = rs.getString("name");
         sex_value = rs.getString("sex");
         birthday_value = rs.getString("birthday");
@@ -91,7 +93,7 @@
     </div>
     <div id="mobile_wrap">
         <div id="mobile_head_portrait">
-            <img src="images/default_avatar.jpeg" style="width: 30px; height: 30px; border-radius: 50px;" />
+            <img src="images/avatar/<%=avatar_img%>" style="width: 30px; height: 30px; border-radius: 50px;" />
         </div>
         <a href="index.jsp" id="mobile_com">「Lifeblog.com」</a>
         <img id="expand-menu" src="images/expand-menu.png" onclick="showShadow(); closeAnimate()" />
@@ -103,7 +105,7 @@
             <a href="">「Lifeblog.com」</a>
         </div>
         <div id="head_portrait">  
-            <img src="images/default_avatar.jpeg" style="width: 80px; height: 80px; border-radius: 50px;">
+            <img src="images/avatar/<%=avatar_img%>" style="width: 80px; height: 80px; border-radius: 50px;">
         </div>
         <div id="personal_signature">
             <p style="font-family: STKaiti"><%=sign_value%></p>

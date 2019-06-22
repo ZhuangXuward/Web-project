@@ -10,7 +10,7 @@ function hideBox() {
     hideShadow();
 }
 
-function showshadow() {
+function showshadow_avatar() {
     var shadow = document.getElementById("shadow");
     shadow.style.width = "" + document.documentElement.scrollWidth + "px";
     if (document.documentElement.clientHeight > document.documentElement.scrollHeight) {
@@ -19,11 +19,16 @@ function showshadow() {
     else {
         shadow.style.height = "" + document.documentElement.scrollHeight + "px";
     }
+    window.onresize = function() {
+        var temp = document.documentElement.clientWidth;
+        var shadow = document.getElementById("shadow");
+        shadow.style.width = temp + "px";
+    };
     shadow.style.display = "block";
     showBox();
 }
 
-function hideShadow() {
+function hideShadow_avatar() {
     var shadow = document.getElementById("shadow");
     shadow.style.display = "none";
     var showBtn = document.getElementById("head_portrait_box");
@@ -34,24 +39,7 @@ function pos() {
 }
 
 function test() {
-    showshadow();
-}
-
-function handleImageFile(file) {
-	var previewArea = document.getElementById("upload_img");
-	var img = document.createElement("img");
-	var fileInput = document.getElementById("myFile");
-	var file = fileInput.files[0];
-	img.file = file;
-	previewArea.appendChild(img);
-	
-	var reader = new FileReader();
-	reader.onload = (function(aImg) {
-		return function(e) {
-			aImg.src = e.target.result;
-		}
-	})(img);
-	reader.readAsDataURL(file);
+    showshadow_avatar();
 }
 
 function onSubmit() {

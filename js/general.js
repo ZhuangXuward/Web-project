@@ -335,6 +335,8 @@ function quanPing() {
    //将其他div隐藏
    var home = document.getElementById("home");
    home.style.display = "none";
+   var bz = document.getElementById("blog_zone");
+   bz.style.display = "none";
    var head = document.getElementById("head_portrait");
    head.style.display = "none";
    var wrap = document.getElementById("wrap");
@@ -366,6 +368,8 @@ function quanPing() {
 function huanYuan() {
    var home = document.getElementById("home");
    home.style.display = "block";
+   var bz = document.getElementById("blog_zone");
+   bz.style.display = "block";
    var wrap = document.getElementById("wrap");
    wrap.style.display = "block";
    var information = document.getElementById("information");
